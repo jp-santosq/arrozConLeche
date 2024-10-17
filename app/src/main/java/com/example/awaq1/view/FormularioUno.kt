@@ -22,17 +22,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 
-
-@Preview
-@Composable
-fun SimpleComposablePreview() {
-    ObservationForm()
-}
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ObservationForm() {
+fun ObservationForm(navController: NavController) {
     var transecto by remember { mutableStateOf("") }
     var tipoAnimal by remember { mutableStateOf("") }
     var nombreComun by remember { mutableStateOf("") }
@@ -52,7 +49,8 @@ fun ObservationForm() {
                 modifier = Modifier
                     .padding(paddingValues)
                     .padding(16.dp)
-                    .fillMaxWidth(),
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),  // Added scrollable behavior
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 // Número de transecto input
@@ -70,7 +68,6 @@ fun ObservationForm() {
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Use icons and options for animal types (replace with actual images)
                     val animals = listOf("Mamífero", "Ave", "Reptil", "Anfibio", "Insecto")
                     animals.forEach { animal ->
                         IconToggleButton(
@@ -117,11 +114,13 @@ fun ObservationForm() {
                 val observacionOptions = listOf("La Vió", "Huella", "Rastro", "Cacería", "Le dijeron")
                 Column {
                     observacionOptions.forEach { option ->
-                        RadioButton(
-                            selected = tipoObservacion == option,
-                            onClick = { tipoObservacion = option }
-                        )
-                        Text(option, modifier = Modifier.padding(start = 8.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(
+                                selected = tipoObservacion == option,
+                                onClick = { tipoObservacion = option }
+                            )
+                            Text(option, modifier = Modifier.padding(start = 8.dp))
+                        }
                     }
                 }
 
@@ -146,7 +145,7 @@ fun ObservationForm() {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Button(onClick = { /* Logic for 'Atrás' */ }) {
+                    Button(onClick = { navController.navigate("settings")}) {
                         Text("Atrás")
                     }
                     Button(onClick = { /* Logic for 'Enviar' */ }) {
@@ -157,3 +156,5 @@ fun ObservationForm() {
         }
     )
 }
+
+

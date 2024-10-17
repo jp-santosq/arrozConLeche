@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
@@ -115,6 +116,12 @@ fun BottomNavigationBar(navController: NavController) {
             onClick = { navController.navigate("mapa") }
         )
         NavigationBarItem(
+            icon = { Icon(Icons.Default.Add, contentDescription = null) },
+            label = { Text("Reporte") },
+            selected = false,
+            onClick = { navController.navigate("reporte") }
+        )
+        NavigationBarItem(
             icon = { Icon(Icons.Default.Settings, contentDescription = null) },
             label = { Text("Configuración") },
             selected = false,
@@ -122,3 +129,4 @@ fun BottomNavigationBar(navController: NavController) {
         )
     }
 }
+
