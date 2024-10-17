@@ -1,5 +1,6 @@
 package com.example.awaq1.view
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -26,6 +27,7 @@ import androidx.navigation.NavController
 
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
+import com.example.awaq1.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,114 +47,121 @@ fun ObservationForm(navController: NavController) {
             )
         },
         content = { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .padding(16.dp)
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),  // Added scrollable behavior
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                // Número de transecto input
-                OutlinedTextField(
-                    value = transecto,
-                    onValueChange = { transecto = it },
-                    label = { Text("Número de Transecto") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                // Tipo de Animal (Multiple Choice with Icons)
-                Text("Tipo de Animal")
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    val animals = listOf("Mamífero", "Ave", "Reptil", "Anfibio", "Insecto")
-                    animals.forEach { animal ->
-                        IconToggleButton(
-                            checked = tipoAnimal == animal,
-                            onCheckedChange = { tipoAnimal = animal },
-                        ) {
-                            Icon(
-                                painter = painterResource(id = /* replace with your image resource ID */ android.R.drawable.ic_menu_gallery),
-                                contentDescription = animal,
-                                tint = if (tipoAnimal == animal) Color.Blue else Color.Gray,
-                                modifier = Modifier.size(40.dp)
-                            )
-                        }
-                    }
-                }
-
-                // Nombre común
-                OutlinedTextField(
-                    value = nombreComun,
-                    onValueChange = { nombreComun = it },
-                    label = { Text("Nombre Común") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                // Nombre científico
-                OutlinedTextField(
-                    value = nombreCientifico,
-                    onValueChange = { nombreCientifico = it },
-                    label = { Text("Nombre Científico") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                // Número de Individuos
-                OutlinedTextField(
-                    value = numeroIndividuos,
-                    onValueChange = { numeroIndividuos = it },
-                    label = { Text("Número de Individuos") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                // Tipo de Observación (Multiple Choice)
-                Text("Tipo de Observación")
-                val observacionOptions = listOf("La Vió", "Huella", "Rastro", "Cacería", "Le dijeron")
-                Column {
-                    observacionOptions.forEach { option ->
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            RadioButton(
-                                selected = tipoObservacion == option,
-                                onClick = { tipoObservacion = option }
-                            )
-                            Text(option, modifier = Modifier.padding(start = 8.dp))
-                        }
-                    }
-                }
-
-                // Elige Archivo button
-                Button(onClick = { /* Logic to pick file */ }) {
-                    Text("Elige Archivo")
-                }
-
-                // Observaciones (multiline text box)
-                OutlinedTextField(
-                    value = observaciones,
-                    onValueChange = { observaciones = it },
-                    label = { Text("Observaciones") },
+            Box(modifier = Modifier.fillMaxSize()) {
+               // Image(painter = painterResource(R.drawable.background),
+                 //   contentDescription = null,
+                   // contentScale = ContentScale.FillBounds,
+                   // modifier = Modifier.matchParentSize())
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp),
-                    maxLines = 4
-                )
-
-                // Atrás and Enviar buttons
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .padding(paddingValues)
+                        .padding(16.dp)
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),  // Added scrollable behavior
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Button(onClick = { navController.navigate("settings")}) {
-                        Text("Atrás")
+                    // Número de transecto input
+                    OutlinedTextField(
+                        value = transecto,
+                        onValueChange = { transecto = it },
+                        label = { Text("Número de Transecto") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    // Tipo de Animal (Multiple Choice with Icons)
+                    Text("Tipo de Animal")
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val animals = listOf("Mamífero", "Ave", "Reptil", "Anfibio", "Insecto")
+                        animals.forEach { animal ->
+                            IconToggleButton(
+                                checked = tipoAnimal == animal,
+                                onCheckedChange = { tipoAnimal = animal },
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = /* replace with your image resource ID */ android.R.drawable.ic_menu_gallery),
+                                    contentDescription = animal,
+                                    tint = if (tipoAnimal == animal) Color.Blue else Color.Gray,
+                                    modifier = Modifier.size(40.dp)
+                                )
+                            }
+                        }
                     }
-                    Button(onClick = { /* Logic for 'Enviar' */ }) {
-                        Text("Enviar")
+
+                    // Nombre común
+                    OutlinedTextField(
+                        value = nombreComun,
+                        onValueChange = { nombreComun = it },
+                        label = { Text("Nombre Común") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    // Nombre científico
+                    OutlinedTextField(
+                        value = nombreCientifico,
+                        onValueChange = { nombreCientifico = it },
+                        label = { Text("Nombre Científico") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    // Número de Individuos
+                    OutlinedTextField(
+                        value = numeroIndividuos,
+                        onValueChange = { numeroIndividuos = it },
+                        label = { Text("Número de Individuos") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    // Tipo de Observación (Multiple Choice)
+                    Text("Tipo de Observación")
+                    val observacionOptions = listOf("La Vió", "Huella", "Rastro", "Cacería", "Le dijeron")
+                    Column {
+                        observacionOptions.forEach { option ->
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                RadioButton(
+                                    selected = tipoObservacion == option,
+                                    onClick = { tipoObservacion = option }
+                                )
+                                Text(option, modifier = Modifier.padding(start = 8.dp))
+                            }
+                        }
+                    }
+
+                    // Elige Archivo button
+                    Button(onClick = { /* Logic to pick file */ }) {
+                        Text("Elige Archivo")
+                    }
+
+                    // Observaciones (multiline text box)
+                    OutlinedTextField(
+                        value = observaciones,
+                        onValueChange = { observaciones = it },
+                        label = { Text("Observaciones") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp),
+                        maxLines = 4
+                    )
+
+                    // Atrás and Enviar buttons
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Button(onClick = { navController.navigate("settings")}) {
+                            Text("Atrás")
+                        }
+                        Button(onClick = { /* Logic for 'Enviar' */ }) {
+                            Text("Enviar")
+                        }
                     }
                 }
             }
+
         }
     )
 }
