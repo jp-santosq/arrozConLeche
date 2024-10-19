@@ -27,7 +27,18 @@ import androidx.navigation.NavController
 
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
+import androidx.navigation.compose.rememberNavController
+import com.example.awaq1.MainActivity
 import com.example.awaq1.R
+import com.example.awaq1.data.FormularioUnoEntity
+import com.example.awaq1.data.FormularioUnoRepository
+import kotlinx.coroutines.runBlocking
+
+@Preview(showBackground = true, showSystemUi = false)
+@Composable
+fun Preview() {
+    ObservationForm(rememberNavController())
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -155,7 +166,23 @@ fun ObservationForm(navController: NavController) {
                         Button(onClick = { navController.navigate("settings")}) {
                             Text("Atrás")
                         }
-                        Button(onClick = { /* Logic for 'Enviar' */ }) {
+                        Button(onClick = {
+                            // Aquí se guarda el reporte existente en la base de datos SQLite
+                            runBlocking {
+                                MainActivity().container.formularioUnoRepository.insertFormularioUno(
+                                    FormularioUnoEntity(
+                                        transecto = transecto,
+                                        tipoAnimal = tipoAnimal,
+                                        nombreComun = nombreComun,
+                                        nombreCientifico = nombreCientifico,
+                                        numeroIndividuos = numeroIndividuos,
+                                        tipoObservacion = tipoObservacion,
+                                        observaciones = observaciones
+                                        )
+                                )
+                            }
+
+                        }) {
                             Text("Enviar")
                         }
                     }
