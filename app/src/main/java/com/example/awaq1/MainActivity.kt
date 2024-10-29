@@ -18,10 +18,11 @@ import com.example.awaq1.view.PrincipalView
 
 class MainActivity : ComponentActivity() {
     lateinit var container: AppContainer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         container = AppDataContainer(this)
+
 
         enableEdgeToEdge()
         setContent {

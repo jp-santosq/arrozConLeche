@@ -27,9 +27,12 @@ import androidx.navigation.NavController
 
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
+import com.example.awaq1.FormularioApplication
 import com.example.awaq1.MainActivity
 import com.example.awaq1.R
+import com.example.awaq1.data.AppContainer
 import com.example.awaq1.data.FormularioUnoEntity
 import com.example.awaq1.data.FormularioUnoRepository
 import kotlinx.coroutines.runBlocking
@@ -43,6 +46,9 @@ fun Preview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ObservationForm(navController: NavController) {
+    val context = LocalContext.current as MainActivity
+    val appContainer = context.container
+
     var transecto by remember { mutableStateOf("") }
     var tipoAnimal by remember { mutableStateOf("") }
     var nombreComun by remember { mutableStateOf("") }
@@ -169,7 +175,7 @@ fun ObservationForm(navController: NavController) {
                         Button(onClick = {
                             // Aquí se guarda el reporte existente en la base de datos SQLite
                             runBlocking {
-                                MainActivity().container.formularioUnoRepository.insertFormularioUno(
+                                appContainer.formularioUnoRepository.insertFormularioUno(
                                     FormularioUnoEntity(
                                         transecto = transecto,
                                         tipoAnimal = tipoAnimal,
