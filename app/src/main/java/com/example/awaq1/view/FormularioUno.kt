@@ -97,10 +97,17 @@ fun ObservationForm(navController: NavController) {
                                 checked = tipoAnimal == animal,
                                 onCheckedChange = { tipoAnimal = animal },
                             ) {
+                                val iconResource = when (animal) {
+                                    "Mamífero" -> R.drawable.ic_mamifero // Replace with your actual resource ID for Mamífero
+                                    "Ave" -> R.drawable.ic_ave // Replace with your actual resource ID for Ave
+                                    "Reptil" -> R.drawable.ic_reptil // Replace with your actual resource ID for Reptil
+                                    "Anfibio" -> R.drawable.ic_anfibio // Replace with your actual resource ID for Anfibio
+                                    "Insecto" -> R.drawable.ic_insecto // Replace with your actual resource ID for Insecto
+                                    else -> android.R.drawable.ic_menu_gallery // Fallback resource
+                                }
                                 Icon(
-                                    painter = painterResource(id = /* replace with your image resource ID */ android.R.drawable.ic_menu_gallery),
+                                    painter = painterResource(id = iconResource),
                                     contentDescription = animal,
-                                    tint = if (tipoAnimal == animal) Color.Blue else Color.Gray,
                                     modifier = Modifier.size(40.dp)
                                 )
                             }
