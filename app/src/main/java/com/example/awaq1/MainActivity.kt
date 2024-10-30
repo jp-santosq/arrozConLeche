@@ -11,12 +11,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.awaq1.data.AppContainer
+import com.example.awaq1.data.AppDataContainer
 import com.example.awaq1.ui.theme.AWAQ1Theme
 import com.example.awaq1.view.PrincipalView
 
 class MainActivity : ComponentActivity() {
+    lateinit var container: AppContainer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        container = AppDataContainer(this)
+
+
         enableEdgeToEdge()
         setContent {
             AWAQ1Theme {

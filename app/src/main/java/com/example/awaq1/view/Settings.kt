@@ -113,7 +113,7 @@ fun BottomNavigationBar(navController: NavController) {
             icon = { Icon(Icons.Default.Search, contentDescription = null) },
             label = { Text("Búsqueda") },
             selected = false,
-            onClick = { navController.navigate("mapa") }
+            onClick = { navController.navigate("buscar") }
         )
         NavigationBarItem(
             icon = { Icon(Icons.Default.Add, contentDescription = null) },

@@ -27,11 +27,27 @@ import androidx.navigation.NavController
 
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.compose.rememberNavController
+import com.example.awaq1.MainActivity
 import com.example.awaq1.R
+import com.example.awaq1.data.AppContainer
+import com.example.awaq1.data.FormularioUnoEntity
+import com.example.awaq1.data.FormularioUnoRepository
+import kotlinx.coroutines.runBlocking
+
+@Preview(showBackground = true, showSystemUi = false)
+@Composable
+fun Preview() {
+    ObservationForm(rememberNavController())
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ObservationForm(navController: NavController) {
+    val context = LocalContext.current as MainActivity
+    val appContainer = context.container
+
     var transecto by remember { mutableStateOf("") }
     var tipoAnimal by remember { mutableStateOf("") }
     var nombreComun by remember { mutableStateOf("") }
@@ -81,10 +97,17 @@ fun ObservationForm(navController: NavController) {
                                 checked = tipoAnimal == animal,
                                 onCheckedChange = { tipoAnimal = animal },
                             ) {
+                                val iconResource = when (animal) {
+                                    "Mamífero" -> R.drawable.ic_mamifero // Replace with your actual resource ID for Mamífero
+                                    "Ave" -> R.drawable.ic_ave // Replace with your actual resource ID for Ave
+                                    "Reptil" -> R.drawable.ic_reptil // Replace with your actual resource ID for Reptil
+                                    "Anfibio" -> R.drawable.ic_anfibio // Replace with your actual resource ID for Anfibio
+                                    "Insecto" -> R.drawable.ic_insecto // Replace with your actual resource ID for Insecto
+                                    else -> android.R.drawable.ic_menu_gallery // Fallback resource
+                                }
                                 Icon(
-                                    painter = painterResource(id = /* replace with your image resource ID */ android.R.drawable.ic_menu_gallery),
+                                    painter = painterResource(id = iconResource),
                                     contentDescription = animal,
-                                    tint = if (tipoAnimal == animal) Color.Blue else Color.Gray,
                                     modifier = Modifier.size(40.dp)
                                 )
                             }
@@ -155,7 +178,24 @@ fun ObservationForm(navController: NavController) {
                         Button(onClick = { navController.navigate("settings")}) {
                             Text("Atrás")
                         }
-                        Button(onClick = { /* Logic for 'Enviar' */ }) {
+                        Button(onClick = {
+                            // Aquí se guarda el reporte existente en la base de datos SQLite
+                            runBlocking {
+                                appContainer.formularioUnoRepository.insertFormularioUno(
+                                    FormularioUnoEntity(
+                                        transecto = transecto,
+                                        tipoAnimal = tipoAnimal,
+                                        nombreComun = nombreComun,
+                                        nombreCientifico = nombreCientifico,
+                                        numeroIndividuos = numeroIndividuos,
+                                        tipoObservacion = tipoObservacion,
+                                        observaciones = observaciones
+                                        )
+                                )
+                            }
+                            navController.navigate("settings")
+
+                        }) {
                             Text("Enviar")
                         }
                     }
