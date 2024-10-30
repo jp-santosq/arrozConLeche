@@ -29,7 +29,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
-import com.example.awaq1.FormularioApplication
 import com.example.awaq1.MainActivity
 import com.example.awaq1.R
 import com.example.awaq1.data.AppContainer
@@ -187,6 +186,7 @@ fun ObservationForm(navController: NavController) {
                                         )
                                 )
                             }
+                            navController.navigate("settings")
 
                         }) {
                             Text("Enviar")

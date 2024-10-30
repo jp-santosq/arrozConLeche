@@ -10,6 +10,7 @@ import com.example.awaq1.view.Mapa
 import com.example.awaq1.view.Settings
 import com.example.awaq1.view.TwoFactor
 import com.example.awaq1.view.ObservationForm
+import com.example.awaq1.view.ObservationListScreen
 
 @Composable
 fun AppNavigator(modifier: Modifier) {
@@ -32,6 +33,9 @@ fun AppNavigator(modifier: Modifier) {
         }
         composable("reporte") {
             ObservationForm(navController = navController)
+        }
+        composable("buscar") {
+            ObservationListScreen(navController = navController)
         }
     }
 }
