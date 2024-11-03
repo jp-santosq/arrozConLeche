@@ -1,6 +1,8 @@
 package com.example.awaq1.data
 
 import android.content.Context
+import com.example.awaq1.data.formularioUno.FormularioUnoRepository
+import com.example.awaq1.data.formularioUno.OfflineFormularioUnoRepository
 
 // Esto luego lo extendemos con los otros repositorios
 interface AppContainer {
