@@ -1,8 +1,9 @@
-package com.example.awaq1.data
+package com.example.awaq1.data.formularioUno
 
 import kotlinx.coroutines.flow.Flow
 
-class OfflineFormularioUnoRepository(private val formularioUnoDAO: FormularioUnoDAO): FormularioUnoRepository {
+class OfflineFormularioUnoRepository(private val formularioUnoDAO: FormularioUnoDAO):
+    FormularioUnoRepository {
     override fun getAllFormularioUnosStream(): Flow<List<FormularioUnoEntity>> = formularioUnoDAO.getAllFormularioUnoEntitys()
     override fun getFormularioUnoStream(id: Int): Flow<FormularioUnoEntity?> = formularioUnoDAO.getFormularioUnoEntity(id)
     override suspend fun insertFormularioUno(item: FormularioUnoEntity) = formularioUnoDAO.insert(item)

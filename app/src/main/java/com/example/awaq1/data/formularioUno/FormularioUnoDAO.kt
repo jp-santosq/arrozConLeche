@@ -1,4 +1,4 @@
-package com.example.awaq1.data
+package com.example.awaq1.data.formularioUno
 
 import androidx.room.Dao
 import androidx.room.Delete
