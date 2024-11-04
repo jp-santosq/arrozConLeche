@@ -1,10 +1,7 @@
 package com.example.awaq1.view
 
-<<<<<<< HEAD
-=======
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
->>>>>>> origin/main
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
