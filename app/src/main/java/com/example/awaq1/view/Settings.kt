@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Home
@@ -93,7 +94,7 @@ fun MenuItem(text: String, onClick: () -> Unit) {
         Text(text = text, fontSize = 18.sp)
         Spacer(modifier = Modifier.weight(1f))
         Icon(
-            imageVector = Icons.Default.ArrowForward,
+            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
             contentDescription = null,
             tint = Color.Gray
         )
@@ -106,8 +107,8 @@ fun BottomNavigationBar(navController: NavController) {
         NavigationBarItem(
             icon = { Icon(Icons.Default.Home, contentDescription = null) },
             label = { Text("Inicio") },
-            selected = true,
-            onClick = { navController.navigate("log_in")}
+            selected = false,
+            onClick = { navController.navigate("home") }
         )
         NavigationBarItem(
             icon = { Icon(Icons.Default.Search, contentDescription = null) },
@@ -125,7 +126,7 @@ fun BottomNavigationBar(navController: NavController) {
             icon = { Icon(Icons.Default.Settings, contentDescription = null) },
             label = { Text("Configuración") },
             selected = false,
-            onClick = { /* Acción para configuración */ }
+            onClick = { navController.navigate("settings") }
         )
     }
 }

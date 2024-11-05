@@ -97,7 +97,7 @@ fun AuthScreen(modifier: Modifier = Modifier, navController:NavController) {
             Spacer(modifier = Modifier.size(200.dp))
 
             Button(onClick = {
-                navController.navigate("settings")
+                navController.navigate("home")
             }, enabled = true,
                 modifier = Modifier.align(Alignment.CenterHorizontally).scale(1.5F),
                 colors = ButtonColors(containerColor = Color(78, 112, 41), contentColor = Color.White, disabledContentColor = Color.Gray, disabledContainerColor = Color.DarkGray)

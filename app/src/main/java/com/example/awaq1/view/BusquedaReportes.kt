@@ -60,32 +60,7 @@ fun ObservationListScreen(navController: NavController) {
             )
         },
         bottomBar = {
-            NavigationBar(containerColor = Color(0xFFAED581)) {
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Home, contentDescription = null) },
-                    label = { Text("Inicio") },
-                    selected = false,
-                    onClick = { navController.navigate("log_in") }
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Search, contentDescription = null) },
-                    label = { Text("Búsqueda") },
-                    selected = true,
-                    onClick = { navController.navigate("buscar") }
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Add, contentDescription = null) },
-                    label = { Text("Reporte") },
-                    selected = false,
-                    onClick = { navController.navigate("reporte") }
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Settings, contentDescription = null) },
-                    label = { Text("Configuración") },
-                    selected = false,
-                    onClick = { navController.navigate("settings") }
-                )
-            }
+            BottomNavigationBar(navController)
         }
     ) { paddingValues ->
         Box(

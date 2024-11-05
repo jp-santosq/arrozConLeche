@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.awaq1.view.Home
 import com.example.awaq1.view.LogIn
 import com.example.awaq1.view.Mapa
 import com.example.awaq1.view.Settings
@@ -36,6 +37,9 @@ fun AppNavigator(modifier: Modifier) {
         }
         composable("buscar") {
             ObservationListScreen(navController = navController)
+        }
+        composable("home") {
+            Home(navController = navController)
         }
     }
 }
