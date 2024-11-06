@@ -65,7 +65,7 @@ fun AuthScreen(modifier: Modifier = Modifier, navController:NavController) {
             alpha = 1F
         )
 
-        Column() {
+        Column {
             Spacer(modifier = Modifier.size(20.dp))
             Text(
                 text = "Verificación",
@@ -97,7 +97,8 @@ fun AuthScreen(modifier: Modifier = Modifier, navController:NavController) {
             Spacer(modifier = Modifier.size(200.dp))
 
             Button(onClick = {
-                navController.navigate("home")
+	    // Currently unreachable code
+                //navController.navigate("log_in_auth")
             }, enabled = true,
                 modifier = Modifier.align(Alignment.CenterHorizontally).scale(1.5F),
                 colors = ButtonColors(containerColor = Color(78, 112, 41), contentColor = Color.White, disabledContentColor = Color.Gray, disabledContainerColor = Color.DarkGray)

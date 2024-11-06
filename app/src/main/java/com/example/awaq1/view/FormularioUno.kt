@@ -204,7 +204,7 @@ fun ObservationForm(navController: NavController) {
                         horizontalArrangement = Arrangement.spacedBy(8.dp) // Space between buttons
                     ) {
                         Button(
-                            onClick = { navController.navigate("settings") },
+                            onClick = { navController.navigate("home") },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF4E7029), // Green background
                                 contentColor = Color.White // White text color

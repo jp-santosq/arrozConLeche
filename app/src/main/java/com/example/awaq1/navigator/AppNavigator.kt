@@ -6,28 +6,30 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.awaq1.view.Home
-import com.example.awaq1.view.LogIn
 import com.example.awaq1.view.Mapa
-import com.example.awaq1.view.Settings
-import com.example.awaq1.view.TwoFactor
 import com.example.awaq1.view.ObservationForm
 import com.example.awaq1.view.ObservationListScreen
+import com.example.awaq1.view.Settings
+import com.example.awaq1.view.TwoFactor
 
 @Composable
-fun AppNavigator(modifier: Modifier) {
+fun AppNavigator(onLogout: () -> Unit, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "log_in") {
-        composable("log_in") {
-            LogIn(navController = navController)
-        }
+    //val startDestination = if (loggedIn) "home" else "log_in"
+    val startDestination = "home"
+    NavHost(navController = navController, startDestination = startDestination) {
+//        composable("log_in") {
+//            LogIn(navController = navController)
+//        }
         composable("two_factor") {
             TwoFactor(navController = navController)
         }
         composable("mapa") {
-           Mapa(navController = navController)
+            Mapa(navController = navController)
         }
         composable("settings") {
-            Settings(navController = navController)
+            // Logout is through the settings page
+            Settings(navController = navController, onLogout)
         }
         composable("perfil") {
             UserSettingsScreen(navController = navController)
