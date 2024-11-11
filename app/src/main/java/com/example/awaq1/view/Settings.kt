@@ -1,12 +1,16 @@
 package com.example.awaq1.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Add
@@ -15,6 +19,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -34,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -119,31 +125,83 @@ fun MenuItem(text: String, onClick: () -> Unit) {
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
-    NavigationBar(containerColor = Color(0xFFAED581)) {
-        NavigationBarItem(
-            icon = { Icon(Icons.Default.Home, contentDescription = null) },
-            label = { Text("Inicio") },
-            selected = false,
-            onClick = { navController.navigate("home") }
-        )
-        NavigationBarItem(
-            icon = { Icon(Icons.Default.Search, contentDescription = null) },
-            label = { Text("Búsqueda") },
-            selected = false,
-            onClick = { navController.navigate("buscar") }
-        )
-        NavigationBarItem(
-            icon = { Icon(Icons.Default.Add, contentDescription = null) },
-            label = { Text("Reporte") },
-            selected = false,
-            onClick = { navController.navigate("reporte") }
-        )
-        NavigationBarItem(
-            icon = { Icon(Icons.Default.Settings, contentDescription = null) },
-            label = { Text("Configuración") },
-            selected = false,
-            onClick = { navController.navigate("settings") }
-        )
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp) // Spacer at the bottom of the navbar
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceAround, // Space items evenly across the row
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+        ) {
+            // Home Icon Button
+            NavigationButton(
+                label = "Home",
+                icon = Icons.Default.Home,
+                isActive = currentRoute == "home",
+                onClick = {
+                    navController.navigate("home") {
+                        popUpTo("home") { inclusive = true }
+                    }
+                }
+            )
+
+            // Add (Reporte) Button - Centered
+            IconButton(
+                onClick = {
+                    navController.navigate("reporte") {
+                        popUpTo("home") { inclusive = false }
+                    }
+                },
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(Color(0xFF4CAF50), CircleShape) // Green background circle
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Reporte",
+                    tint = Color.White
+                )
+            }
+
+            // Settings Icon Button
+            NavigationButton(
+                label = "Settings",
+                icon = Icons.Default.Settings,
+                isActive = currentRoute == "settings",
+                onClick = {
+                    navController.navigate("settings") {
+                        popUpTo("home") { inclusive = false }
+                    }
+                }
+            )
+        }
     }
 }
 
+@Composable
+fun NavigationButton(label: String, icon: androidx.compose.ui.graphics.vector.ImageVector, isActive: Boolean, onClick: () -> Unit) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        IconButton(onClick = onClick) {
+            Icon(
+                imageVector = icon,
+                contentDescription = label,
+                tint = if (isActive) Color(0xFF4CAF50) else Color.Gray // Green when active, gray when inactive
+            )
+        }
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            fontWeight = if (isActive) FontWeight.Bold else FontWeight.Normal,
+            color = if (isActive) Color(0xFF4CAF50) else Color.Gray // Green when active, gray when inactive
+        )
+    }
+}
