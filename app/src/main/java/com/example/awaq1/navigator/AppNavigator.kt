@@ -5,12 +5,16 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.awaq1.MainActivity
+import com.example.awaq1.data.formularioUno.FormularioUnoRepository
+import com.example.awaq1.data.formularioUno.OfflineFormularioUnoRepository
 import com.example.awaq1.view.Home
 import com.example.awaq1.view.Mapa
 import com.example.awaq1.view.ObservationForm
 import com.example.awaq1.view.ObservationListScreen
 import com.example.awaq1.view.Settings
 import com.example.awaq1.view.TwoFactor
+import com.example.awaq1.view.EditProfileScreen
 
 @Composable
 fun AppNavigator(onLogout: () -> Unit, modifier: Modifier = Modifier) {
@@ -33,6 +37,9 @@ fun AppNavigator(onLogout: () -> Unit, modifier: Modifier = Modifier) {
         }
         composable("perfil") {
             UserSettingsScreen(navController = navController)
+        }
+        composable("editarperfil") {
+            EditProfileScreen(navController = navController)
         }
         composable("reporte") {
             ObservationForm(navController = navController)

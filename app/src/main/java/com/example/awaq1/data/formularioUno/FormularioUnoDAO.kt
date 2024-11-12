@@ -24,4 +24,13 @@ interface FormularioUnoDAO {
 
     @Query("SELECT * from Formulario1 ORDER BY id ASC")
     fun getAllFormularioUnoEntitys(): Flow<List<FormularioUnoEntity>>
+
+    @Query("SELECT COUNT(*) FROM Formulario1")
+    fun getTotalCount(): Flow<Int>
+
+    @Query("SELECT COUNT(*) FROM Formulario1 WHERE enviado = 1")
+    fun getCountSent(): Flow<Int>
+
+    @Query("SELECT COUNT(*) FROM Formulario1 WHERE guardado = 1")
+    fun getCountSaved(): Flow<Int>
 }

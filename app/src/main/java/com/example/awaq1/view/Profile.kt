@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.awaq1.R
+import com.example.awaq1.view.MenuItem
+import com.example.awaq1.view.SectionTitle
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,7 +80,13 @@ fun UserSettingsScreen(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                SettingsSection("GENERAL", listOf("Editar Perfil", "Cambiar contraseña"))
+                SectionTitle("GENERAL")
+                MenuItem("Editar Perfil") {
+                    navController.navigate("editarperfil")
+                }
+                MenuItem("Cambiar contraseña") {
+                    // Acción para cambiar contraseña
+                }
                 Spacer(modifier = Modifier.height(16.dp))
                 SettingsSection("NOTIFICACIONES", listOf("Notificaciones"))
                 Spacer(modifier = Modifier.height(16.dp))

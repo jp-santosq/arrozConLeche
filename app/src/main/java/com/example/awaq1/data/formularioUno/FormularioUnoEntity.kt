@@ -14,4 +14,6 @@ data class FormularioUnoEntity(
     val numeroIndividuos: String,
     val tipoObservacion: String,
     val observaciones: String,
+    var enviado: Boolean = false,
+    var guardado: Boolean = false
 )

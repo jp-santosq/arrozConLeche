@@ -34,7 +34,7 @@ fun Home(navController: NavController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFD3E8D5))
+                    .background(Color(0xFFFFFFFF))
                     .padding(paddingValues)
                     .padding(16.dp)
             ) {
