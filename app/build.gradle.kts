@@ -81,4 +81,20 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation (libs.auth0)
+
+    // Test Imports
+    testImplementation(libs.junit)
+    // Updated to explicitly specify compatible versions
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.4.3")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
+    // Include the Compose BOM for Android Test dependencies
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.04.01"))
+}
+configurations.all {
+    resolutionStrategy {
+        // Force compatible versions for AndroidX testing dependencies
+        force("androidx.test.ext:junit:1.1.5")
+        force("androidx.test.espresso:espresso-core:3.5.0")
+    }
 }
