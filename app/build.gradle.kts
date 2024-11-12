@@ -55,6 +55,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.ui.test.junit4.android)
     val room_version = "2.6.1"
 
     implementation(libs.androidx.room.runtime)
@@ -80,5 +81,24 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation (libs.auth0)
+    implementation(libs.auth0)
+
+    // Test Imports
+    testImplementation(libs.junit)
+
+    // Updated to explicitly specify compatible versions
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+
+    // Include the Compose BOM for Android Test dependencies
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.04.01"))
+}
+
+configurations.all {
+    resolutionStrategy {
+        // Force compatible versions for AndroidX testing dependencies
+        force("androidx.test.ext:junit:1.1.5")
+        force("androidx.test.espresso:espresso-core:3.5.0")
+    }
 }
