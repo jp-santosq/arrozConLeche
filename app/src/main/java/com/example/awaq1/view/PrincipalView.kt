@@ -36,11 +36,7 @@ fun PrincipalView(modifier: Modifier = Modifier, auth0: Auth0) {
     var credentials by remember { mutableStateOf<Credentials?>(null) }
 
     Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
-<<<<<<< HEAD
-        if (0==0) {
-=======
         if (loggedIn) { // loggedIn o 0 == 0
->>>>>>> origin/New-Navbar-and-Home-Page
             AppNavigator(
                 onLogout = {
                     Log.d("AuthLogout", "Logging out!")
