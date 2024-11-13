@@ -135,6 +135,9 @@ fun ObservationFormDos(navController: NavController) {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             val animals = listOf("Mamífero", "Ave", "Reptil", "Anfibio", "Insecto")
+                            if (tipoAnimal == "") {
+                                tipoAnimal = animals[0]
+                            }
                             animals.forEach { animal ->
                                 IconToggleButton(
                                     checked = tipoAnimal == animal,
@@ -204,7 +207,7 @@ fun ObservationFormDos(navController: NavController) {
                         Text("Altura de Observación")
                         val alturaOptions: List<Pair<String, String>> = listOf(Pair("Baja", "<1mt"), Pair("Media", "1-3mt"), Pair("Alta", ">3mt"))
                         if (alturaObservacion == "") {
-                            alturaObservacion = observacionOptions[0]
+                            alturaObservacion = alturaOptions[0].first
                         }
                         Column {
                             alturaOptions.forEach { option ->
@@ -217,7 +220,7 @@ fun ObservationFormDos(navController: NavController) {
                                             unselectedColor = Color.Gray
                                         )
                                     )
-                                    Text("${option.first}, ${option.second}", modifier = Modifier.padding(start = 8.dp))
+                                    Text("${option.first} ${option.second}", modifier = Modifier.padding(start = 8.dp))
                                 }
                             }
                         }
@@ -292,7 +295,7 @@ fun ObservationFormDos(navController: NavController) {
                                             )
                                         )
                                     }
-                                    navController.navigate("settings")
+                                    navController.navigate("home")
                                 },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = Color(0xFF4E7029),

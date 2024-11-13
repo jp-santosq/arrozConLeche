@@ -8,7 +8,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.awaq1.view.Home
 import com.example.awaq1.view.Mapa
 import com.example.awaq1.view.ObservationForm
+import com.example.awaq1.view.ObservationFormCuatro
 import com.example.awaq1.view.ObservationFormDos
+import com.example.awaq1.view.ObservationFormTres
 import com.example.awaq1.view.ObservationListScreen
 import com.example.awaq1.view.SelectFormularioScreen
 import com.example.awaq1.view.Settings
@@ -46,6 +48,12 @@ fun AppNavigator(onLogout: () -> Unit, modifier: Modifier = Modifier) {
         }
         composable("reporte_2") {
             ObservationFormDos(navController = navController)
+        }
+        composable("reporte_3") {
+            ObservationFormTres(navController = navController)
+        }
+        composable("reporte_4") {
+            ObservationFormCuatro(navController = navController)
         }
 
         composable("buscar") {

@@ -100,42 +100,31 @@ fun SelectFormularioScreen(navController: NavController) {
                 verticalArrangement = Arrangement.Center
             ) {
                 Spacer(modifier = Modifier.height(32.dp))
-
-                Button(
-                    onClick = { navController.navigate("reporte") },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF4E7029),
-                        contentColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(30),
-                    modifier = Modifier//.size(30.dp, 10.dp).fillMaxWidth()
-                ) {
-                    Text(
-                        "Fauna en Transectos",
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    )
-                }
-                Button(
-                    onClick = { navController.navigate("reporte_2") },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF4E7029),
-                        contentColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(30),
-                ) {
-                    Text(
-                        "Fauna en Punto de Conteo",
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    )
-                }
-
+                FormChooseButton("reporte", "Fauna en Transectos", navController)
+                FormChooseButton("reporte_2", "Fauna en Punto de Conteo", navController)
+                FormChooseButton("reporte_3", "Validación de Cobertura", navController)
+                FormChooseButton("reporte_4", "Parcela de Vegetación", navController)
             }
         }
+    }
+}
+
+@Composable
+fun FormChooseButton(route: String, text: String, navController: NavController) {
+    Button(
+        onClick = { navController.navigate(route) },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xFF4E7029),
+            contentColor = Color.White
+        ),
+        shape = RoundedCornerShape(30),
+    ) {
+        Text(
+            text,
+            style = TextStyle(
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        )
     }
 }

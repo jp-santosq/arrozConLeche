@@ -41,47 +41,51 @@ import kotlinx.coroutines.runBlocking
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.filled.Add
 import com.example.awaq1.ViewModels.CameraViewModel
+import com.example.awaq1.data.formularioUno.FormularioDosEntity
+import com.example.awaq1.data.formularioUno.FormularioTresEntity
 import com.example.awaq1.view.CameraView
 
 
-@RequiresApi(Build.VERSION_CODES.P)
-@Preview(showBackground = true, showSystemUi = false)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun Preview() {
-    ObservationForm(rememberNavController())
+fun PreviewForm3() {
+    ObservationFormTres(rememberNavController())
 }
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ObservationForm(navController: NavController) {
+fun ObservationFormTres(navController: NavController) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
 
-    var transecto by remember { mutableStateOf("") }
-    var tipoAnimal by remember { mutableStateOf("") }
-    var nombreComun by remember { mutableStateOf("") }
-    var nombreCientifico by remember { mutableStateOf("") }
-    var numeroIndividuos by remember { mutableStateOf("") }
-    var tipoObservacion by remember { mutableStateOf("") }
-    var observaciones by remember { mutableStateOf("") }
+    var codigo by remember { mutableStateOf("") }
+    var seguimiento by remember { mutableStateOf(true) }
+    var cambio by remember { mutableStateOf(true) }
+    var cobertura: String by remember { mutableStateOf("") }
+    var tipoCultivo: String by remember { mutableStateOf("") }
+    var disturbio: String by remember { mutableStateOf("") }
+    var observaciones: String by remember { mutableStateOf("") }
     var showCamera by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(
-                    text ="Formulario de Observación",
-                    style = TextStyle(
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = (-0.03).em,
-                        color = Color(0xFF4E7029)
+                title = {
+                    Text(
+                        text = "Formulario de Observación",
+                        style = TextStyle(
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = (-0.03).em,
+                            color = Color(0xFF4E7029)
+                        )
                     )
-                ) },
+                },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color.White,
                     titleContentColor = Color(0xFF4E7029)
@@ -95,9 +99,11 @@ fun ObservationForm(navController: NavController) {
                     cameraViewModel = CameraViewModel()
                 )
             } else {
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.White)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.White)
+                ) {
                     Column(
                         modifier = Modifier
                             .padding(paddingValues)
@@ -106,76 +112,81 @@ fun ObservationForm(navController: NavController) {
                             .verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
+
                         OutlinedTextField(
-                            value = transecto,
-                            onValueChange = { transecto = it },
-                            label = { Text("Número de Transecto") },
+                            value = codigo,
+                            onValueChange = { codigo = it },
+                            label = { Text("Código") },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             modifier = Modifier.fillMaxWidth()
                         )
 
-                        Text("Tipo de Animal")
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            val animals = listOf("Mamífero", "Ave", "Reptil", "Anfibio", "Insecto")
-                            animals.forEach { animal ->
-                                IconToggleButton(
-                                    checked = tipoAnimal == animal,
-                                    onCheckedChange = { tipoAnimal = animal },
-                                ) {
-                                    val iconResource = when (animal) {
-                                        "Mamífero" -> R.drawable.ic_mamifero
-                                        "Ave" -> R.drawable.ic_ave
-                                        "Reptil" -> R.drawable.ic_reptil
-                                        "Anfibio" -> R.drawable.ic_anfibio
-                                        "Insecto" -> R.drawable.ic_insecto
-                                        else -> android.R.drawable.ic_menu_gallery
-                                    }
-                                    Icon(
-                                        painter = painterResource(id = iconResource),
-                                        contentDescription = animal,
-                                        modifier = Modifier.size(40.dp),
-                                        tint = if (tipoAnimal == animal) Color(0xFF4E7029) else Color(0xFF3F3F3F)
+                        // SI o NO
+                        Text("Seguimiento")
+                        Column {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                RadioButton(
+                                    selected = seguimiento,
+                                    onClick = { seguimiento = true },
+                                    colors = RadioButtonDefaults.colors(
+                                        selectedColor = Color(0xFF4E7029),
+                                        unselectedColor = Color.Gray
                                     )
-                                }
+                                )
+                                Text("Sí", modifier = Modifier.padding(start = 8.dp))
+                            }
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                RadioButton(
+                                    selected = !seguimiento,
+                                    onClick = { seguimiento = false },
+                                    colors = RadioButtonDefaults.colors(
+                                        selectedColor = Color(0xFF4E7029),
+                                        unselectedColor = Color.Gray
+                                    )
+                                )
+                                Text("No", modifier = Modifier.padding(start = 8.dp))
                             }
                         }
 
-                        OutlinedTextField(
-                            value = nombreComun,
-                            onValueChange = { nombreComun = it },
-                            label = { Text("Nombre Común") },
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                        // SI o NO
+                        Text("Cambió")
+                        Column {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                RadioButton(
+                                    selected = cambio,
+                                    onClick = { cambio = true },
+                                    colors = RadioButtonDefaults.colors(
+                                        selectedColor = Color(0xFF4E7029),
+                                        unselectedColor = Color.Gray
+                                    )
+                                )
+                                Text("Sí", modifier = Modifier.padding(start = 8.dp))
+                            }
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                RadioButton(
+                                    selected = !cambio,
+                                    onClick = { cambio = false },
+                                    colors = RadioButtonDefaults.colors(
+                                        selectedColor = Color(0xFF4E7029),
+                                        unselectedColor = Color.Gray
+                                    )
+                                )
+                                Text("No", modifier = Modifier.padding(start = 8.dp))
+                            }
+                        }
 
-                        OutlinedTextField(
-                            value = nombreCientifico,
-                            onValueChange = { nombreCientifico = it },
-                            label = { Text("Nombre Científico") },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        OutlinedTextField(
-                            value = numeroIndividuos,
-                            onValueChange = { numeroIndividuos = it },
-                            label = { Text("Número de Individuos") },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        Text("Tipo de Observación")
-                        val observacionOptions = listOf("La Vió", "Huella", "Rastro", "Cacería", "Le dijeron")
-                        if (tipoObservacion == "") {
-                            tipoObservacion = observacionOptions[0]
+                        Text("Cobertura")
+                        val coberturaOptions =
+                            listOf("BD", "RA", "RB", "PA", "PL", "CP", "CT", "VH", "TD", "IF")
+                        if (cobertura == "") {
+                            cobertura = coberturaOptions[0]
                         }
                         Column {
-                            observacionOptions.forEach { option ->
+                            coberturaOptions.forEach { option ->
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     RadioButton(
-                                        selected = tipoObservacion == option,
-                                        onClick = { tipoObservacion = option },
+                                        selected = cobertura == option,
+                                        onClick = { cobertura = option },
                                         colors = RadioButtonDefaults.colors(
                                             selectedColor = Color(0xFF4E7029),
                                             unselectedColor = Color.Gray
@@ -185,6 +196,47 @@ fun ObservationForm(navController: NavController) {
                                 }
                             }
                         }
+
+                        OutlinedTextField(
+                            value = tipoCultivo,
+                            onValueChange = { tipoCultivo = it },
+                            label = { Text("Tipos de cultivo") },
+                            // Es un numero lo de esta entrada?
+                            // keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            // TODO: Aclarar, cambiar schema si es necesario
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Text("Disturbio")
+                        val disturbioOptions = listOf(
+                            "Inundación",
+                            "Quema",
+                            "Tala",
+                            "Erosión",
+                            "Minería",
+                            "Carretera",
+                            "Más plantas acuáticas",
+                            "Otro"
+                        )
+                        if (disturbio == "") {
+                            disturbio = disturbioOptions[0]
+                        }
+                        Column {
+                            disturbioOptions.forEach { option ->
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    RadioButton(
+                                        selected = disturbio == option,
+                                        onClick = { disturbio = option },
+                                        colors = RadioButtonDefaults.colors(
+                                            selectedColor = Color(0xFF4E7029),
+                                            unselectedColor = Color.Gray
+                                        )
+                                    )
+                                    Text(option, modifier = Modifier.padding(start = 8.dp))
+                                }
+                            }
+                        }
+
 
                         // Botón de cámara actualizado
                         Button(
@@ -208,6 +260,7 @@ fun ObservationForm(navController: NavController) {
                             Text("Tomar Foto")
                         }
 
+                        // Observaciones
                         OutlinedTextField(
                             value = observaciones,
                             onValueChange = { observaciones = it },
@@ -233,27 +286,29 @@ fun ObservationForm(navController: NavController) {
                                 shape = RoundedCornerShape(50),
                                 modifier = Modifier.weight(1f)
                             ) {
-                                Text("Atras",
+                                Text(
+                                    "Atras",
                                     style = TextStyle(
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight.SemiBold
-                                    ))
+                                    )
+                                )
                             }
 
                             Button(
                                 onClick = {
+                                    val formulario = FormularioTresEntity(
+                                        codigo = codigo,
+                                        seguimiento = seguimiento,
+                                        cambio = cambio,
+                                        cobertura = cobertura,
+                                        tipoCultivo = tipoCultivo,
+                                        disturbio = disturbio,
+                                        observaciones = observaciones,
+                                    )
                                     runBlocking {
-                                        appContainer.formularioUnoRepository.insertFormularioUno(
-                                            FormularioUnoEntity(
-                                                transecto = transecto,
-                                                tipoAnimal = tipoAnimal,
-                                                nombreComun = nombreComun,
-                                                nombreCientifico = nombreCientifico,
-                                                numeroIndividuos = numeroIndividuos,
-                                                tipoObservacion = tipoObservacion,
-                                                observaciones = observaciones
-                                            )
-                                        )
+                                        // appContainer.formularioUnoRepository.insertFormularioTres(formulario)
+                                        Log.d("FORM", formulario.toString())
                                     }
                                     navController.navigate("home")
                                 },
@@ -264,11 +319,13 @@ fun ObservationForm(navController: NavController) {
                                 shape = RoundedCornerShape(50),
                                 modifier = Modifier.weight(1f)
                             ) {
-                                Text("Enviar",
+                                Text(
+                                    "Enviar",
                                     style = TextStyle(
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight.SemiBold
-                                    ))
+                                    )
+                                )
                             }
                         }
                     }

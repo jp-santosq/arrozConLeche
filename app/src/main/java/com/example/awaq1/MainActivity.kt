@@ -18,11 +18,10 @@ import com.example.awaq1.ui.theme.AWAQ1Theme
 import com.example.awaq1.view.PrincipalView
 
 
-
-
 class MainActivity : ComponentActivity() {
     lateinit var container: AppContainer
     private lateinit var account: Auth0
+
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +41,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             AWAQ1Theme {
                 PrincipalView(modifier = Modifier, account)
-                }
             }
         }
+    }
+
     fun arePermissionsGranted(): Boolean {
         return CAMERA_PERMISSION.all { permission ->
             ContextCompat.checkSelfPermission(
@@ -59,6 +59,6 @@ class MainActivity : ComponentActivity() {
             Manifest.permission.CAMERA
         )
     }
-    }
+}
 
 
