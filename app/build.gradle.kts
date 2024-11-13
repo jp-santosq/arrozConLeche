@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
+    id("androidx.room")
 }
 
 android {
@@ -22,6 +23,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+        room {
+            schemaDirectory("$projectDir/schemas")
         }
     }
 
@@ -53,10 +57,10 @@ android {
         }
     }
 }
+val room_version = "2.6.1"
 
 dependencies {
     implementation(libs.androidx.ui.test.junit4.android)
-    val room_version = "2.6.1"
 
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)

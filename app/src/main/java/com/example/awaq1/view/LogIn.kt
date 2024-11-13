@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActionScope
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -24,6 +27,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.auth0.android.Auth0
@@ -65,6 +71,8 @@ fun LogIn(
                 value = username,
                 onValueChange = {username = it },
                 label = { Text("Email") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
                 modifier = Modifier
                     .padding(top = 20.dp)
                     .fillMaxWidth()
@@ -74,6 +82,14 @@ fun LogIn(
                 value = password,
                 onValueChange = {password = it },
                 label = { Text("Contraseña") },
+                visualTransformation = PasswordVisualTransformation(),
+                singleLine = true,
+                keyboardActions = KeyboardActions(onDone = {
+                    loginWithUsernamePassword(auth0, username, password, onLoginSuccess, onError = { message ->
+                        errorMessage = message // Actualiza el mensaje de error si ocurre un problema
+                    })
+                    defaultKeyboardAction(ImeAction.Done)
+                }),
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .fillMaxWidth()

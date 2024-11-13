@@ -44,30 +44,32 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.filled.Add
 import com.example.awaq1.ViewModels.CameraViewModel
+import com.example.awaq1.data.formularioUno.FormularioDosEntity
 import com.example.awaq1.view.CameraView
 
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
-fun Preview() {
-    ObservationForm(rememberNavController())
+fun PreviewForm2() {
+    ObservationFormDos(rememberNavController())
 }
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ObservationForm(navController: NavController) {
+fun ObservationFormDos(navController: NavController) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
 
-    var transecto by remember { mutableStateOf("") }
-    var tipoAnimal by remember { mutableStateOf("") }
-    var nombreComun by remember { mutableStateOf("") }
-    var nombreCientifico by remember { mutableStateOf("") }
-    var numeroIndividuos by remember { mutableStateOf("") }
-    var tipoObservacion by remember { mutableStateOf("") }
-    var observaciones by remember { mutableStateOf("") }
+    var zona: String by remember {mutableStateOf("")}
+    var tipoAnimal: String by remember {mutableStateOf("")}
+    var nombreComun: String by remember {mutableStateOf("")}
+    var nombreCientifico: String by remember {mutableStateOf("")}
+    var numeroIndividuos: String by remember {mutableStateOf("")}
+    var tipoObservacion: String by remember {mutableStateOf("")}
+    var alturaObservacion: String by remember {mutableStateOf("")}
+    var observaciones: String by remember {mutableStateOf("")}
     var showCamera by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -106,13 +108,26 @@ fun ObservationForm(navController: NavController) {
                             .verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        OutlinedTextField(
-                            value = transecto,
-                            onValueChange = { transecto = it },
-                            label = { Text("Número de Transecto") },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                        Text("Zona")
+                        val zonasOpciones = listOf("Bosque", "Arreglo Agroforestal", "Cultivos Transitorios", "Cultivos Permanentes")
+                        if (zona == "") {
+                            zona = zonasOpciones[0]
+                        }
+                        Column {
+                            zonasOpciones.forEach { option ->
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    RadioButton(
+                                        selected = zona == option,
+                                        onClick = { zona = option },
+                                        colors = RadioButtonDefaults.colors(
+                                            selectedColor = Color(0xFF4E7029),
+                                            unselectedColor = Color.Gray
+                                        )
+                                    )
+                                    Text(option, modifier = Modifier.padding(start = 8.dp))
+                                }
+                            }
+                        }
 
                         Text("Tipo de Animal")
                         Row(
@@ -186,6 +201,27 @@ fun ObservationForm(navController: NavController) {
                             }
                         }
 
+                        Text("Altura de Observación")
+                        val alturaOptions: List<Pair<String, String>> = listOf(Pair("Baja", "<1mt"), Pair("Media", "1-3mt"), Pair("Alta", ">3mt"))
+                        if (alturaObservacion == "") {
+                            alturaObservacion = observacionOptions[0]
+                        }
+                        Column {
+                            alturaOptions.forEach { option ->
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    RadioButton(
+                                        selected = alturaObservacion == option.first,
+                                        onClick = { alturaObservacion = option.first },
+                                        colors = RadioButtonDefaults.colors(
+                                            selectedColor = Color(0xFF4E7029),
+                                            unselectedColor = Color.Gray
+                                        )
+                                    )
+                                    Text("${option.first}, ${option.second}", modifier = Modifier.padding(start = 8.dp))
+                                }
+                            }
+                        }
+
                         // Botón de cámara actualizado
                         Button(
                             onClick = {
@@ -243,15 +279,16 @@ fun ObservationForm(navController: NavController) {
                             Button(
                                 onClick = {
                                     runBlocking {
-                                        appContainer.formularioUnoRepository.insertFormularioUno(
-                                            FormularioUnoEntity(
-                                                transecto = transecto,
+                                        appContainer.formularioUnoRepository.insertFormularioDos(
+                                            FormularioDosEntity(
+                                                zona = zona,
                                                 tipoAnimal = tipoAnimal,
                                                 nombreComun = nombreComun,
                                                 nombreCientifico = nombreCientifico,
                                                 numeroIndividuos = numeroIndividuos,
                                                 tipoObservacion = tipoObservacion,
-                                                observaciones = observaciones
+                                                alturaObservacion = alturaObservacion,
+                                                observaciones = observaciones,
                                             )
                                         )
                                     }

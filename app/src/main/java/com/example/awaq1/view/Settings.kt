@@ -155,7 +155,7 @@ fun BottomNavigationBar(navController: NavController) {
             // Add (Reporte) Button - Centered
             IconButton(
                 onClick = {
-                    navController.navigate("reporte") {
+                    navController.navigate("elegir_reporte") {
                         popUpTo("home") { inclusive = false }
                     }
                 },
