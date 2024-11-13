@@ -15,4 +15,16 @@ class OfflineFormularioUnoRepository(private val formularioUnoDAO: FormularioUno
     override suspend fun insertFormularioDos(item: FormularioDosEntity) = formularioUnoDAO.insert(item)
     override suspend fun deleteFormularioDos(item: FormularioDosEntity) = formularioUnoDAO.delete(item)
     override suspend fun updateFormularioDos(item: FormularioDosEntity) = formularioUnoDAO.update(item)
+    
+    override fun getAllFormularioTresStream(): Flow<List<FormularioTresEntity>> = formularioUnoDAO.getAllFormularioTresEntitys()
+    override fun getFormularioTresStream(id: Int): Flow<FormularioTresEntity?> = formularioUnoDAO.getFormularioTresEntity(id)
+    override suspend fun insertFormularioTres(item: FormularioTresEntity) = formularioUnoDAO.insert(item)
+    override suspend fun deleteFormularioTres(item: FormularioTresEntity) = formularioUnoDAO.delete(item)
+    override suspend fun updateFormularioTres(item: FormularioTresEntity) = formularioUnoDAO.update(item)
+    
+    override fun getAllFormularioCuatroStream(): Flow<List<FormularioCuatroEntity>> = formularioUnoDAO.getAllFormularioCuatroEntitys()
+    override fun getFormularioCuatroStream(id: Int): Flow<FormularioCuatroEntity?> = formularioUnoDAO.getFormularioCuatroEntity(id)
+    override suspend fun insertFormularioCuatro(item: FormularioCuatroEntity) = formularioUnoDAO.insert(item)
+    override suspend fun deleteFormularioCuatro(item: FormularioCuatroEntity) = formularioUnoDAO.delete(item)
+    override suspend fun updateFormularioCuatro(item: FormularioCuatroEntity) = formularioUnoDAO.update(item)
 }

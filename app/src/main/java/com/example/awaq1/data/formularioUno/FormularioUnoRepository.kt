@@ -20,4 +20,20 @@ interface FormularioUnoRepository {
     suspend fun deleteFormularioDos(item: FormularioDosEntity)
     suspend fun updateFormularioDos(item: FormularioDosEntity)
 
+    // FormularioTres
+    fun getAllFormularioTresStream(): Flow<List<FormularioTresEntity>>
+    fun getFormularioTresStream(id: Int): Flow<FormularioTresEntity?>
+
+    suspend fun insertFormularioTres(item: FormularioTresEntity)
+    suspend fun deleteFormularioTres(item: FormularioTresEntity)
+    suspend fun updateFormularioTres(item: FormularioTresEntity)
+
+    // FormularioCuatro
+    fun getAllFormularioCuatroStream(): Flow<List<FormularioCuatroEntity>>
+    fun getFormularioCuatroStream(id: Int): Flow<FormularioCuatroEntity?>
+
+    suspend fun insertFormularioCuatro(item: FormularioCuatroEntity)
+    suspend fun deleteFormularioCuatro(item: FormularioCuatroEntity)
+    suspend fun updateFormularioCuatro(item: FormularioCuatroEntity)
+
 }

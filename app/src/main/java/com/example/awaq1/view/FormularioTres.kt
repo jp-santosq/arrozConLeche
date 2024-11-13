@@ -307,7 +307,7 @@ fun ObservationFormTres(navController: NavController) {
                                         observaciones = observaciones,
                                     )
                                     runBlocking {
-                                        // appContainer.formularioUnoRepository.insertFormularioTres(formulario)
+                                        appContainer.formularioUnoRepository.insertFormularioTres(formulario)
                                         Log.d("FORM", formulario.toString())
                                     }
                                     navController.navigate("home")

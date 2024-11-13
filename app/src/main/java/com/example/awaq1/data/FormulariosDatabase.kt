@@ -5,12 +5,14 @@ import android.content.Context
 import androidx.room.AutoMigration
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.awaq1.data.formularioUno.FormularioCuatroEntity
 import com.example.awaq1.data.formularioUno.FormularioDosEntity
+import com.example.awaq1.data.formularioUno.FormularioTresEntity
 import com.example.awaq1.data.formularioUno.FormularioUnoDAO
 import com.example.awaq1.data.formularioUno.FormularioUnoEntity
 
 
-@Database(entities = [FormularioUnoEntity::class, FormularioDosEntity::class], version = 1, exportSchema = true)
+@Database(entities = [FormularioUnoEntity::class, FormularioDosEntity::class, FormularioTresEntity::class, FormularioCuatroEntity::class], version = 2, exportSchema = true, autoMigrations = [AutoMigration(from = 1, to = 2)])
 abstract class FormulariosDatabase : RoomDatabase() {
     abstract fun formulario1Dao(): FormularioUnoDAO
 
