@@ -93,7 +93,7 @@ dependencies {
     // Updated to explicitly specify compatible versions
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test:core:1.5.0")
-    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:runner:1.5.0")
     androidTestImplementation("androidx.room:room-testing:2.6.1")
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.camera2)
