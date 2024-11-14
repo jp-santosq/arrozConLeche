@@ -32,6 +32,7 @@ fun Home(navController: NavController) {
     val appContainer = context.container
     val formsList: List<FormularioUnoEntity> by appContainer.formularioUnoRepository.getAllFormularioUnosStream()
         .collectAsState(initial = emptyList())
+    val count by appContainer.formularioUnoRepository.getFormularioUnoCount().collectAsState(initial = 0)
 
     Scaffold(
         bottomBar = {
@@ -97,7 +98,7 @@ fun Home(navController: NavController) {
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        StatsColumn(label = "Total", count = 5, color = Color.Black)
+                        StatsColumn(label = "Total", count = count, color = Color.Black)
                         StatsColumn(label = "Enviados", count = 3, color = Color(0xFF4CAF50))
                         StatsColumn(label = "Guardados", count = 2, color = Color.Red)
                     }

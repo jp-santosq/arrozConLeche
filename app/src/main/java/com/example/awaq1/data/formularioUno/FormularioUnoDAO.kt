@@ -73,4 +73,16 @@ interface FormularioUnoDAO {
 
     @Query("SELECT * from Formulario4 ORDER BY id ASC")
     fun getAllFormularioCuatroEntitys(): Flow<List<FormularioCuatroEntity>>
+
+    @Query("SELECT COUNT(*) FROM Formulario1")
+    suspend fun getFormularioUnoCount(): Int
+
+    @Query("SELECT COUNT(*) FROM Formulario2")
+    suspend fun getFormularioDosCount(): Int
+
+    @Query("SELECT COUNT(*) FROM Formulario3")
+    suspend fun getFormularioTresCount(): Int
+
+    @Query("SELECT COUNT(*) FROM Formulario4")
+    suspend fun getFormularioCuatroCount(): Int
 }
