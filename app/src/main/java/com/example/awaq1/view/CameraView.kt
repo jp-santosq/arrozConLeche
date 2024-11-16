@@ -60,7 +60,7 @@ fun CameraView(modifier: Modifier = Modifier, activity: MainActivity) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES .P)
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel, onClose: () -> Unit) {
     val imageCapture = remember { ImageCapture.Builder().setFlashMode(ImageCapture.FLASH_MODE_ON).build() }
@@ -73,8 +73,8 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel, onClo
     cameraViewModel.setImageCapture(controller)
 
     var flashVisible by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(false) } // Estado para el diálogo
-    var savedImageUri by remember { mutableStateOf<Uri?>(null) } // URI de la imagen guardada
+    var showDialog by remember { mutableStateOf(false) }
+    var savedImageUri by remember { mutableStateOf<Uri?>(null) }
 
     Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
         val lifecycleOwner = LocalLifecycleOwner.current
@@ -88,13 +88,12 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel, onClo
             }
         )
 
-        // Efecto de flash
         if (flashVisible) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.White.copy(alpha = 0.5f))
-                    .clickable { /* Evitar clics en el flash */ }
+                    .clickable { }
             )
         }
 
@@ -106,15 +105,12 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel, onClo
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Botón para cerrar la cámara
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(14.dp))
                     .size(45.dp)
                     .background(MaterialTheme.colorScheme.primary)
-                    .clickable {
-                        onClose() // Cierra la cámara
-                    },
+                    .clickable { onClose() },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -136,21 +132,16 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel, onClo
                         if ((activity as MainActivity).arePermissionsGranted()) {
                             cameraViewModel.takePhoto(
                                 context = activity,
-                                onImageSaved = { file ->
-                                    // Guardar la URI de la imagen
-                                    savedImageUri = Uri.fromFile(file) // Corrección aquí
-                                    // Mostrar el diálogo
+                                onImageSaved = { uri ->
+                                    savedImageUri = uri
                                     showDialog = true
-                                    // Mostrar el efecto de flash
                                     flashVisible = true
-                                    // Ocultar el efecto de flash después de un breve tiempo
                                     GlobalScope.launch {
-                                        delay(100) // Duración del efecto de flash
+                                        delay(100)
                                         flashVisible = false
                                     }
                                 },
                                 onError = { exception ->
-                                    // Manejar error
                                     println("Error al guardar la foto: ${exception.message}")
                                 }
                             )
@@ -192,7 +183,6 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel, onClo
             }
         }
 
-        // Diálogo de confirmación
         if (showDialog) {
             AlertDialog(
                 onDismissRequest = { showDialog = false },
@@ -200,8 +190,13 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel, onClo
                 text = { Text(text = "¿Quieres usar la foto que acabas de tomar?") },
                 confirmButton = {
                     Button(onClick = {
-                        // Aquí puedes agregar la lógica para subir la imagen al almacenamiento
-                        println("Foto subida: ${savedImageUri?.path}")
+                        savedImageUri?.let { uri ->
+                            // Notificar a la galería sobre el nuevo archivo
+                            activity.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).apply {
+                                data = uri
+                            })
+                        }
+                        println("Foto guardada en la galería: ${savedImageUri?.path}")
                         showDialog = false
                     }) {
                         Text("Sí")
@@ -209,7 +204,6 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel, onClo
                 },
                 dismissButton = {
                     Button(onClick = {
-                        // Aquí puedes manejar la lógica si el usuario decide no usar la foto println("Foto no utilizada")
                         showDialog = false
                     }) {
                         Text("No")
