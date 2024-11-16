@@ -1,6 +1,5 @@
 package com.example.awaq1.view
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -36,15 +35,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.example.awaq1.MainActivity
 import com.example.awaq1.R
-import com.example.awaq1.data.formularioUno.FormularioUnoEntity
+import com.example.awaq1.data.formularios.FormularioUnoEntity
 import kotlinx.coroutines.runBlocking
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.filled.Add
 import com.example.awaq1.ViewModels.CameraViewModel
-import com.example.awaq1.view.CameraView
 
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -243,7 +240,7 @@ fun ObservationForm(navController: NavController) {
                             Button(
                                 onClick = {
                                     runBlocking {
-                                        appContainer.formularioUnoRepository.insertFormularioUno(
+                                        appContainer.formulariosRepository.insertFormularioUno(
                                             FormularioUnoEntity(
                                                 transecto = transecto,
                                                 tipoAnimal = tipoAnimal,

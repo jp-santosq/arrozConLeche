@@ -1,8 +1,8 @@
-package com.example.awaq1.data.formularioUno
+package com.example.awaq1.data.formularios
 
 import kotlinx.coroutines.flow.Flow
 
-interface FormularioUnoRepository {
+interface FormulariosRepository {
 
     // FormularioUno
     fun getAllFormularioUnosStream(): Flow<List<FormularioUnoEntity>>

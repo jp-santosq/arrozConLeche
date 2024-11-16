@@ -4,14 +4,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -21,9 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.awaq1.MainActivity
 import com.example.awaq1.R
-import com.example.awaq1.data.formularioUno.FormularioUnoEntity
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import com.example.awaq1.data.formularios.FormularioUnoEntity
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.horizontalScroll
@@ -36,7 +28,7 @@ import androidx.compose.material3.CardDefaults
 fun ObservationListScreen(navController: NavController) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
-    val formsList: List<FormularioUnoEntity> by appContainer.formularioUnoRepository.getAllFormularioUnosStream()
+    val formsList: List<FormularioUnoEntity> by appContainer.formulariosRepository.getAllFormularioUnosStream()
         .collectAsState(initial = emptyList())
 
     var completoSelected by remember { mutableStateOf(false) }

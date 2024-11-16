@@ -1,13 +1,11 @@
 package com.example.awaq1.view
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -18,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.compose.foundation.verticalScroll
@@ -35,19 +32,14 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.example.awaq1.MainActivity
-import com.example.awaq1.R
-import com.example.awaq1.data.formularioUno.FormularioUnoEntity
 import kotlinx.coroutines.runBlocking
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.filled.Add
 import com.example.awaq1.ViewModels.CameraViewModel
-import com.example.awaq1.data.formularioUno.FormularioDosEntity
-import com.example.awaq1.data.formularioUno.FormularioTresEntity
-import com.example.awaq1.view.CameraView
+import com.example.awaq1.data.formularios.FormularioTresEntity
 
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -307,7 +299,7 @@ fun ObservationFormTres(navController: NavController) {
                                         observaciones = observaciones,
                                     )
                                     runBlocking {
-                                        appContainer.formularioUnoRepository.insertFormularioTres(formulario)
+                                        appContainer.formulariosRepository.insertFormularioTres(formulario)
                                         Log.d("FORM", formulario.toString())
                                     }
                                     navController.navigate("home")

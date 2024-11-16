@@ -5,15 +5,13 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.awaq1.data.FormulariosDatabase
-import com.example.awaq1.data.formularioUno.FormularioUnoDAO
-import com.example.awaq1.data.formularioUno.FormularioUnoEntity
+import com.example.awaq1.data.formularios.FormulariosDAO
+import com.example.awaq1.data.formularios.FormularioUnoEntity
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,7 +20,7 @@ import org.junit.runner.RunWith
 class UnitTests {
 
     private lateinit var db: FormulariosDatabase
-    private lateinit var dao: FormularioUnoDAO
+    private lateinit var dao: FormulariosDAO
 
     @Before
     fun setUp() {

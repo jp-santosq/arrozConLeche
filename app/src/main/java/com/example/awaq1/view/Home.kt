@@ -1,6 +1,5 @@
 package com.example.awaq1.view
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,26 +13,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.awaq1.MainActivity
-import com.example.awaq1.R
-import com.example.awaq1.data.formularioUno.FormularioUnoEntity
+import com.example.awaq1.data.formularios.FormularioUnoEntity
 
 @Composable
 fun Home(navController: NavController) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
-    val formsList: List<FormularioUnoEntity> by appContainer.formularioUnoRepository.getAllFormularioUnosStream()
+    val formsList: List<FormularioUnoEntity> by appContainer.formulariosRepository.getAllFormularioUnosStream()
         .collectAsState(initial = emptyList())
-    val count by appContainer.formularioUnoRepository.getFormularioUnoCount().collectAsState(initial = 0)
+    val count by appContainer.formulariosRepository.getFormularioUnoCount().collectAsState(initial = 0)
 
     Scaffold(
         bottomBar = {

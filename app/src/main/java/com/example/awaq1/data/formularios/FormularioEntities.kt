@@ -1,4 +1,4 @@
-package com.example.awaq1.data.formularioUno
+package com.example.awaq1.data.formularios
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
