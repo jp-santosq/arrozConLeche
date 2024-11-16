@@ -55,7 +55,7 @@ fun CameraView(modifier: Modifier = Modifier, activity: MainActivity) {
     val cameraViewModel = CameraViewModel()
     Column(modifier.
     fillMaxSize(),
-    Arrangement.Center, Alignment.CenterHorizontally) {
+        Arrangement.Center, Alignment.CenterHorizontally) {
         var showCamera by remember { mutableStateOf(false) }
 
         if (showCamera) {
