@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -59,7 +60,7 @@ fun CameraView(modifier: Modifier = Modifier, activity: MainActivity) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.P)
+@RequiresApi(Build.VERSION_CODES .P)
 @Composable
 fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel, onClose: () -> Unit) {
     val imageCapture = remember { ImageCapture.Builder().setFlashMode(ImageCapture.FLASH_MODE_ON).build() }
@@ -72,6 +73,8 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel, onClo
     cameraViewModel.setImageCapture(controller)
 
     var flashVisible by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) } // Estado para el diálogo
+    var savedImageUri by remember { mutableStateOf<Uri?>(null) } // URI de la imagen guardada
 
     Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
         val lifecycleOwner = LocalLifecycleOwner.current
@@ -134,8 +137,10 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel, onClo
                             cameraViewModel.takePhoto(
                                 context = activity,
                                 onImageSaved = { file ->
-                                    // Manejar la imagen guardada (opcional)
-                                    println("Foto guardada en: ${file.absolutePath}")
+                                    // Guardar la URI de la imagen
+                                    savedImageUri = Uri.fromFile(file) // Corrección aquí
+                                    // Mostrar el diálogo
+                                    showDialog = true
                                     // Mostrar el efecto de flash
                                     flashVisible = true
                                     // Ocultar el efecto de flash después de un breve tiempo
@@ -185,6 +190,32 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel, onClo
                     modifier = Modifier.size(26.dp)
                 )
             }
+        }
+
+        // Diálogo de confirmación
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = { Text(text = "¿Usar esta foto?") },
+                text = { Text(text = "¿Quieres usar la foto que acabas de tomar?") },
+                confirmButton = {
+                    Button(onClick = {
+                        // Aquí puedes agregar la lógica para subir la imagen al almacenamiento
+                        println("Foto subida: ${savedImageUri?.path}")
+                        showDialog = false
+                    }) {
+                        Text("Sí")
+                    }
+                },
+                dismissButton = {
+                    Button(onClick = {
+                        // Aquí puedes manejar la lógica si el usuario decide no usar la foto println("Foto no utilizada")
+                        showDialog = false
+                    }) {
+                        Text("No")
+                    }
+                }
+            )
         }
     }
 }
