@@ -96,7 +96,8 @@ fun ObservationFormTres(navController: NavController) {
             if (showCamera) {
                 CameraWindow(
                     activity = context,
-                    cameraViewModel = CameraViewModel()
+                    cameraViewModel = CameraViewModel(),
+                    onClose = { showCamera = false }
                 )
             } else {
                 Box(

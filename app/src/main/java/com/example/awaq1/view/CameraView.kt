@@ -11,16 +11,7 @@ import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -31,11 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,21 +32,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.awaq1.MainActivity
 import com.example.awaq1.ViewModels.CameraViewModel
-
-
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun CameraView(modifier: Modifier = Modifier, activity: MainActivity) {
-
     val cameraViewModel = CameraViewModel()
-    Column(modifier.
-    fillMaxSize(),
-        Arrangement.Center, Alignment.CenterHorizontally) {
-        var showCamera by remember { mutableStateOf(false) }
+    var showCamera by remember { mutableStateOf(false) }
 
+    Column(modifier.fillMaxSize(), Arrangement.Center, Alignment.CenterHorizontally) {
         if (showCamera) {
-            CameraWindow(activity, cameraViewModel)
+            CameraWindow(activity, cameraViewModel, onClose = { showCamera = false })
         } else {
             Column(
                 modifier = modifier.fillMaxSize(),
@@ -71,35 +56,24 @@ fun CameraView(modifier: Modifier = Modifier, activity: MainActivity) {
                 }
             }
         }
-
     }
 }
 
-
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
-fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel) {
-    val imageCapture = remember { ImageCapture.Builder().build() }
+fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel, onClose: () -> Unit) {
+    val imageCapture = remember { ImageCapture.Builder().setFlashMode(ImageCapture.FLASH_MODE_ON).build() }
     val controller = remember {
-        LifecycleCameraController(
-            activity
-        ).apply {
-            setEnabledUseCases(
-                CameraController.IMAGE_CAPTURE
-            )
+        LifecycleCameraController(activity).apply {
+            setEnabledUseCases(CameraController.IMAGE_CAPTURE)
         }
     }
 
     cameraViewModel.setImageCapture(controller)
 
+    var flashVisible by remember { mutableStateOf(false) }
 
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-    ) {
-
+    Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
         val lifecycleOwner = LocalLifecycleOwner.current
         AndroidView(
             modifier = Modifier.fillMaxSize(),
@@ -111,6 +85,16 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel) {
             }
         )
 
+        // Efecto de flash
+        if (flashVisible) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White.copy(alpha = 0.5f))
+                    .clickable { /* Evitar clics en el flash */ }
+            )
+        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -119,35 +103,26 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel) {
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-
+            // Botón para cerrar la cámara
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(14.dp))
                     .size(45.dp)
                     .background(MaterialTheme.colorScheme.primary)
                     .clickable {
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse(
-                                "content://media/internal/images/media"
-                            )
-                        ).also {
-                            activity.startActivity(it)
-                        }
+                        onClose() // Cierra la cámara
                     },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.Done,
-                    contentDescription = "Gallery",
+                    contentDescription = "Close Camera",
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(26.dp)
                 )
             }
 
             Spacer(modifier = Modifier.width(1.dp))
-
-
 
             Box(
                 modifier = Modifier
@@ -161,6 +136,13 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel) {
                                 onImageSaved = { file ->
                                     // Manejar la imagen guardada (opcional)
                                     println("Foto guardada en: ${file.absolutePath}")
+                                    // Mostrar el efecto de flash
+                                    flashVisible = true
+                                    // Ocultar el efecto de flash después de un breve tiempo
+                                    GlobalScope.launch {
+                                        delay(100) // Duración del efecto de flash
+                                        flashVisible = false
+                                    }
                                 },
                                 onError = { exception ->
                                     // Manejar error
@@ -203,9 +185,6 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel) {
                     modifier = Modifier.size(26.dp)
                 )
             }
-
         }
-
     }
-
 }

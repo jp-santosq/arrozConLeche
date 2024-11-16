@@ -101,8 +101,10 @@ dependencies {
     implementation(libs.androidx.camera.video)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.extensions)
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+
 
     // Include the Compose BOM for Android Test dependencies
     androidTestImplementation(platform("androidx.compose:compose-bom:2024.04.01"))
