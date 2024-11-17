@@ -39,6 +39,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.filled.Add
 import com.example.awaq1.ViewModels.CameraViewModel
+import com.example.awaq1.data.formularios.FormularioDosEntity
 import com.example.awaq1.data.formularios.FormularioTresEntity
 
 
@@ -299,8 +300,9 @@ fun ObservationFormTres(navController: NavController) {
                                         observaciones = observaciones,
                                     )
                                     runBlocking {
-                                        appContainer.formulariosRepository.insertFormularioTres(formulario)
-                                        Log.d("FORM", formulario.toString())
+                                        appContainer.usuariosRepository.insertUserWithFormularioTres(
+                                            context.accountInfo.user_id, formulario
+                                        )
                                     }
                                     navController.navigate("home")
                                 },

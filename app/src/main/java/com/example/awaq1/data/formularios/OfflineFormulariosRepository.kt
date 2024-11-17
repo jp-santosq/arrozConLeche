@@ -10,7 +10,7 @@ class OfflineFormulariosRepository(
     private val formularioCuatroDAO: FormularioCuatroDAO
 ): FormulariosRepository {
     override fun getAllFormularioUnosStream(): Flow<List<FormularioUnoEntity>> = formularioUnoDAO.getAllFormularioUnoEntities()
-    override fun getFormularioUnoStream(id: Int): Flow<FormularioUnoEntity?> = formularioUnoDAO.getFormularioUnoEntity(id)
+    override fun getFormularioUnoStream(id: Long): Flow<FormularioUnoEntity?> = formularioUnoDAO.getFormularioUnoEntity(id)
     override suspend fun insertFormularioUno(item: FormularioUnoEntity) {
         formularioUnoDAO.insert(item)
     }
@@ -19,7 +19,7 @@ class OfflineFormulariosRepository(
 
     
     override fun getAllFormularioDosesStream(): Flow<List<FormularioDosEntity>> = formularioDosDAO.getAllFormularioDosEntities()
-    override fun getFormularioDosStream(id: Int): Flow<FormularioDosEntity?> = formularioDosDAO.getFormularioDosEntity(id)
+    override fun getFormularioDosStream(id: Long): Flow<FormularioDosEntity?> = formularioDosDAO.getFormularioDosEntity(id)
     override suspend fun insertFormularioDos(item: FormularioDosEntity) {
         formularioDosDAO.insert(item)
     }
@@ -27,7 +27,7 @@ class OfflineFormulariosRepository(
     override suspend fun updateFormularioDos(item: FormularioDosEntity) = formularioDosDAO.update(item)
     
     override fun getAllFormularioTresStream(): Flow<List<FormularioTresEntity>> = formularioTresDAO.getAllFormularioTresEntities()
-    override fun getFormularioTresStream(id: Int): Flow<FormularioTresEntity?> = formularioTresDAO.getFormularioTresEntity(id)
+    override fun getFormularioTresStream(id: Long): Flow<FormularioTresEntity?> = formularioTresDAO.getFormularioTresEntity(id)
     override suspend fun insertFormularioTres(item: FormularioTresEntity) {
         formularioTresDAO.insert(item)
     }
@@ -35,7 +35,7 @@ class OfflineFormulariosRepository(
     override suspend fun updateFormularioTres(item: FormularioTresEntity) = formularioTresDAO.update(item)
     
     override fun getAllFormularioCuatroStream(): Flow<List<FormularioCuatroEntity>> = formularioCuatroDAO.getAllFormularioCuatroEntities()
-    override fun getFormularioCuatroStream(id: Int): Flow<FormularioCuatroEntity?> = formularioCuatroDAO.getFormularioCuatroEntity(id)
+    override fun getFormularioCuatroStream(id: Long): Flow<FormularioCuatroEntity?> = formularioCuatroDAO.getFormularioCuatroEntity(id)
     override suspend fun insertFormularioCuatro(item: FormularioCuatroEntity) {
         formularioCuatroDAO.insert(item)
     }

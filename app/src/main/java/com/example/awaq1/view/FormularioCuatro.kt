@@ -365,8 +365,9 @@ fun ObservationFormCuatro(navController: NavController) {
                                         observaciones = observaciones
                                     )
                                     runBlocking {
-                                        appContainer.formulariosRepository.insertFormularioCuatro(formulario)
-                                        Log.d("FORM", formulario.toString())
+                                        appContainer.usuariosRepository.insertUserWithFormularioCuatro(
+                                            context.accountInfo.user_id, formulario
+                                        )
                                     }
                                     navController.navigate("home")
                                 },

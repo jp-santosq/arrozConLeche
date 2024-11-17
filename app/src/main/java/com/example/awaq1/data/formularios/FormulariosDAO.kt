@@ -20,7 +20,7 @@ interface FormularioUnoDAO {
     suspend fun delete(item: FormularioUnoEntity)
 
     @Query("SELECT * from Formulario1 WHERE id = :id")
-    fun getFormularioUnoEntity(id: Int): Flow<FormularioUnoEntity?>
+    fun getFormularioUnoEntity(id: Long): Flow<FormularioUnoEntity?>
 
     @Query("SELECT * from Formulario1 ORDER BY id ASC")
     fun getAllFormularioUnoEntities(): Flow<List<FormularioUnoEntity>>
@@ -41,7 +41,7 @@ interface FormularioDosDAO {
     suspend fun delete(item: FormularioDosEntity)
 
     @Query("SELECT * from Formulario2 WHERE id = :id")
-    fun getFormularioDosEntity(id: Int): Flow<FormularioDosEntity?>
+    fun getFormularioDosEntity(id: Long): Flow<FormularioDosEntity?>
 
     @Query("SELECT * from Formulario2 ORDER BY id ASC")
     fun getAllFormularioDosEntities(): Flow<List<FormularioDosEntity>>
@@ -62,7 +62,7 @@ interface FormularioTresDAO {
     suspend fun delete(item: FormularioTresEntity)
 
     @Query("SELECT * from Formulario3 WHERE id = :id")
-    fun getFormularioTresEntity(id: Int): Flow<FormularioTresEntity?>
+    fun getFormularioTresEntity(id: Long): Flow<FormularioTresEntity?>
 
     @Query("SELECT * from Formulario3 ORDER BY id ASC")
     fun getAllFormularioTresEntities(): Flow<List<FormularioTresEntity>>
@@ -83,7 +83,7 @@ interface FormularioCuatroDAO {
     suspend fun delete(item: FormularioCuatroEntity)
 
     @Query("SELECT * from Formulario4 WHERE id = :id")
-    fun getFormularioCuatroEntity(id: Int): Flow<FormularioCuatroEntity?>
+    fun getFormularioCuatroEntity(id: Long): Flow<FormularioCuatroEntity?>
 
     @Query("SELECT * from Formulario4 ORDER BY id ASC")
     fun getAllFormularioCuatroEntities(): Flow<List<FormularioCuatroEntity>>

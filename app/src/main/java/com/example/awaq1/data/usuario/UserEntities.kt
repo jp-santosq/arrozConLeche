@@ -23,7 +23,7 @@ data class UsuarioEntity(
     val lastLogin: String,
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var id: Long = 0
 }
 
 // Usuario Formulario 1 Association Entity
@@ -35,11 +35,11 @@ data class UsuarioEntity(
     ]
 )
 data class UsuarioFormulario1Entity(
-    val usuarioId: Int,
-    val formId: Int,
+    val usuarioId: Long,
+    val formId: Long,
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var id: Long = 0
 }
 
 // Usuario Formulario 2 Association Entity
@@ -51,11 +51,11 @@ data class UsuarioFormulario1Entity(
     ]
 )
 data class UsuarioFormulario2Entity(
-    val usuarioId: Int,
-    val formId: Int,
+    val usuarioId: Long,
+    val formId: Long,
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var id: Long = 0
 }
 
 // Usuario Formulario 3 Association Entity
@@ -67,11 +67,11 @@ data class UsuarioFormulario2Entity(
     ]
 )
 data class UsuarioFormulario3Entity(
-    val usuarioId: Int,
-    val formId: Int,
+    val usuarioId: Long,
+    val formId: Long,
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var id: Long = 0
 }
 
 // Usuario Formulario 4 Association Entity
@@ -83,9 +83,9 @@ data class UsuarioFormulario3Entity(
     ]
 )
 data class UsuarioFormulario4Entity(
-    val usuarioId: Int,
-    val formId: Int,
+    val usuarioId: Long,
+    val formId: Long,
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var id: Long = 0
 }

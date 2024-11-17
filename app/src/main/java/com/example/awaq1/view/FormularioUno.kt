@@ -239,17 +239,20 @@ fun ObservationForm(navController: NavController) {
 
                             Button(
                                 onClick = {
+                                    // Generar objeto formulario
+                                    val formulario = FormularioUnoEntity(
+                                        transecto = transecto,
+                                        tipoAnimal = tipoAnimal,
+                                        nombreComun = nombreComun,
+                                        nombreCientifico = nombreCientifico,
+                                        numeroIndividuos = numeroIndividuos,
+                                        tipoObservacion = tipoObservacion,
+                                        observaciones = observaciones
+                                    )
+                                    // Guardar en base de datos, vinculado al usuario
                                     runBlocking {
-                                        appContainer.formulariosRepository.insertFormularioUno(
-                                            FormularioUnoEntity(
-                                                transecto = transecto,
-                                                tipoAnimal = tipoAnimal,
-                                                nombreComun = nombreComun,
-                                                nombreCientifico = nombreCientifico,
-                                                numeroIndividuos = numeroIndividuos,
-                                                tipoObservacion = tipoObservacion,
-                                                observaciones = observaciones
-                                            )
+                                        appContainer.usuariosRepository.insertUserWithFormularioUno(
+                                            context.accountInfo.user_id, formulario
                                         )
                                     }
                                     navController.navigate("home")

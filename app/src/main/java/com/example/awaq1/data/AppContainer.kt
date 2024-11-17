@@ -24,8 +24,14 @@ class AppDataContainer(private val context: Context) : AppContainer {
     override val usuariosRepository: UsuariosRepository by lazy {
         UsuariosRepository(
             usuarioDAO = FormulariosDatabase.getDatabase(context).usuarioDAO(),
+            usuarioFormulario1DAO = FormulariosDatabase.getDatabase(context).usuarioFormulario1DAO(),
+            usuarioFormulario2DAO = FormulariosDatabase.getDatabase(context).usuarioFormulario2DAO(),
+            usuarioFormulario3DAO = FormulariosDatabase.getDatabase(context).usuarioFormulario3DAO(),
+            usuarioFormulario4DAO = FormulariosDatabase.getDatabase(context).usuarioFormulario4DAO(),
             formularioUnoDAO = FormulariosDatabase.getDatabase(context).formulario1Dao(),
-            usuarioFormulario1DAO = FormulariosDatabase.getDatabase(context).usuarioFormulario1DAO()
+            formularioDosDAO = FormulariosDatabase.getDatabase(context).formulario2Dao(),
+            formularioTresDAO = FormulariosDatabase.getDatabase(context).formulario3Dao(),
+            formularioCuatroDAO = FormulariosDatabase.getDatabase(context).formulario4Dao(),
         )
     }
 }

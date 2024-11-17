@@ -277,20 +277,23 @@ fun ObservationFormDos(navController: NavController) {
 
                             Button(
                                 onClick = {
+                                    val formulario =
+                                        FormularioDosEntity(
+                                            zona = zona,
+                                            tipoAnimal = tipoAnimal,
+                                            nombreComun = nombreComun,
+                                            nombreCientifico = nombreCientifico,
+                                            numeroIndividuos = numeroIndividuos,
+                                            tipoObservacion = tipoObservacion,
+                                            alturaObservacion = alturaObservacion,
+                                            observaciones = observaciones,
+                                        )
                                     runBlocking {
-                                        appContainer.formulariosRepository.insertFormularioDos(
-                                            FormularioDosEntity(
-                                                zona = zona,
-                                                tipoAnimal = tipoAnimal,
-                                                nombreComun = nombreComun,
-                                                nombreCientifico = nombreCientifico,
-                                                numeroIndividuos = numeroIndividuos,
-                                                tipoObservacion = tipoObservacion,
-                                                alturaObservacion = alturaObservacion,
-                                                observaciones = observaciones,
-                                            )
+                                        appContainer.usuariosRepository.insertUserWithFormularioDos(
+                                            context.accountInfo.user_id, formulario
                                         )
                                     }
+
                                     navController.navigate("home")
                                 },
                                 colors = ButtonDefaults.buttonColors(

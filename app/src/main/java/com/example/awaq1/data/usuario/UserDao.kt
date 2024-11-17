@@ -23,26 +23,26 @@ interface UsuarioDAO {
     suspend fun delete(usuario: UsuarioEntity)
 
     @Query("SELECT * from Usuarios WHERE id = :id")
-    fun getUsuarioById(id: Int): Flow<UsuarioEntity?>
+    fun getUsuarioById(id: Long): Flow<UsuarioEntity?>
 
     @Query("SELECT * from Usuarios ORDER BY id ASC")
     fun getAllUsuarios(): Flow<List<UsuarioEntity>>
 
     @Query("SELECT id FROM Usuarios WHERE username = :username")
-    suspend fun getUserIdByUsername(username: String): Int?
+    suspend fun getUserIdByUsername(username: String): Long?
 
     @Query("UPDATE Usuarios SET lastAccess = :lastAccess WHERE id = :userId")
-    suspend fun updateLastAccess(userId: Int, lastAccess: String)
+    suspend fun updateLastAccess(userId: Long, lastAccess: String)
 
     @Query("UPDATE Usuarios SET lastLogin = :lastLogin WHERE id = :userId")
-    suspend fun updateLastLogin(userId: Int, lastLogin: String)
+    suspend fun updateLastLogin(userId: Long, lastLogin: String)
 }
 
 // DAO for UsuarioFormulario1Entity
 @Dao
 interface UsuarioFormulario1DAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(usuarioFormulario: UsuarioFormulario1Entity)
+    suspend fun insert(usuarioFormulario: UsuarioFormulario1Entity): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertFromParts(usuario: UsuarioEntity, formulario: FormularioUnoEntity)
@@ -54,17 +54,20 @@ interface UsuarioFormulario1DAO {
     suspend fun delete(usuarioFormulario: UsuarioFormulario1Entity)
 
     @Query("SELECT * from UsuarioFormulario1 WHERE usuarioId = :usuarioId")
-    fun getFormulariosForUsuario(usuarioId: Int): Flow<List<UsuarioFormulario1Entity>>
+    fun getFormulariosForUsuario(usuarioId: Long): Flow<List<UsuarioFormulario1Entity>>
 
     @Query("SELECT * from UsuarioFormulario1 WHERE formId = :formId")
-    fun getUsuariosForFormulario(formId: Int): Flow<List<UsuarioFormulario1Entity>>
+    fun getUsuariosForFormulario(formId: Long): Flow<List<UsuarioFormulario1Entity>>
+
+    @Query("SELECT * from Formulario1 INNER JOIN UsuarioFormulario1 ON Formulario1.id = UsuarioFormulario1.formId WHERE UsuarioFormulario1.usuarioId = :usuarioId")
+    fun getAllFormulariosForUserID(usuarioId: Long): Flow<List<FormularioUnoEntity>>
 }
 
 // DAO for UsuarioFormulario2Entity
 @Dao
 interface UsuarioFormulario2DAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(usuarioFormulario: UsuarioFormulario2Entity)
+    suspend fun insert(usuarioFormulario: UsuarioFormulario2Entity): Long
 
     @Update
     suspend fun update(usuarioFormulario: UsuarioFormulario2Entity)
@@ -73,17 +76,17 @@ interface UsuarioFormulario2DAO {
     suspend fun delete(usuarioFormulario: UsuarioFormulario2Entity)
 
     @Query("SELECT * from UsuarioFormulario2 WHERE usuarioId = :usuarioId")
-    fun getFormulariosForUsuario(usuarioId: Int): Flow<List<UsuarioFormulario2Entity>>
+    fun getFormulariosForUsuario(usuarioId: Long): Flow<List<UsuarioFormulario2Entity>>
 
     @Query("SELECT * from UsuarioFormulario2 WHERE formId = :formId")
-    fun getUsuariosForFormulario(formId: Int): Flow<List<UsuarioFormulario2Entity>>
+    fun getUsuariosForFormulario(formId: Long): Flow<List<UsuarioFormulario2Entity>>
 }
 
 // DAO for UsuarioFormulario3Entity
 @Dao
 interface UsuarioFormulario3DAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(usuarioFormulario: UsuarioFormulario3Entity)
+    suspend fun insert(usuarioFormulario: UsuarioFormulario3Entity): Long
 
     @Update
     suspend fun update(usuarioFormulario: UsuarioFormulario3Entity)
@@ -92,17 +95,17 @@ interface UsuarioFormulario3DAO {
     suspend fun delete(usuarioFormulario: UsuarioFormulario3Entity)
 
     @Query("SELECT * from UsuarioFormulario3 WHERE usuarioId = :usuarioId")
-    fun getFormulariosForUsuario(usuarioId: Int): Flow<List<UsuarioFormulario3Entity>>
+    fun getFormulariosForUsuario(usuarioId: Long): Flow<List<UsuarioFormulario3Entity>>
 
     @Query("SELECT * from UsuarioFormulario3 WHERE formId = :formId")
-    fun getUsuariosForFormulario(formId: Int): Flow<List<UsuarioFormulario3Entity>>
+    fun getUsuariosForFormulario(formId: Long): Flow<List<UsuarioFormulario3Entity>>
 }
 
 // DAO for UsuarioFormulario4Entity
 @Dao
 interface UsuarioFormulario4DAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(usuarioFormulario: UsuarioFormulario4Entity)
+    suspend fun insert(usuarioFormulario: UsuarioFormulario4Entity): Long
 
     @Update
     suspend fun update(usuarioFormulario: UsuarioFormulario4Entity)
@@ -111,8 +114,8 @@ interface UsuarioFormulario4DAO {
     suspend fun delete(usuarioFormulario: UsuarioFormulario4Entity)
 
     @Query("SELECT * from UsuarioFormulario4 WHERE usuarioId = :usuarioId")
-    fun getFormulariosForUsuario(usuarioId: Int): Flow<List<UsuarioFormulario4Entity>>
+    fun getFormulariosForUsuario(usuarioId: Long): Flow<List<UsuarioFormulario4Entity>>
 
     @Query("SELECT * from UsuarioFormulario4 WHERE formId = :formId")
-    fun getUsuariosForFormulario(formId: Int): Flow<List<UsuarioFormulario4Entity>>
+    fun getUsuariosForFormulario(formId: Long): Flow<List<UsuarioFormulario4Entity>>
 }

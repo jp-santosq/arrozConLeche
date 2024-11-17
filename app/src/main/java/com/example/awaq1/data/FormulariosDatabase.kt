@@ -25,7 +25,7 @@ import com.example.awaq1.data.usuario.UsuarioFormulario4DAO
 import com.example.awaq1.data.usuario.UsuarioFormulario4Entity
 
 
-@Database(entities = [FormularioUnoEntity::class, FormularioDosEntity::class, FormularioTresEntity::class, FormularioCuatroEntity::class, UsuarioEntity::class, UsuarioFormulario1Entity::class, UsuarioFormulario2Entity::class, UsuarioFormulario3Entity::class, UsuarioFormulario4Entity::class], version = 3, exportSchema = true, autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)])
+@Database(entities = [FormularioUnoEntity::class, FormularioDosEntity::class, FormularioTresEntity::class, FormularioCuatroEntity::class, UsuarioEntity::class, UsuarioFormulario1Entity::class, UsuarioFormulario2Entity::class, UsuarioFormulario3Entity::class, UsuarioFormulario4Entity::class], version = 4, exportSchema = true, autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)])
 abstract class FormulariosDatabase : RoomDatabase() {
     abstract fun formulario1Dao(): FormularioUnoDAO
     abstract fun formulario2Dao(): FormularioDosDAO
@@ -45,6 +45,7 @@ abstract class FormulariosDatabase : RoomDatabase() {
             // if the Instance is not null, return it, otherwise create a new database instance.
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, FormulariosDatabase::class.java, "formularios_database")
+                    .fallbackToDestructiveMigration() // Quien necesita migraciones? Nuke it! Win-Win
                     .build()
                     .also { Instance = it }
             }
