@@ -40,7 +40,7 @@ import com.example.awaq1.R
 @Composable
 fun LogIn(
     auth0: Auth0,
-    onLoginSuccess: (Credentials) -> Unit,
+    onLoginSuccess: (Credentials, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var username by remember { mutableStateOf("") }

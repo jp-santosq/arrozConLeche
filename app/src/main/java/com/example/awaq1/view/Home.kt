@@ -1,6 +1,5 @@
 package com.example.awaq1.view
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,26 +13,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.awaq1.MainActivity
-import com.example.awaq1.R
-import com.example.awaq1.data.formularioUno.FormularioUnoEntity
+import com.example.awaq1.data.formularios.FormularioCuatroEntity
+import com.example.awaq1.data.formularios.FormularioDosEntity
+import com.example.awaq1.data.formularios.FormularioTresEntity
+import com.example.awaq1.data.formularios.FormularioUnoEntity
+import com.example.awaq1.data.usuario.UsuarioFormulario1Entity
 
 @Composable
 fun Home(navController: NavController) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
-    val formsList: List<FormularioUnoEntity> by appContainer.formularioUnoRepository.getAllFormularioUnosStream()
+    val formsList: List<FormularioUnoEntity> by appContainer.usuariosRepository.getAllFormularioUnoForUserID(context.accountInfo.user_id)
         .collectAsState(initial = emptyList())
-    val count by appContainer.formularioUnoRepository.getFormularioUnoCount().collectAsState(initial = 0)
+    val count by appContainer.formulariosRepository.getFormularioUnoCount()
+        .collectAsState(initial = 0)
 
     Scaffold(
         bottomBar = {
@@ -96,7 +95,7 @@ fun Home(navController: NavController) {
 
                     // Stats Row
                     Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        horizontalArrangement = Arrangement.SpaceAround,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         StatsColumn(label = "Total", count = count, color = Color.Black)
@@ -105,6 +104,7 @@ fun Home(navController: NavController) {
                     }
 
                     // Progress Bar
+                    // TODO: Desactivar esto probablemente
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -120,7 +120,10 @@ fun Home(navController: NavController) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxHeight()
-                                    .background(Color(0xFF4E7029), shape = RoundedCornerShape(12.dp))
+                                    .background(
+                                        Color(0xFF4E7029),
+                                        shape = RoundedCornerShape(12.dp)
+                                    )
                                     .fillMaxWidth(0.6f)
                             )
                         }
@@ -138,40 +141,13 @@ fun Home(navController: NavController) {
                         columns = GridCells.Fixed(2),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .padding(horizontal = 0.dp, vertical = 8.dp)
+                            .fillMaxWidth()
                     ) {
                         items(formsList) { form ->
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { /* Navigate to form detail */ },
-                                colors = CardDefaults.cardColors(
-                                    containerColor = Color.White
-                                ),
-                                elevation = CardDefaults.cardElevation(
-                                    defaultElevation = 4.dp
-                                )
-                            ) {
-                                Column(
-                                    modifier = Modifier.padding(8.dp)
-                                ) {
-                                    Text(
-                                        text = "Transecto: ${form.transecto}",
-                                        style = MaterialTheme.typography.titleSmall,
-                                        color = Color.Black
-                                    )
-                                    Text(
-                                        text = "Tipo: ${form.tipoAnimal}",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = Color.Black
-                                    )
-                                    Text(
-                                        text = "Nombre: ${form.nombreComun}",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = Color.Black
-                                    )
-                                }
-                            }
+                            val formCard = FormInfo(form)
+                            formCard.displayCard()
                         }
                     }
                 }
@@ -196,3 +172,86 @@ fun StatsColumn(label: String, count: Int, color: Color) {
         )
     }
 }
+
+// Se ve algo así
+// +---------------+
+// | tipo:valorId  |
+// | pTag: pCont   |
+// | sTag: sCont   |
+// +---------------+
+
+data class FormInfo(
+    val tipo: String, // Descripcion del tipo de formulario (una sola palabra)
+    val valorIdentificador: String, // Valor que se muestra junto tipo
+    val primerTag: String, // Tag del primer valor a mostrar como preview del formulario
+    val primerContenido: String, // El valor a mostrar junto al primer tag
+    val segundoTag: String,
+    val segundoContenido: String,
+
+    val formulario: String // Indicador de tipo de formulario, para luego acceder
+) {
+    constructor(formulario: FormularioUnoEntity) : this(
+        tipo = "Transecto", formulario.transecto,
+        primerTag = "Tipo", formulario.tipoAnimal,
+        segundoTag = "Nombre", formulario.nombreComun,
+        formulario = "form1"
+    )
+
+    constructor(formulario: FormularioDosEntity) : this(
+        tipo = "Zona", formulario.zona,
+        primerTag = "Tipo", formulario.tipoAnimal,
+        segundoTag = "Nombre", formulario.nombreComun,
+        formulario = "form2"
+    )
+
+    constructor(formulario: FormularioTresEntity) : this(
+        tipo = "Código", formulario.codigo,
+        primerTag = "Seguimiento", siONo(formulario.seguimiento),
+        segundoTag = "Cambio", siONo(formulario.cambio),
+        formulario = "form3"
+    )
+
+    constructor(formulario: FormularioCuatroEntity) : this(
+        tipo = "Código", formulario.codigo,
+        primerTag = "Cuad. A", formulario.quad_a,
+        segundoTag = "Cuad. B", formulario.quad_b,
+        formulario = "form4"
+    )
+
+    @Composable
+    fun displayCard(modifier: Modifier = Modifier) {
+        Card(
+            modifier = modifier
+                .fillMaxWidth()
+                .clickable { /* Navigate to form detail */ },
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            ),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 4.dp
+            )
+        ) {
+            Column(
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Text(
+                    text = "$tipo: $valorIdentificador",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = Color.Black
+                )
+                Text(
+                    text = "$primerTag: $primerContenido",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Black
+                )
+                Text(
+                    text = "$segundoTag: $segundoContenido",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Black
+                )
+            }
+        }
+    }
+}
+
+private fun siONo(boolean: Boolean): String = if (boolean) "Sí" else "No"

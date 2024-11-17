@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.auth0.android.Auth0
+import com.example.awaq1.data.AccountInfo
 import com.example.awaq1.data.AppContainer
 import com.example.awaq1.data.AppDataContainer
 import com.example.awaq1.ui.theme.AWAQ1Theme
@@ -21,6 +22,7 @@ import com.example.awaq1.view.PrincipalView
 class MainActivity : ComponentActivity() {
     lateinit var container: AppContainer
     private lateinit var account: Auth0
+    lateinit var accountInfo: AccountInfo
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
