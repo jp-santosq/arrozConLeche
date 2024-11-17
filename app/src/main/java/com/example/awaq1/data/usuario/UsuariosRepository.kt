@@ -79,6 +79,8 @@ class UsuariosRepository(
 
     fun getUsuariosForFormularioDos(formId: Long): Flow<List<UsuarioFormulario2Entity>> = usuarioFormulario2DAO.getUsuariosForFormulario(formId)
 
+    fun getAllFormularioDosForUserID(usuarioId: Long): Flow<List<FormularioDosEntity>> = usuarioFormulario2DAO.getAllFormulariosForUserID(usuarioId)
+
     // UsuarioFormulario3 operations
     @Transaction
     suspend fun insertUserWithFormularioTres(userId: Long, formulario: FormularioTresEntity): Long {
@@ -94,6 +96,8 @@ class UsuariosRepository(
 
     fun getUsuariosForFormularioTres(formId: Long): Flow<List<UsuarioFormulario3Entity>> = usuarioFormulario3DAO.getUsuariosForFormulario(formId)
 
+    fun getAllFormularioTresForUserID(usuarioId: Long): Flow<List<FormularioTresEntity>> = usuarioFormulario3DAO.getAllFormulariosForUserID(usuarioId)
+
     // UsuarioFormulario4 operations
     @Transaction
     suspend fun insertUserWithFormularioCuatro(userId: Long, formulario: FormularioCuatroEntity): Long {
@@ -108,4 +112,6 @@ class UsuariosRepository(
     fun getFormulariosForUsuarioCuatro(usuarioId: Long): Flow<List<UsuarioFormulario4Entity>> = usuarioFormulario4DAO.getFormulariosForUsuario(usuarioId)
 
     fun getUsuariosForFormularioCuatro(formId: Long): Flow<List<UsuarioFormulario4Entity>> = usuarioFormulario4DAO.getUsuariosForFormulario(formId)
+
+    fun getAllFormularioCuatroForUserID(usuarioId: Long): Flow<List<FormularioCuatroEntity>> = usuarioFormulario4DAO.getAllFormulariosForUserID(usuarioId)
 }

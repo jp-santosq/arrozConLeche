@@ -23,13 +23,19 @@ import com.example.awaq1.data.formularios.FormularioCuatroEntity
 import com.example.awaq1.data.formularios.FormularioDosEntity
 import com.example.awaq1.data.formularios.FormularioTresEntity
 import com.example.awaq1.data.formularios.FormularioUnoEntity
-import com.example.awaq1.data.usuario.UsuarioFormulario1Entity
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun Home(navController: NavController) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
-    val formsList: List<FormularioUnoEntity> by appContainer.usuariosRepository.getAllFormularioUnoForUserID(context.accountInfo.user_id)
+    val forms1: List<FormularioUnoEntity> by appContainer.usuariosRepository.getAllFormularioUnoForUserID(context.accountInfo.user_id)
+        .collectAsState(initial = emptyList())
+    val forms2: List<FormularioDosEntity> by appContainer.usuariosRepository.getAllFormularioDosForUserID(context.accountInfo.user_id)
+        .collectAsState(initial = emptyList())
+    val forms3: List<FormularioTresEntity> by appContainer.usuariosRepository.getAllFormularioTresForUserID(context.accountInfo.user_id)
+        .collectAsState(initial = emptyList())
+    val forms4: List<FormularioCuatroEntity> by appContainer.usuariosRepository.getAllFormularioCuatroForUserID(context.accountInfo.user_id)
         .collectAsState(initial = emptyList())
     val count by appContainer.formulariosRepository.getFormularioUnoCount()
         .collectAsState(initial = 0)
@@ -145,10 +151,23 @@ fun Home(navController: NavController) {
                             .padding(horizontal = 0.dp, vertical = 8.dp)
                             .fillMaxWidth()
                     ) {
-                        items(formsList) { form ->
+                        items(forms1) { form ->
                             val formCard = FormInfo(form)
                             formCard.displayCard()
                         }
+                        items(forms2) { form ->
+                            val formCard = FormInfo(form)
+                            formCard.displayCard()
+                        }
+                        items(forms3) { form ->
+                            val formCard = FormInfo(form)
+                            formCard.displayCard()
+                        }
+                        items(forms4) { form ->
+                            val formCard = FormInfo(form)
+                            formCard.displayCard()
+                        }
+
                     }
                 }
             }
@@ -188,34 +207,39 @@ data class FormInfo(
     val segundoTag: String,
     val segundoContenido: String,
 
-    val formulario: String // Indicador de tipo de formulario, para luego acceder
+    val formulario: String, // Indicador de tipo de formulario, para luego acceder
+    val formId: Long
 ) {
     constructor(formulario: FormularioUnoEntity) : this(
         tipo = "Transecto", formulario.transecto,
         primerTag = "Tipo", formulario.tipoAnimal,
         segundoTag = "Nombre", formulario.nombreComun,
-        formulario = "form1"
+        formulario = "form1",
+        formId = formulario.id.toLong()
     )
 
     constructor(formulario: FormularioDosEntity) : this(
         tipo = "Zona", formulario.zona,
         primerTag = "Tipo", formulario.tipoAnimal,
         segundoTag = "Nombre", formulario.nombreComun,
-        formulario = "form2"
+        formulario = "form2",
+        formId = formulario.id.toLong()
     )
 
     constructor(formulario: FormularioTresEntity) : this(
         tipo = "Código", formulario.codigo,
         primerTag = "Seguimiento", siONo(formulario.seguimiento),
         segundoTag = "Cambio", siONo(formulario.cambio),
-        formulario = "form3"
+        formulario = "form3",
+        formId = formulario.id.toLong()
     )
 
     constructor(formulario: FormularioCuatroEntity) : this(
         tipo = "Código", formulario.codigo,
         primerTag = "Cuad. A", formulario.quad_a,
         segundoTag = "Cuad. B", formulario.quad_b,
-        formulario = "form4"
+        formulario = "form4",
+        formId = formulario.id.toLong()
     )
 
     @Composable
