@@ -12,6 +12,7 @@ import androidx.camera.view.CameraController
 import androidx.lifecycle.ViewModel
 import java.io.File
 import android.net.Uri
+import java.io.IOException
 
 class CameraViewModel: ViewModel() {
     private var imageCapture: CameraController? = null
@@ -51,5 +52,39 @@ class CameraViewModel: ViewModel() {
                 }
             }
         )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun saveGalleryImage(
+        context: Context,
+        sourceUri: Uri,
+        onImageSaved: (Uri) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        try {
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, "IMG_${System.currentTimeMillis()}")
+                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+                }
+            }
+
+            val destinationUri = context.contentResolver.insert(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                contentValues
+            )
+
+            destinationUri?.let { uri ->
+                context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                    context.contentResolver.openInputStream(sourceUri)?.use { inputStream ->
+                        inputStream.copyTo(outputStream)
+                    }
+                }
+                onImageSaved(uri)
+            }
+        } catch (e: IOException) {
+            onError(e)
+        }
     }
 }

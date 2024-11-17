@@ -44,7 +44,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.filled.Add
 import com.example.awaq1.ViewModels.CameraViewModel
-import com.example.awaq1.view.CameraView
+
 
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -93,7 +93,8 @@ fun ObservationForm(navController: NavController) {
                 CameraWindow(
                     activity = context,
                     cameraViewModel = CameraViewModel(),
-                    onClose = { showCamera = false }
+                    onClose = { showCamera = false },
+                    onGalleryClick = { /* Aquí puedes manejar la acción de la galería */ }
                 )
             } else {
                 Box(modifier = Modifier

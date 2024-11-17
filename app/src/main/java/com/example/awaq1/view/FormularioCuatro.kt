@@ -49,7 +49,7 @@ import com.example.awaq1.ViewModels.CameraViewModel
 import com.example.awaq1.data.formularioUno.FormularioCuatroEntity
 import com.example.awaq1.data.formularioUno.FormularioDosEntity
 import com.example.awaq1.data.formularioUno.FormularioTresEntity
-import com.example.awaq1.view.CameraView
+
 
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -106,7 +106,8 @@ fun ObservationFormCuatro(navController: NavController) {
                 CameraWindow(
                     activity = context,
                     cameraViewModel = CameraViewModel(),
-                    onClose = { showCamera = false }
+                    onClose = { showCamera = false },
+                    onGalleryClick = { /* Aquí puedes manejar la acción de la galería */ }
                 )
             } else {
                 Box(
