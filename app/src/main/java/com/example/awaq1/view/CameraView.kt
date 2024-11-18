@@ -3,6 +3,8 @@ package com.example.awaq1.view
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -11,95 +13,67 @@ import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.awaq1.MainActivity
 import com.example.awaq1.ViewModels.CameraViewModel
-
-
-
-@RequiresApi(Build.VERSION_CODES.P)
-@Composable
-fun CameraView(modifier: Modifier = Modifier, activity: MainActivity) {
-
-    val cameraViewModel = CameraViewModel()
-    Column(modifier.
-    fillMaxSize(),
-        Arrangement.Center, Alignment.CenterHorizontally) {
-        var showCamera by remember { mutableStateOf(false) }
-
-        if (showCamera) {
-            CameraWindow(activity, cameraViewModel)
-        } else {
-            Column(
-                modifier = modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Button(onClick = { showCamera = true }) {
-                    Text(text = "Tomar foto")
-                }
-            }
-        }
-
-    }
-}
-
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
-fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel) {
-    val imageCapture = remember { ImageCapture.Builder().build() }
+fun CameraWindow(
+    activity: MainActivity,
+    cameraViewModel: CameraViewModel,
+    onClose: () -> Unit,
+    onGalleryClick: () -> Unit
+) {
+    val imageCapture = remember { ImageCapture.Builder().setFlashMode(ImageCapture.FLASH_MODE_ON).build() }
     val controller = remember {
-        LifecycleCameraController(
-            activity
-        ).apply {
-            setEnabledUseCases(
-                CameraController.IMAGE_CAPTURE
-            )
+        LifecycleCameraController(activity).apply {
+            setEnabledUseCases(CameraController.IMAGE_CAPTURE)
         }
     }
 
     cameraViewModel.setImageCapture(controller)
 
+    var flashVisible by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
+    var savedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var showGalleryDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            savedImageUri = it
+            showGalleryDialog = true
+        }
+    }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-    ) {
-
+    Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
         val lifecycleOwner = LocalLifecycleOwner.current
         AndroidView(
             modifier = Modifier.fillMaxSize(),
@@ -111,6 +85,15 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel) {
             }
         )
 
+        if (flashVisible) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White.copy(alpha = 0.5f))
+                    .clickable { }
+            )
+        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -119,36 +102,24 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel) {
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-
+            // Botón para cerrar la cámara
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(14.dp))
                     .size(45.dp)
                     .background(MaterialTheme.colorScheme.primary)
-                    .clickable {
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse(
-                                "content://media/internal/images/media"
-                            )
-                        ).also {
-                            activity.startActivity(it)
-                        }
-                    },
+                    .clickable { onClose() },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.Done,
-                    contentDescription = "Gallery",
+                    contentDescription = "Close Camera",
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(26.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.width(1.dp))
-
-
-
+            // Botón para tomar foto
             Box(
                 modifier = Modifier
                     .clip(CircleShape)
@@ -158,12 +129,16 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel) {
                         if ((activity as MainActivity).arePermissionsGranted()) {
                             cameraViewModel.takePhoto(
                                 context = activity,
-                                onImageSaved = { file ->
-                                    // Manejar la imagen guardada (opcional)
-                                    println("Foto guardada en: ${file.absolutePath}")
+                                onImageSaved = { uri ->
+                                    savedImageUri = uri
+                                    showDialog = true
+                                    flashVisible = true
+                                    GlobalScope.launch {
+                                        delay(100)
+                                        flashVisible = false
+                                    }
                                 },
                                 onError = { exception ->
-                                    // Manejar error
                                     println("Error al guardar la foto: ${exception.message}")
                                 }
                             )
@@ -179,33 +154,93 @@ fun CameraWindow(activity: MainActivity, cameraViewModel: CameraViewModel) {
                 )
             }
 
-            Spacer(modifier = Modifier.width(1.dp))
-
+            // Botón para seleccionar de galería
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(14.dp))
                     .size(45.dp)
                     .background(MaterialTheme.colorScheme.primary)
                     .clickable {
-                        controller.cameraSelector =
-                            if (controller.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
-                                CameraSelector.DEFAULT_FRONT_CAMERA
-                            } else {
-                                CameraSelector.DEFAULT_BACK_CAMERA
-                            }
+                        galleryLauncher.launch("image/*")
                     },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.Share,
-                    contentDescription = "Change Camera",
+                    contentDescription = "Select from Gallery",
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(26.dp)
                 )
             }
-
         }
 
-    }
+        // Diálogo para foto tomada
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = { Text(text = "¿Usar esta foto?") },
+                text = { Text(text = "¿Quieres usar la foto que acabas de tomar?") },
+                confirmButton = {
+                    Button(onClick = {
+                        savedImageUri?.let { uri ->
+                            activity.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).apply {
+                                data = uri
+                            })
+                        }
+                        println("Foto guardada en la galería: ${savedImageUri?.path}")
+                        showDialog = false
+                    }) {
+                        Text("Sí")
+                    }
+                },
+                dismissButton = {
+                    Button(onClick = {
+                        showDialog = false
+                    }) {
+                        Text("No")
+                    }
+                }
+            )
+        }
 
+        // Diálogo para imagen seleccionada de galería
+        if (showGalleryDialog) {
+            AlertDialog(
+                onDismissRequest = { showGalleryDialog = false },
+                title = { Text(text = "¿Usar esta imagen?") },
+                text = { Text(text = "¿Quieres usar la imagen seleccionada?") },
+                confirmButton = {
+                    Button(onClick = {
+                        savedImageUri?.let { uri ->
+                            // Guardar la imagen seleccionada en la memoria interna
+                            cameraViewModel.saveGalleryImage(
+                                context = context,
+                                sourceUri = uri,
+                                onImageSaved = { savedUri ->
+                                    activity.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).apply {
+                                        data = savedUri
+                                    })
+                                    println("Imagen de galería guardada: ${savedUri.path}")
+                                },
+                                onError = { exception ->
+                                    println("Error al guardar la imagen de galería: ${exception.message}")
+                                }
+                            )
+                        }
+                        showGalleryDialog = false
+                    }) {
+                        Text("Sí")
+                    }
+                },
+                dismissButton = {
+                    Button(onClick = {
+                        savedImageUri = null
+                        showGalleryDialog = false
+                    }) {
+                        Text("No")
+                    }
+                }
+            )
+        }
+    }
 }

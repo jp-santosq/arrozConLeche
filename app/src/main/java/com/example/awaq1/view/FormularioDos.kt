@@ -90,7 +90,9 @@ fun ObservationFormDos(navController: NavController) {
             if (showCamera) {
                 CameraWindow(
                     activity = context,
-                    cameraViewModel = CameraViewModel()
+                    cameraViewModel = CameraViewModel(),
+                    onClose = { showCamera = false },
+                    onGalleryClick = { /* Aquí puedes manejar la acción de la galería */ }
                 )
             } else {
                 Box(modifier = Modifier
