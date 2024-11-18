@@ -1,5 +1,6 @@
 package com.example.awaq1.view
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -37,8 +38,11 @@ import androidx.compose.material.icons.Icons
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.ui.draw.scale
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.ViewModels.CameraViewModel
 import com.example.awaq1.data.formularios.FormularioCuatroEntity
 
@@ -56,6 +60,7 @@ fun PreviewForm4() {
 fun ObservationFormCuatro(navController: NavController) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
+    val cameraViewModel: CameraViewModel = viewModel()
 
     var codigo: String by remember { mutableStateOf("") }
     var quad_a: String by remember { mutableStateOf("") }
@@ -71,6 +76,7 @@ fun ObservationFormCuatro(navController: NavController) {
     var altura: String by remember { mutableStateOf("") }
     var observaciones: String by remember { mutableStateOf("") }
     var showCamera by remember { mutableStateOf(false) }
+    val savedImageUri = remember { mutableStateOf<Uri?>(null) }
 
     Scaffold(
         topBar = {
@@ -96,9 +102,10 @@ fun ObservationFormCuatro(navController: NavController) {
             if (showCamera) {
                 CameraWindow(
                     activity = context,
-                    cameraViewModel = CameraViewModel(),
+                    cameraViewModel = cameraViewModel,
+                    savedImageUri = savedImageUri, // Pass state
                     onClose = { showCamera = false },
-                    onGalleryClick = { /* Aquí puedes manejar la acción de la galería */ }
+                    onGalleryClick = { /* Optional: Handle gallery selection */ }
                 )
             } else {
                 Box(
@@ -294,11 +301,7 @@ fun ObservationFormCuatro(navController: NavController) {
 
                         // Botón de cámara actualizado
                         Button(
-                            onClick = {
-                                if (context.arePermissionsGranted()) {
-                                    showCamera = true
-                                }
-                            },
+                            onClick = { showCamera = true }, // Toggle the camera view
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF4E7029),
                                 contentColor = Color.White
@@ -307,11 +310,27 @@ fun ObservationFormCuatro(navController: NavController) {
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
-                                contentDescription = "Tomar foto",
+                                contentDescription = "Take Photo",
                                 modifier = Modifier.size(24.dp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Tomar Foto")
+                            Text("Take Photo")
+                        }
+
+                        Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
+
+                        // Display the saved image
+                        savedImageUri.value?.let { uri ->
+                            Column {
+                                //Text("Image saved at: $uri")
+                                Image(
+                                    painter = rememberAsyncImagePainter(model = uri),
+                                    contentDescription = "Saved Image",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(200.dp)
+                                )
+                            }
                         }
 
                         // Observaciones

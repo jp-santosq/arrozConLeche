@@ -1,5 +1,6 @@
 package com.example.awaq1.view
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -38,8 +39,12 @@ import com.example.awaq1.R
 import kotlinx.coroutines.runBlocking
 import androidx.compose.material.icons.Icons
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.material.icons.filled.Add
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.ViewModels.CameraViewModel
 import com.example.awaq1.data.formularios.FormularioDosEntity
 
@@ -57,6 +62,7 @@ fun PreviewForm2() {
 fun ObservationFormDos(navController: NavController) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
+    val cameraViewModel: CameraViewModel = viewModel()
 
     var zona: String by remember {mutableStateOf("")}
     var tipoAnimal: String by remember {mutableStateOf("")}
@@ -67,6 +73,7 @@ fun ObservationFormDos(navController: NavController) {
     var alturaObservacion: String by remember {mutableStateOf("")}
     var observaciones: String by remember {mutableStateOf("")}
     var showCamera by remember { mutableStateOf(false) }
+    val savedImageUri = remember { mutableStateOf<Uri?>(null) }
 
     Scaffold(
         topBar = {
@@ -90,9 +97,10 @@ fun ObservationFormDos(navController: NavController) {
             if (showCamera) {
                 CameraWindow(
                     activity = context,
-                    cameraViewModel = CameraViewModel(),
+                    cameraViewModel = cameraViewModel,
+                    savedImageUri = savedImageUri, // Pass state
                     onClose = { showCamera = false },
-                    onGalleryClick = { /* Aquí puedes manejar la acción de la galería */ }
+                    onGalleryClick = { /* Optional: Handle gallery selection */ }
                 )
             } else {
                 Box(modifier = Modifier
@@ -223,13 +231,9 @@ fun ObservationFormDos(navController: NavController) {
                             }
                         }
 
-                        // Botón de cámara actualizado
+                        // Camera Button
                         Button(
-                            onClick = {
-                                if (context.arePermissionsGranted()) {
-                                    showCamera = true
-                                }
-                            },
+                            onClick = { showCamera = true }, // Toggle the camera view
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF4E7029),
                                 contentColor = Color.White
@@ -238,22 +242,28 @@ fun ObservationFormDos(navController: NavController) {
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
-                                contentDescription = "Tomar foto",
+                                contentDescription = "Take Photo",
                                 modifier = Modifier.size(24.dp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Tomar Foto")
+                            Text("Take Photo")
                         }
 
-                        OutlinedTextField(
-                            value = observaciones,
-                            onValueChange = { observaciones = it },
-                            label = { Text("Observaciones") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(100.dp),
-                            maxLines = 4
-                        )
+                        Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
+
+                        // Display the saved image
+                        savedImageUri.value?.let { uri ->
+                            Column {
+                                //Text("Image saved at: $uri")
+                                Image(
+                                    painter = rememberAsyncImagePainter(model = uri),
+                                    contentDescription = "Saved Image",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(200.dp)
+                                )
+                            }
+                        }
 
                         Row(
                             modifier = Modifier
