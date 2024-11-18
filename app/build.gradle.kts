@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.androidx.ui.test.junit4.android)
 
     implementation(libs.androidx.room.runtime)
+    implementation(libs.play.services.location)
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
 
