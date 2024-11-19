@@ -35,7 +35,7 @@ fun Home(navController: NavController) {
     val context = LocalContext.current as MainActivity
 
     //Username para saludo
-    val nombre = context.accountInfo.username
+    val nombre = context.accountInfo.username.substringBefore("@")
 
     val appContainer = context.container
     val forms1: List<FormularioUnoEntity> by appContainer.usuariosRepository.getAllFormularioUnoForUserID(
