@@ -56,6 +56,7 @@ fun PreviewForm2() {
     ObservationFormDos(rememberNavController())
 }
 
+@RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
@@ -94,7 +95,7 @@ fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
 
 
     var showCamera by remember { mutableStateOf(false) }
-    val savedImageUri = remember { mutableStateOf<Uri?>(null) }
+    val savedImageUris = remember { mutableStateOf(mutableListOf<Uri>()) }
 
     Scaffold(
         topBar = {
@@ -121,7 +122,7 @@ fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
                 CameraWindow(
                     activity = context,
                     cameraViewModel = cameraViewModel,
-                    savedImageUri = savedImageUri, // Pass state
+                    savedImageUris = savedImageUris, // Pass state
                     onClose = { showCamera = false },
                     onGalleryClick = { /* Optional: Handle gallery selection */ }
                 )
@@ -273,7 +274,7 @@ fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
 
                         // Camera Button
                         Button(
-                            onClick = { showCamera = true }, // Toggle the camera view
+                            onClick = { showCamera = true },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF4E7029),
                                 contentColor = Color.White
@@ -289,19 +290,24 @@ fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
                             Text("Take Photo")
                         }
 
-                        Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
+                        // Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
 
                         // Display the saved image
-                        savedImageUri.value?.let { uri ->
-                            Column {
-                                //Text("Image saved at: $uri")
+                        savedImageUris.value.forEach { uri ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
                                 Image(
                                     painter = rememberAsyncImagePainter(model = uri),
                                     contentDescription = "Saved Image",
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(200.dp)
+                                    modifier = Modifier.size(100.dp)
                                 )
+                                Button(onClick = {
+                                    savedImageUris.value = savedImageUris.value.toMutableList().apply { remove(uri) }
+                                }) {
+                                    Text("Delete")
+                                }
                             }
                         }
 

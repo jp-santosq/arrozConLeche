@@ -28,6 +28,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable data class FormCuatroID(val form_id: Long = 0)
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun AppNavigator(onLogout: () -> Unit, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
@@ -59,6 +60,7 @@ fun AppNavigator(onLogout: () -> Unit, modifier: Modifier = Modifier) {
             val formId: FormUnoID = backStackEntry.toRoute()
             ObservationForm(navController = navController, formId.form_id)
         }
+
         composable<FormDosID> { backStackEntry ->
             val formId: FormDosID = backStackEntry.toRoute()
             ObservationFormDos(navController = navController, formId.form_id)
@@ -71,7 +73,6 @@ fun AppNavigator(onLogout: () -> Unit, modifier: Modifier = Modifier) {
             val formId: FormCuatroID = backStackEntry.toRoute()
             ObservationFormCuatro(navController = navController, formId.form_id)
         }
-
         composable("buscar") {
             ObservationListScreen(navController = navController)
         }

@@ -1,6 +1,7 @@
 package com.example.awaq1.view
 
 import android.net.Uri
+import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -36,6 +37,7 @@ import com.example.awaq1.MainActivity
 import kotlinx.coroutines.runBlocking
 import androidx.compose.material.icons.Icons
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.ui.draw.scale
@@ -46,13 +48,13 @@ import com.example.awaq1.data.formularios.FormularioCuatroEntity
 import com.example.awaq1.data.formularios.FormularioTresEntity
 import kotlinx.coroutines.flow.first
 
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewForm4() {
     ObservationFormCuatro(rememberNavController())
 }
 
+@RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) {
@@ -100,7 +102,7 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
     }
 
     var showCamera by remember { mutableStateOf(false) }
-    val savedImageUri = remember { mutableStateOf<Uri?>(null) }
+    val savedImageUris = remember { mutableStateOf(mutableListOf<Uri>()) }
 
     Scaffold(
         topBar = {
@@ -127,11 +129,11 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
                 CameraWindow(
                     activity = context,
                     cameraViewModel = cameraViewModel,
-                    savedImageUri = savedImageUri, // Pass state
+                    savedImageUris = savedImageUris, // Pass state
                     onClose = { showCamera = false },
                     onGalleryClick = { /* Optional: Handle gallery selection */ }
                 )
-            } else {
+            }else {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -323,9 +325,9 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
                             modifier = Modifier.fillMaxWidth()
                         )
 
-                        // Botón de cámara actualizado
+                        // Camera Button
                         Button(
-                            onClick = { showCamera = true }, // Toggle the camera view
+                            onClick = { showCamera = true },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF4E7029),
                                 contentColor = Color.White
@@ -341,19 +343,24 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
                             Text("Take Photo")
                         }
 
-                        Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
+                        // Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
 
                         // Display the saved image
-                        savedImageUri.value?.let { uri ->
-                            Column {
-                                //Text("Image saved at: $uri")
+                        savedImageUris.value.forEach { uri ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
                                 Image(
                                     painter = rememberAsyncImagePainter(model = uri),
                                     contentDescription = "Saved Image",
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(200.dp)
+                                    modifier = Modifier.size(100.dp)
                                 )
+                                Button(onClick = {
+                                    savedImageUris.value = savedImageUris.value.toMutableList().apply { remove(uri) }
+                                }) {
+                                    Text("Delete")
+                                }
                             }
                         }
 
