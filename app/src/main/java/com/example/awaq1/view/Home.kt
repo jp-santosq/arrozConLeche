@@ -33,6 +33,10 @@ import kotlinx.coroutines.flow.map
 @Composable
 fun Home(navController: NavController) {
     val context = LocalContext.current as MainActivity
+
+    //Username para saludo
+    val nombre = context.accountInfo.username
+
     val appContainer = context.container
     val forms1: List<FormularioUnoEntity> by appContainer.usuariosRepository.getAllFormularioUnoForUserID(
         context.accountInfo.user_id
@@ -74,7 +78,7 @@ fun Home(navController: NavController) {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Hola, Samantha",
+                        text = "Hola, $nombre!",
                         fontSize = 36.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF4E7029)
