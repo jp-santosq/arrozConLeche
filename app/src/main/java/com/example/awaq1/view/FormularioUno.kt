@@ -59,6 +59,7 @@ fun Preview() {
     ObservationForm(rememberNavController())
 }
 
+@RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
@@ -98,8 +99,7 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
     val cameraViewModel: CameraViewModel = viewModel()
 
     var showCamera by remember { mutableStateOf(false) }
-    val savedImageUri = remember { mutableStateOf<Uri?>(null) }
-
+    val savedImageUris = remember { mutableStateOf(mutableListOf<Uri>()) }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -125,11 +125,11 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
                 CameraWindow(
                     activity = context,
                     cameraViewModel = cameraViewModel,
-                    savedImageUri = savedImageUri, // Pass state
+                    savedImageUris = savedImageUris, // Pass state
                     onClose = { showCamera = false },
                     onGalleryClick = { /* Optional: Handle gallery selection */ }
                 )
-            } else {
+            }  else {
 
                 Column(
                     modifier = Modifier
@@ -230,110 +230,114 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
                     }
 
 
-                        // Camera Button
+                    // Camera Button
+                    Button(
+                        onClick = { showCamera = true },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF4E7029),
+                            contentColor = Color.White
+                        ),
+                        shape = RoundedCornerShape(10)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Take Photo",
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Take Photo")
+                    }
+
+                   // Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
+
+                    // Display the saved image
+                    savedImageUris.value.forEach { uri ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Image(
+                                painter = rememberAsyncImagePainter(model = uri),
+                                contentDescription = "Saved Image",
+                                modifier = Modifier.size(100.dp)
+                            )
+                            Button(onClick = {
+                                savedImageUris.value = savedImageUris.value.toMutableList().apply { remove(uri) }
+                            }) {
+                                Text("Delete")
+                            }
+                        }
+                    }
+                    OutlinedTextField(
+                        value = observaciones,
+                        onValueChange = { observaciones = it },
+                        label = { Text("Observaciones") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp),
+                        maxLines = 4
+                    )
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         Button(
-                            onClick = { showCamera = true }, // Toggle the camera view
+                            onClick = { navController.navigate("home") },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF4E7029),
                                 contentColor = Color.White
                             ),
-                            shape = RoundedCornerShape(10)
+                            shape = RoundedCornerShape(50),
+                            modifier = Modifier.weight(1f)
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "Take Photo",
-                                modifier = Modifier.size(24.dp)
+                            Text(
+                                "Atras",
+                                style = TextStyle(
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                )
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text("Take Photo")
                         }
 
-                        Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
-
-                        // Display the saved image
-                        savedImageUri.value?.let { uri ->
-                            Column {
-                                //Text("Image saved at: $uri")
-                                Image(
-                                    painter = rememberAsyncImagePainter(model = uri),
-                                    contentDescription = "Saved Image",
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(200.dp)
-                                )
-                            }
-                        }
-
-                        OutlinedTextField(
-                            value = observaciones,
-                            onValueChange = { observaciones = it },
-                            label = { Text("Observaciones") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(100.dp),
-                            maxLines = 4
-                        )
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        Button(
+                            onClick = {
+                                val formulario =
+                                    FormularioUnoEntity(
+                                        transecto = transecto,
+                                        tipoAnimal = tipoAnimal,
+                                        nombreComun = nombreComun,
+                                        nombreCientifico = nombreCientifico,
+                                        numeroIndividuos = numeroIndividuos,
+                                        tipoObservacion = tipoObservacion,
+                                        observaciones = observaciones,
+                                    ).withID(formularioId)
+                                // Guardar en base de datos, vinculado al usuario
+                                runBlocking {
+                                    appContainer.usuariosRepository.insertUserWithFormularioUno(
+                                        context.accountInfo.user_id, formulario
+                                    )
+                                }
+                                navController.navigate("home")
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF4E7029),
+                                contentColor = Color.White
+                            ),
+                            shape = RoundedCornerShape(50),
+                            modifier = Modifier.weight(1f)
                         ) {
-                            Button(
-                                onClick = { navController.navigate("home") },
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xFF4E7029),
-                                    contentColor = Color.White
-                                ),
-                                shape = RoundedCornerShape(50),
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                Text(
-                                    "Atras",
-                                    style = TextStyle(
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.SemiBold
-                                    )
+                            Text(
+                                "Guardar",
+                                style = TextStyle(
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.SemiBold
                                 )
-                            }
-
-                            Button(
-                                onClick = {
-                                    val formulario =
-                                        FormularioUnoEntity(
-                                            transecto = transecto,
-                                            tipoAnimal = tipoAnimal,
-                                            nombreComun = nombreComun,
-                                            nombreCientifico = nombreCientifico,
-                                            numeroIndividuos = numeroIndividuos,
-                                            tipoObservacion = tipoObservacion,
-                                            observaciones = observaciones,
-                                        ).withID(formularioId)
-                                    // Guardar en base de datos, vinculado al usuario
-                                    runBlocking {
-                                        appContainer.usuariosRepository.insertUserWithFormularioUno(
-                                            context.accountInfo.user_id, formulario
-                                        )
-                                    }
-                                    navController.navigate("home")
-                                },
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xFF4E7029),
-                                    contentColor = Color.White
-                                ),
-                                shape = RoundedCornerShape(50),
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                Text(
-                                    "Guardar",
-                                    style = TextStyle(
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-                                )
-                            }
+                            )
                         }
+                    }
                 }
             }
         }

@@ -22,8 +22,8 @@ import com.example.awaq1.MainActivity
 
 class CameraViewModel : ViewModel() {
     private var imageCapture: ImageCapture? = null
-    private val _photoUri = MutableLiveData<Uri?>()
-    val photoUri: LiveData<Uri?> get() = _photoUri
+    private val _photoUris = MutableLiveData<MutableList<Uri>>(mutableListOf())
+    val photoUris: MutableLiveData<MutableList<Uri>> get() = _photoUris
 
     fun bindCamera(previewView: PreviewView, activity: MainActivity) {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
@@ -89,8 +89,13 @@ class CameraViewModel : ViewModel() {
         )
     }
 
+    fun addPhotoUri(uri: Uri) {
+        _photoUris.value?.add(uri)
+        _photoUris.postValue(_photoUris.value)
+    }
 
-    fun savePhotoUri(uri: Uri) {
-        _photoUri.postValue(uri)
+    fun removePhotoUri(uri: Uri) {
+        _photoUris.value?.remove(uri)
+        _photoUris.postValue(_photoUris.value)
     }
 }

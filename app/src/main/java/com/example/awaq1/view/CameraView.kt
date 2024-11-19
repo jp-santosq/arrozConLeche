@@ -14,7 +14,14 @@ import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -32,35 +39,42 @@ import com.example.awaq1.ViewModels.CameraViewModel
 fun CameraWindow(
     activity: MainActivity,
     cameraViewModel: CameraViewModel,
-    savedImageUri: MutableState<Uri?>,
+    savedImageUris: MutableState<MutableList<Uri>>,
     onClose: () -> Unit,
     onGalleryClick: () -> Unit
 ) {
     var flashVisible by remember { mutableStateOf(false) }
     val context = LocalContext.current
+
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
             if (uri != null) {
-                savedImageUri.value = uri // Save the selected image URI
+                savedImageUris.value.add(uri)
+                onClose() // Exit the CameraWindow after importing
             }
         }
     )
 
+    var showPreview by remember { mutableStateOf(false) }
+    var currentCapturedUri by remember { mutableStateOf<Uri?>(null) }
+
     Box(modifier = Modifier.fillMaxSize()) {
         // Camera Preview
-        AndroidView(
-            factory = { context ->
-                PreviewView(context).apply {
-                    layoutParams = ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    )
-                    cameraViewModel.bindCamera(this, activity)
-                }
-            },
-            modifier = Modifier.fillMaxSize()
-        )
+        if (!showPreview) {
+            AndroidView(
+                factory = { ctx ->
+                    PreviewView(ctx).apply {
+                        layoutParams = ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
+                        )
+                        cameraViewModel.bindCamera(this, activity)
+                    }
+                },
+                modifier = Modifier.fillMaxSize()
+            )
+        }
 
         // Flash Effect
         if (flashVisible) {
@@ -71,8 +85,9 @@ fun CameraWindow(
             )
         }
 
-        // Confirmation UI
-        savedImageUri.value?.let { uri ->
+        // Image Preview and Confirmation
+        currentCapturedUri?.let { uri ->
+            showPreview = true
             Image(
                 painter = rememberAsyncImagePainter(uri),
                 contentDescription = "Captured Photo",
@@ -86,7 +101,8 @@ fun CameraWindow(
             ) {
                 Button(
                     onClick = {
-                        savedImageUri.value = null // Retake photo
+                        currentCapturedUri = null // Reset current image
+                        showPreview = false // Return to camera preview
                     },
                     modifier = Modifier.weight(1f)
                 ) {
@@ -95,8 +111,10 @@ fun CameraWindow(
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
                     onClick = {
-                        onClose()
-                        cameraViewModel.savePhotoUri(uri)
+                        savedImageUris.value.add(uri) // Add image to the list
+                        currentCapturedUri = null // Reset current image
+                        showPreview = false // Return to camera preview
+                        onClose() // Exit the CameraWindow after confirmation
                     },
                     modifier = Modifier.weight(1f)
                 ) {
@@ -105,7 +123,7 @@ fun CameraWindow(
             }
         }
 
-        if (savedImageUri.value == null) {
+        if (!showPreview) {
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -117,7 +135,7 @@ fun CameraWindow(
                         cameraViewModel.takePhoto(
                             context = context,
                             onImageSaved = { uri ->
-                                savedImageUri.value = uri
+                                currentCapturedUri = uri
                                 flashVisible = true
                                 Handler(Looper.getMainLooper()).postDelayed({
                                     flashVisible = false
@@ -129,15 +147,21 @@ fun CameraWindow(
                         )
                     }
                 ) {
-                    Text("Take Photo")
+                    Text("Tomar Foto")
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
                     onClick = { galleryLauncher.launch("image/*") } // Launch gallery picker
                 ) {
-                    Text("Import from Gallery")
+                    Text("Importar de galeria")
+                }
+                Button(
+                    onClick = { onClose() } // Launch gallery picker
+                ) {
+                    Text("Cancelar")
                 }
             }
         }
     }
 }
+

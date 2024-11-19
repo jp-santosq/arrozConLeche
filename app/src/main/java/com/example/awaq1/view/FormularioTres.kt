@@ -1,6 +1,7 @@
 package com.example.awaq1.view
 
 import android.net.Uri
+import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -36,6 +37,7 @@ import com.example.awaq1.MainActivity
 import kotlinx.coroutines.runBlocking
 import androidx.compose.material.icons.Icons
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.material.icons.filled.Add
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -51,6 +53,7 @@ fun PreviewForm3() {
     ObservationFormTres(rememberNavController())
 }
 
+@RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
@@ -67,7 +70,7 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
     var disturbio: String by remember { mutableStateOf("") }
     var observaciones: String by remember { mutableStateOf("") }
     var showCamera by remember { mutableStateOf(false) }
-    val savedImageUri = remember { mutableStateOf<Uri?>(null) }
+    val savedImageUris = remember { mutableStateOf(mutableListOf<Uri>()) }
 
     if (formularioId != 0L) {
         val formulario: FormularioTresEntity? = runBlocking {
@@ -113,11 +116,11 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
                 CameraWindow(
                     activity = context,
                     cameraViewModel = cameraViewModel,
-                    savedImageUri = savedImageUri, // Pass state
+                    savedImageUris = savedImageUris, // Pass state
                     onClose = { showCamera = false },
                     onGalleryClick = { /* Optional: Handle gallery selection */ }
                 )
-            } else {
+            }  else {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -257,9 +260,9 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
                         }
 
 
-                        // Botón de cámara actualizado
+                        // Camera Button
                         Button(
-                            onClick = { showCamera = true }, // Toggle the camera view
+                            onClick = { showCamera = true },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF4E7029),
                                 contentColor = Color.White
@@ -275,19 +278,24 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
                             Text("Take Photo")
                         }
 
-                        Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
+                        // Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
 
                         // Display the saved image
-                        savedImageUri.value?.let { uri ->
-                            Column {
-                                //Text("Image saved at: $uri")
+                        savedImageUris.value.forEach { uri ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
                                 Image(
                                     painter = rememberAsyncImagePainter(model = uri),
                                     contentDescription = "Saved Image",
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(200.dp)
+                                    modifier = Modifier.size(100.dp)
                                 )
+                                Button(onClick = {
+                                    savedImageUris.value = savedImageUris.value.toMutableList().apply { remove(uri) }
+                                }) {
+                                    Text("Delete")
+                                }
                             }
                         }
 
