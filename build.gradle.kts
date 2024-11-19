@@ -4,4 +4,5 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     id("com.google.devtools.ksp") version "1.9.20-1.0.14" apply false
     id("androidx.room") version "2.6.1" apply false
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.7.10" apply false
 }

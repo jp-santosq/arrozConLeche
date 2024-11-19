@@ -1,5 +1,6 @@
 package com.example.awaq1.view
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,6 +24,7 @@ import com.example.awaq1.data.formularios.FormularioCuatroEntity
 import com.example.awaq1.data.formularios.FormularioDosEntity
 import com.example.awaq1.data.formularios.FormularioTresEntity
 import com.example.awaq1.data.formularios.FormularioUnoEntity
+import com.example.awaq1.navigator.FormUnoID
 import kotlinx.coroutines.flow.map
 
 @Composable
@@ -153,19 +155,19 @@ fun Home(navController: NavController) {
                     ) {
                         items(forms1) { form ->
                             val formCard = FormInfo(form)
-                            formCard.displayCard()
+                            formCard.DisplayCard(navController)
                         }
                         items(forms2) { form ->
                             val formCard = FormInfo(form)
-                            formCard.displayCard()
+                            formCard.DisplayCard(navController)
                         }
                         items(forms3) { form ->
                             val formCard = FormInfo(form)
-                            formCard.displayCard()
+                            formCard.DisplayCard(navController)
                         }
                         items(forms4) { form ->
                             val formCard = FormInfo(form)
-                            formCard.displayCard()
+                            formCard.DisplayCard(navController)
                         }
 
                     }
@@ -215,7 +217,7 @@ data class FormInfo(
         primerTag = "Tipo", formulario.tipoAnimal,
         segundoTag = "Nombre", formulario.nombreComun,
         formulario = "form1",
-        formId = formulario.id.toLong()
+        formId = formulario.id
     )
 
     constructor(formulario: FormularioDosEntity) : this(
@@ -223,7 +225,7 @@ data class FormInfo(
         primerTag = "Tipo", formulario.tipoAnimal,
         segundoTag = "Nombre", formulario.nombreComun,
         formulario = "form2",
-        formId = formulario.id.toLong()
+        formId = formulario.id
     )
 
     constructor(formulario: FormularioTresEntity) : this(
@@ -231,7 +233,7 @@ data class FormInfo(
         primerTag = "Seguimiento", siONo(formulario.seguimiento),
         segundoTag = "Cambio", siONo(formulario.cambio),
         formulario = "form3",
-        formId = formulario.id.toLong()
+        formId = formulario.id
     )
 
     constructor(formulario: FormularioCuatroEntity) : this(
@@ -239,15 +241,22 @@ data class FormInfo(
         primerTag = "Cuad. A", formulario.quad_a,
         segundoTag = "Cuad. B", formulario.quad_b,
         formulario = "form4",
-        formId = formulario.id.toLong()
+        formId = formulario.id
     )
 
+    fun goEditFormulario(navController: NavController) {
+        Log.d("HOME_CLICK_ACTION", "Click en $this")
+        if (formulario == "form1") {
+            navController.navigate(route = FormUnoID(formId))
+        }
+    }
+
     @Composable
-    fun displayCard(modifier: Modifier = Modifier) {
+    fun DisplayCard(navController: NavController, modifier: Modifier = Modifier) {
         Card(
             modifier = modifier
                 .fillMaxWidth()
-                .clickable { /* Navigate to form detail */ },
+                .clickable { this.goEditFormulario(navController) },
             colors = CardDefaults.cardColors(
                 containerColor = Color.White
             ),

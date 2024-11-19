@@ -3,8 +3,10 @@ package com.example.awaq1.data
 import androidx.room.Database
 import android.content.Context
 import androidx.room.AutoMigration
+import androidx.room.DeleteColumn
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.AutoMigrationSpec
 import com.example.awaq1.data.formularios.FormularioCuatroDAO
 import com.example.awaq1.data.formularios.FormularioCuatroEntity
 import com.example.awaq1.data.formularios.FormularioDosDAO
@@ -25,7 +27,12 @@ import com.example.awaq1.data.usuario.UsuarioFormulario4DAO
 import com.example.awaq1.data.usuario.UsuarioFormulario4Entity
 
 
-@Database(entities = [FormularioUnoEntity::class, FormularioDosEntity::class, FormularioTresEntity::class, FormularioCuatroEntity::class, UsuarioEntity::class, UsuarioFormulario1Entity::class, UsuarioFormulario2Entity::class, UsuarioFormulario3Entity::class, UsuarioFormulario4Entity::class], version = 4, exportSchema = true, autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)])
+@Database(
+    entities = [FormularioUnoEntity::class, FormularioDosEntity::class, FormularioTresEntity::class, FormularioCuatroEntity::class, UsuarioEntity::class, UsuarioFormulario1Entity::class, UsuarioFormulario2Entity::class, UsuarioFormulario3Entity::class, UsuarioFormulario4Entity::class],
+    version = 5,
+    exportSchema = true,
+    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)]
+)
 abstract class FormulariosDatabase : RoomDatabase() {
     abstract fun formulario1Dao(): FormularioUnoDAO
     abstract fun formulario2Dao(): FormularioDosDAO

@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.awaq1.R
+import com.example.awaq1.navigator.FormUnoID
 
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
@@ -100,7 +101,7 @@ fun SelectFormularioScreen(navController: NavController) {
                 verticalArrangement = Arrangement.Center
             ) {
                 Spacer(modifier = Modifier.height(32.dp))
-                FormChooseButton("reporte", "Fauna en Transectos", navController)
+                FormChooseButton(FormUnoID(), "Fauna en Transectos", navController)
                 FormChooseButton("reporte_2", "Fauna en Punto de Conteo", navController)
                 FormChooseButton("reporte_3", "Validación de Cobertura", navController)
                 FormChooseButton("reporte_4", "Parcela de Vegetación", navController)
@@ -110,7 +111,7 @@ fun SelectFormularioScreen(navController: NavController) {
 }
 
 @Composable
-fun FormChooseButton(route: String, text: String, navController: NavController) {
+fun FormChooseButton(route: Any, text: String, navController: NavController) {
     Button(
         onClick = { navController.navigate(route) },
         colors = ButtonDefaults.buttonColors(

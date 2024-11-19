@@ -8,9 +8,11 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
+// TODO: OnConflictStrategy.REPLACE para todos los DAOs
+//  (Cuando funcione en pruebas la edicion de reportes de FormularioUno)
 @Dao
 interface FormularioUnoDAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: FormularioUnoEntity): Long
 
     @Update

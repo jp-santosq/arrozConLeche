@@ -49,31 +49,44 @@ import androidx.compose.material.icons.filled.Add
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.ViewModels.CameraViewModel
+import kotlinx.coroutines.flow.first
 
 
-@RequiresApi(Build.VERSION_CODES.P)
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
 fun Preview() {
     ObservationForm(rememberNavController())
 }
 
-@RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ObservationForm(navController: NavController) {
+fun ObservationForm(navController: NavController, formulario_id: Long = 0L) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
 
+    var formulario by remember {
+        mutableStateOf(
+            runBlocking {
+                Log.d("Formulario1Loading", "Loading formulario1 with ID $formulario_id")
+                appContainer.formulariosRepository.getFormularioUnoStream(formulario_id).first()
+                    ?: FormularioUnoEntity(
+                        transecto = "",
+                        tipoAnimal = "",
+                        nombreComun = "",
+                        nombreCientifico = "",
+                        numeroIndividuos = "",
+                        tipoObservacion = "",
+                        observaciones = ""
+                    )
+            }
+        )
+    }
+    // Para Room, 0 significa que no hay un id designado. Genera una nueva entrada con id auto-generado.
+    // Un valor de un id existente, reemplaza.
+    formulario.id = formulario_id
+
     val cameraViewModel: CameraViewModel = viewModel()
 
-    var transecto by remember { mutableStateOf("") }
-    var tipoAnimal by remember { mutableStateOf("") }
-    var nombreComun by remember { mutableStateOf("") }
-    var nombreCientifico by remember { mutableStateOf("") }
-    var numeroIndividuos by remember { mutableStateOf("") }
-    var tipoObservacion by remember { mutableStateOf("") }
-    var observaciones by remember { mutableStateOf("") }
     var showCamera by remember { mutableStateOf(false) }
     val savedImageUri = remember { mutableStateOf<Uri?>(null) }
 
@@ -106,8 +119,7 @@ fun ObservationForm(navController: NavController) {
                     onClose = { showCamera = false },
                     onGalleryClick = { /* Optional: Handle gallery selection */ }
                 )
-            }
-            else {
+            } else {
                 Column(
                     modifier = Modifier
                         .padding(paddingValues)
@@ -117,8 +129,8 @@ fun ObservationForm(navController: NavController) {
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     OutlinedTextField(
-                        value = transecto,
-                        onValueChange = { transecto = it },
+                        value = formulario.transecto,
+                        onValueChange = { formulario = formulario.copy(transecto = it) },
                         label = { Text("Número de Transecto") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         modifier = Modifier.fillMaxWidth()
@@ -130,10 +142,18 @@ fun ObservationForm(navController: NavController) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         val animals = listOf("Mamífero", "Ave", "Reptil", "Anfibio", "Insecto")
+                        if (formulario.tipoAnimal == "") {
+                            formulario = formulario.copy(tipoAnimal = animals[0])
+                        }
+
                         animals.forEach { animal ->
                             IconToggleButton(
-                                checked = tipoAnimal == animal,
-                                onCheckedChange = { tipoAnimal = animal }
+                                checked = formulario.tipoAnimal == animal,
+                                onCheckedChange = {
+                                    formulario = formulario.copy(
+                                        tipoAnimal = animal
+                                    )
+                                },
                             ) {
                                 val iconResource = when (animal) {
                                     "Mamífero" -> R.drawable.ic_mamifero
@@ -147,54 +167,58 @@ fun ObservationForm(navController: NavController) {
                                     painter = painterResource(id = iconResource),
                                     contentDescription = animal,
                                     modifier = Modifier.size(40.dp),
-                                    tint = if (tipoAnimal == animal) Color(0xFF4E7029) else Color(0xFF3F3F3F)
-                                )
-                            }
-                        }
-                    }
-
-                    OutlinedTextField(
-                        value = nombreComun,
-                        onValueChange = { nombreComun = it },
-                        label = { Text("Nombre Común") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    OutlinedTextField(
-                        value = nombreCientifico,
-                        onValueChange = { nombreCientifico = it },
-                        label = { Text("Nombre Científico") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    OutlinedTextField(
-                        value = numeroIndividuos,
-                        onValueChange = { numeroIndividuos = it },
-                        label = { Text("Número de Individuos") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Text("Tipo de Observación")
-                    val observacionOptions = listOf("La Vió", "Huella", "Rastro", "Cacería", "Le dijeron")
-                    if (tipoObservacion == "") {
-                        tipoObservacion = observacionOptions[0]
-                    }
-                    Column {
-                        observacionOptions.forEach { option ->
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                RadioButton(
-                                    selected = tipoObservacion == option,
-                                    onClick = { tipoObservacion = option },
-                                    colors = RadioButtonDefaults.colors(
-                                        selectedColor = Color(0xFF4E7029),
-                                        unselectedColor = Color.Gray
+                                    tint = if (formulario.tipoAnimal == animal) Color(0xFF4E7029) else Color(
+                                        0xFF3F3F3F
                                     )
                                 )
-                                Text(option, modifier = Modifier.padding(start = 8.dp))
                             }
                         }
                     }
+                }
+
+                OutlinedTextField(
+                    value = formulario.nombreComun,
+                    onValueChange = { formulario = formulario.copy(nombreComun = it) },
+                    label = { Text("Nombre Común") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                OutlinedTextField(
+                    value = formulario.nombreCientifico,
+                    onValueChange = { formulario = formulario.copy(nombreCientifico = it) },
+                    label = { Text("Nombre Científico") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                OutlinedTextField(
+                    value = formulario.numeroIndividuos,
+                    onValueChange = { formulario = formulario.copy(numeroIndividuos = it) },
+                    label = { Text("Número de Individuos") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Text("Tipo de Observación")
+                val observacionOptions =
+                    listOf("La Vió", "Huella", "Rastro", "Cacería", "Le dijeron")
+                if (formulario.tipoObservacion == "") {
+                    formulario = formulario.copy(tipoObservacion = observacionOptions[0])
+                }
+                Column {
+                    observacionOptions.forEach { option ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(
+                                selected = formulario.tipoObservacion == option,
+                                onClick = { formulario.tipoObservacion = option },
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = Color(0xFF4E7029),
+                                    unselectedColor = Color.Gray
+                                )
+                            )
+                            Text(option, modifier = Modifier.padding(start = 8.dp))
+                        }
+                    }
+
 
                     // Camera Button
                     Button(
@@ -231,8 +255,8 @@ fun ObservationForm(navController: NavController) {
                     }
 
                     OutlinedTextField(
-                        value = observaciones,
-                        onValueChange = { observaciones = it },
+                        value = formulario.observaciones,
+                        onValueChange = { formulario = formulario.copy(observaciones = it) },
                         label = { Text("Observaciones") },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -266,15 +290,7 @@ fun ObservationForm(navController: NavController) {
 
                         Button(
                             onClick = {
-                                val formulario = FormularioUnoEntity(
-                                    transecto = transecto,
-                                    tipoAnimal = tipoAnimal,
-                                    nombreComun = nombreComun,
-                                    nombreCientifico = nombreCientifico,
-                                    numeroIndividuos = numeroIndividuos,
-                                    tipoObservacion = tipoObservacion,
-                                    observaciones = observaciones
-                                )
+                                // Guardar en base de datos, vinculado al usuario
                                 runBlocking {
                                     appContainer.usuariosRepository.insertUserWithFormularioUno(
                                         context.accountInfo.user_id, formulario
@@ -290,7 +306,7 @@ fun ObservationForm(navController: NavController) {
                             modifier = Modifier.weight(1f)
                         ) {
                             Text(
-                                "Enviar",
+                                "Guardar",
                                 style = TextStyle(
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.SemiBold

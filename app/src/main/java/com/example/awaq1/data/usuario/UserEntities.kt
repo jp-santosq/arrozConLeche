@@ -32,15 +32,13 @@ data class UsuarioEntity(
     foreignKeys = [
         ForeignKey(entity = UsuarioEntity::class, parentColumns = ["id"], childColumns = ["usuarioId"], onDelete = ForeignKey.CASCADE),
         ForeignKey(entity = FormularioUnoEntity::class, parentColumns = ["id"], childColumns = ["formId"], onDelete = ForeignKey.CASCADE)
-    ]
+    ],
+    primaryKeys = ["usuarioId", "formId"]
 )
 data class UsuarioFormulario1Entity(
     val usuarioId: Long,
     val formId: Long,
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
-}
+)
 
 // Usuario Formulario 2 Association Entity
 @Entity(

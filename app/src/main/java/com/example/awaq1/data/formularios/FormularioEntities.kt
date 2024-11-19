@@ -18,7 +18,14 @@ data class FormularioUnoEntity(
     // https://kotlinlang.org/docs/data-classes.html#properties-declared-in-the-class-body
     // Tiene que ser var, o necesitara accesors (get, set)
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var id: Long = 0
+
+    fun withID(id: Long): FormularioUnoEntity {
+        val newForm = this.copy()
+        newForm.id = id
+        newForm.transecto = "huhuhu"
+        return newForm
+    }
 }
 
 
@@ -35,7 +42,7 @@ data class FormularioDosEntity(
     var observaciones: String,
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var id: Long = 0
 }
 
 // Validacion de cobertura
@@ -50,7 +57,7 @@ data class FormularioTresEntity(
     val observaciones: String
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var id: Long = 0
 }
 
 // Parcela de vegetacion
@@ -72,6 +79,6 @@ data class FormularioCuatroEntity(
     val observaciones: String
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var id: Long = 0
 }
 

@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.awaq1.view.Home
 import com.example.awaq1.view.Mapa
 import com.example.awaq1.view.ObservationForm
@@ -17,6 +18,10 @@ import com.example.awaq1.view.ObservationListScreen
 import com.example.awaq1.view.SelectFormularioScreen
 import com.example.awaq1.view.Settings
 import com.example.awaq1.view.TwoFactor
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class FormUnoID(val form_id: Long = 0)
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
@@ -46,8 +51,9 @@ fun AppNavigator(onLogout: () -> Unit, modifier: Modifier = Modifier) {
             SelectFormularioScreen(navController = navController)
         }
 
-        composable("reporte") {
-           ObservationForm(navController = navController)
+        composable <FormUnoID> { backStackEntry ->
+            val formId: FormUnoID = backStackEntry.toRoute()
+            ObservationForm(navController = navController, formId.form_id)
         }
         composable("reporte_2") {
             ObservationFormDos(navController = navController)
