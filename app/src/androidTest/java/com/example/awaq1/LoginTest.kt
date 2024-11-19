@@ -7,6 +7,18 @@ import com.example.awaq1.MainActivity
 import org.junit.Rule
 import org.junit.Test
 
+// Requerimientos
+
+// Para ejecutar la prueba se debe de desabilitar el Login de la aplicación
+// Se desactiva al cambiar la linea 39 del archivo PrincipalView.kt
+// Se cambia de if (loggedIn) { a if (0 == 0) {
+
+// Descripcion
+
+// La prueba BottomNavigationBarTest corre tres diferentes pruebas en donde
+// intenta navegar en la aplicacion desde la Home page. Las pruebas checan que
+// se pueda mover de home a los formularios y a los ajustes.
+
 class BottomNavigationBarTest {
 
     @get:Rule

@@ -160,6 +160,7 @@ fun CameraWindow(
                 ) {
                     Text("Cancelar")
                 }
+                Spacer(modifier = Modifier.height(45.dp))
             }
         }
     }

@@ -182,6 +182,7 @@ fun BottomNavigationBar(navController: NavController) {
                 }
             )
         }
+        Spacer(modifier = Modifier.height(45.dp))
     }
 }
 

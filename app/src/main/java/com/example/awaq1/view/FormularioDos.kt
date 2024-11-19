@@ -42,6 +42,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.material.icons.filled.Add
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
@@ -179,8 +180,9 @@ fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
                                 IconToggleButton(
                                     checked = tipoAnimal == animal,
                                     onCheckedChange = { tipoAnimal = animal },
+                                    modifier = Modifier.size(100.dp)
                                 ) {
-                                    val iconResource = when (animal) {
+                                    val imageResource = when (animal) {
                                         "Mamífero" -> R.drawable.ic_mamifero
                                         "Ave" -> R.drawable.ic_ave
                                         "Reptil" -> R.drawable.ic_reptil
@@ -188,14 +190,36 @@ fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
                                         "Insecto" -> R.drawable.ic_insecto
                                         else -> android.R.drawable.ic_menu_gallery
                                     }
-                                    Icon(
-                                        painter = painterResource(id = iconResource),
-                                        contentDescription = animal,
-                                        modifier = Modifier.size(40.dp),
-                                        tint = if (tipoAnimal == animal) Color(0xFF4E7029) else Color(
-                                            0xFF3F3F3F
-                                        )
-                                    )
+
+                                    // Outer Box for border and padding
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(8.dp) // Space between items
+                                            .border(
+                                                width = 2.dp,
+                                                color = if (tipoAnimal == animal) Color(0xFF4E7029) else Color.Transparent, // Green border if selected
+                                                shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp) // Rounded corners
+                                            )
+                                            .padding(8.dp) // Padding inside the border
+                                    ) {
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally // Center image and label
+                                        ) {
+                                            // Image with increased size
+                                            Image(
+                                                painter = painterResource(id = imageResource),
+                                                contentDescription = animal,
+                                                modifier = Modifier.requiredSize(100.dp) // Larger size for the image
+                                            )
+                                            // Label below the image
+                                            Text(
+                                                text = animal,
+                                                fontSize = 20.sp,
+                                                color = if (tipoAnimal == animal) Color(0xFF4E7029) else Color(0xFF3F3F3F), // Green if selected
+                                                modifier = Modifier.padding(top = 4.dp) // Space between image and label
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }
