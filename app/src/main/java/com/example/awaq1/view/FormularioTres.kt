@@ -35,29 +35,25 @@ import androidx.navigation.compose.rememberNavController
 import com.example.awaq1.MainActivity
 import kotlinx.coroutines.runBlocking
 import androidx.compose.material.icons.Icons
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.material.icons.filled.Add
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.ViewModels.CameraViewModel
-import com.example.awaq1.data.formularios.FormularioDosEntity
 import com.example.awaq1.data.formularios.FormularioTresEntity
+import kotlinx.coroutines.flow.first
 
 
-@RequiresApi(Build.VERSION_CODES.P)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewForm3() {
     ObservationFormTres(rememberNavController())
 }
 
-@RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ObservationFormTres(navController: NavController) {
+fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
 
@@ -72,6 +68,25 @@ fun ObservationFormTres(navController: NavController) {
     var observaciones: String by remember { mutableStateOf("") }
     var showCamera by remember { mutableStateOf(false) }
     val savedImageUri = remember { mutableStateOf<Uri?>(null) }
+
+    if (formularioId != 0L) {
+        val formulario: FormularioTresEntity? = runBlocking {
+            Log.d("Formulario3Loading", "Loading formulario3 with ID $formularioId")
+            appContainer.formulariosRepository.getFormularioTresStream(formularioId).first()
+        }
+
+        if (formulario != null) {
+            codigo = formulario.codigo
+            seguimiento = formulario.seguimiento
+            cambio = formulario.cambio
+            cobertura = formulario.cobertura
+            tipoCultivo = formulario.tipoCultivo
+            disturbio = formulario.disturbio
+            observaciones = formulario.observaciones
+        } else {
+            Log.e("Formulario3Loading", "NO se pudo obtener el formulario3 con id $formularioId")
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -321,7 +336,8 @@ fun ObservationFormTres(navController: NavController) {
                                         tipoCultivo = tipoCultivo,
                                         disturbio = disturbio,
                                         observaciones = observaciones,
-                                    )
+                                    ).withID(formularioId)
+
                                     runBlocking {
                                         appContainer.usuariosRepository.insertUserWithFormularioTres(
                                             context.accountInfo.user_id, formulario

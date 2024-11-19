@@ -46,15 +46,13 @@ data class UsuarioFormulario1Entity(
     foreignKeys = [
         ForeignKey(entity = UsuarioEntity::class, parentColumns = ["id"], childColumns = ["usuarioId"], onDelete = ForeignKey.CASCADE),
         ForeignKey(entity = FormularioDosEntity::class, parentColumns = ["id"], childColumns = ["formId"], onDelete = ForeignKey.CASCADE)
-    ]
+    ],
+    primaryKeys = ["usuarioId", "formId"]
 )
 data class UsuarioFormulario2Entity(
     val usuarioId: Long,
     val formId: Long,
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
-}
+)
 
 // Usuario Formulario 3 Association Entity
 @Entity(
@@ -62,15 +60,13 @@ data class UsuarioFormulario2Entity(
     foreignKeys = [
         ForeignKey(entity = UsuarioEntity::class, parentColumns = ["id"], childColumns = ["usuarioId"], onDelete = ForeignKey.CASCADE),
         ForeignKey(entity = FormularioTresEntity::class, parentColumns = ["id"], childColumns = ["formId"], onDelete = ForeignKey.CASCADE)
-    ]
+    ],
+    primaryKeys = ["usuarioId", "formId"]
 )
 data class UsuarioFormulario3Entity(
     val usuarioId: Long,
     val formId: Long,
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
-}
+)
 
 // Usuario Formulario 4 Association Entity
 @Entity(
@@ -78,12 +74,10 @@ data class UsuarioFormulario3Entity(
     foreignKeys = [
         ForeignKey(entity = UsuarioEntity::class, parentColumns = ["id"], childColumns = ["usuarioId"], onDelete = ForeignKey.CASCADE),
         ForeignKey(entity = FormularioCuatroEntity::class, parentColumns = ["id"], childColumns = ["formId"], onDelete = ForeignKey.CASCADE)
-    ]
+    ],
+    primaryKeys = ["usuarioId", "formId"]
 )
 data class UsuarioFormulario4Entity(
     val usuarioId: Long,
     val formId: Long,
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
-}
+)

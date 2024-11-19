@@ -33,7 +33,7 @@ interface FormularioUnoDAO {
 
 @Dao
 interface FormularioDosDAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: FormularioDosEntity): Long
 
     @Update
@@ -54,7 +54,7 @@ interface FormularioDosDAO {
 
 @Dao
 interface FormularioTresDAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: FormularioTresEntity): Long
 
     @Update
@@ -75,7 +75,7 @@ interface FormularioTresDAO {
 
 @Dao
 interface FormularioCuatroDAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: FormularioCuatroEntity): Long
 
     @Update

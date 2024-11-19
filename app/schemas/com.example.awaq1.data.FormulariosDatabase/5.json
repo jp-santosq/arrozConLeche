@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "8c2768eb3029419e55f31ea619bdc01f",
+    "identityHash": "036e5325ed9b7f20e73dc32d72394e34",
     "entities": [
       {
         "tableName": "Formulario1",
@@ -384,7 +384,7 @@
       },
       {
         "tableName": "UsuarioFormulario2",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`usuarioId` INTEGER NOT NULL, `formId` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`usuarioId`) REFERENCES `Usuarios`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`formId`) REFERENCES `Formulario2`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`usuarioId` INTEGER NOT NULL, `formId` INTEGER NOT NULL, PRIMARY KEY(`usuarioId`, `formId`), FOREIGN KEY(`usuarioId`) REFERENCES `Usuarios`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`formId`) REFERENCES `Formulario2`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "usuarioId",
@@ -397,18 +397,13 @@
             "columnName": "formId",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
-          "autoGenerate": true,
+          "autoGenerate": false,
           "columnNames": [
-            "id"
+            "usuarioId",
+            "formId"
           ]
         },
         "indices": [],
@@ -439,7 +434,7 @@
       },
       {
         "tableName": "UsuarioFormulario3",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`usuarioId` INTEGER NOT NULL, `formId` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`usuarioId`) REFERENCES `Usuarios`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`formId`) REFERENCES `Formulario3`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`usuarioId` INTEGER NOT NULL, `formId` INTEGER NOT NULL, PRIMARY KEY(`usuarioId`, `formId`), FOREIGN KEY(`usuarioId`) REFERENCES `Usuarios`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`formId`) REFERENCES `Formulario3`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "usuarioId",
@@ -452,18 +447,13 @@
             "columnName": "formId",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
-          "autoGenerate": true,
+          "autoGenerate": false,
           "columnNames": [
-            "id"
+            "usuarioId",
+            "formId"
           ]
         },
         "indices": [],
@@ -494,7 +484,7 @@
       },
       {
         "tableName": "UsuarioFormulario4",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`usuarioId` INTEGER NOT NULL, `formId` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`usuarioId`) REFERENCES `Usuarios`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`formId`) REFERENCES `Formulario4`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`usuarioId` INTEGER NOT NULL, `formId` INTEGER NOT NULL, PRIMARY KEY(`usuarioId`, `formId`), FOREIGN KEY(`usuarioId`) REFERENCES `Usuarios`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`formId`) REFERENCES `Formulario4`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "usuarioId",
@@ -507,18 +497,13 @@
             "columnName": "formId",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
-          "autoGenerate": true,
+          "autoGenerate": false,
           "columnNames": [
-            "id"
+            "usuarioId",
+            "formId"
           ]
         },
         "indices": [],
@@ -551,7 +536,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8c2768eb3029419e55f31ea619bdc01f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '036e5325ed9b7f20e73dc32d72394e34')"
     ]
   }
 }

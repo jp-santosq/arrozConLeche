@@ -24,6 +24,9 @@ import com.example.awaq1.data.formularios.FormularioCuatroEntity
 import com.example.awaq1.data.formularios.FormularioDosEntity
 import com.example.awaq1.data.formularios.FormularioTresEntity
 import com.example.awaq1.data.formularios.FormularioUnoEntity
+import com.example.awaq1.navigator.FormCuatroID
+import com.example.awaq1.navigator.FormDosID
+import com.example.awaq1.navigator.FormTresID
 import com.example.awaq1.navigator.FormUnoID
 import kotlinx.coroutines.flow.map
 
@@ -31,13 +34,21 @@ import kotlinx.coroutines.flow.map
 fun Home(navController: NavController) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
-    val forms1: List<FormularioUnoEntity> by appContainer.usuariosRepository.getAllFormularioUnoForUserID(context.accountInfo.user_id)
+    val forms1: List<FormularioUnoEntity> by appContainer.usuariosRepository.getAllFormularioUnoForUserID(
+        context.accountInfo.user_id
+    )
         .collectAsState(initial = emptyList())
-    val forms2: List<FormularioDosEntity> by appContainer.usuariosRepository.getAllFormularioDosForUserID(context.accountInfo.user_id)
+    val forms2: List<FormularioDosEntity> by appContainer.usuariosRepository.getAllFormularioDosForUserID(
+        context.accountInfo.user_id
+    )
         .collectAsState(initial = emptyList())
-    val forms3: List<FormularioTresEntity> by appContainer.usuariosRepository.getAllFormularioTresForUserID(context.accountInfo.user_id)
+    val forms3: List<FormularioTresEntity> by appContainer.usuariosRepository.getAllFormularioTresForUserID(
+        context.accountInfo.user_id
+    )
         .collectAsState(initial = emptyList())
-    val forms4: List<FormularioCuatroEntity> by appContainer.usuariosRepository.getAllFormularioCuatroForUserID(context.accountInfo.user_id)
+    val forms4: List<FormularioCuatroEntity> by appContainer.usuariosRepository.getAllFormularioCuatroForUserID(
+        context.accountInfo.user_id
+    )
         .collectAsState(initial = emptyList())
     val count by appContainer.formulariosRepository.getFormularioUnoCount()
         .collectAsState(initial = 0)
@@ -246,8 +257,12 @@ data class FormInfo(
 
     fun goEditFormulario(navController: NavController) {
         Log.d("HOME_CLICK_ACTION", "Click en $this")
-        if (formulario == "form1") {
-            navController.navigate(route = FormUnoID(formId))
+        when (formulario) {
+            "form1" -> navController.navigate(route = FormUnoID(formId))
+            "form2" -> navController.navigate(route = FormDosID(formId))
+            "form3" -> navController.navigate(route = FormTresID(formId))
+            "form4" -> navController.navigate(route = FormCuatroID(formId))
+            else -> throw Exception("CARD NAVIGATION NOT IMPLEMENTED FOR $formulario")
         }
     }
 

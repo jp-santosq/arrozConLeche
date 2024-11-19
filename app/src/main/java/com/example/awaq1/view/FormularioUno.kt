@@ -49,6 +49,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.ViewModels.CameraViewModel
+import com.example.awaq1.data.formularios.FormularioDosEntity
 import kotlinx.coroutines.flow.first
 
 
@@ -60,30 +61,39 @@ fun Preview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ObservationForm(navController: NavController, formulario_id: Long = 0L) {
+fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
 
-    var formulario by remember {
-        mutableStateOf(
-            runBlocking {
-                Log.d("Formulario1Loading", "Loading formulario1 with ID $formulario_id")
-                appContainer.formulariosRepository.getFormularioUnoStream(formulario_id).first()
-                    ?: FormularioUnoEntity(
-                        transecto = "",
-                        tipoAnimal = "",
-                        nombreComun = "",
-                        nombreCientifico = "",
-                        numeroIndividuos = "",
-                        tipoObservacion = "",
-                        observaciones = ""
-                    )
-            }
-        )
+    var transecto by remember { mutableStateOf("") }
+    var tipoAnimal by remember { mutableStateOf("") }
+    var nombreComun by remember { mutableStateOf("") }
+    var nombreCientifico by remember { mutableStateOf("") }
+    var numeroIndividuos by remember { mutableStateOf("") }
+    var tipoObservacion by remember { mutableStateOf("") }
+    var observaciones by remember { mutableStateOf("") }
+
+    if (formularioId != 0L) {
+        val formulario: FormularioUnoEntity? = runBlocking {
+            Log.d("Formulario1Loading", "Loading formulario1 with ID $formularioId")
+            appContainer.formulariosRepository.getFormularioUnoStream(formularioId).first()
+        }
+
+        if (formulario != null) {
+            transecto = formulario.transecto
+            tipoAnimal = formulario.tipoAnimal
+            nombreComun = formulario.nombreComun
+            nombreCientifico = formulario.nombreCientifico
+            numeroIndividuos = formulario.numeroIndividuos
+            tipoObservacion = formulario.tipoObservacion
+            observaciones = formulario.observaciones
+        } else {
+            Log.e("Formulario2Loading", "NO se pudo obtener el formulario2 con id $formularioId")
+        }
     }
+
     // Para Room, 0 significa que no hay un id designado. Genera una nueva entrada con id auto-generado.
     // Un valor de un id existente, reemplaza.
-    formulario.id = formulario_id
 
     val cameraViewModel: CameraViewModel = viewModel()
 
@@ -120,6 +130,7 @@ fun ObservationForm(navController: NavController, formulario_id: Long = 0L) {
                     onGalleryClick = { /* Optional: Handle gallery selection */ }
                 )
             } else {
+
                 Column(
                     modifier = Modifier
                         .padding(paddingValues)
@@ -129,8 +140,8 @@ fun ObservationForm(navController: NavController, formulario_id: Long = 0L) {
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     OutlinedTextField(
-                        value = formulario.transecto,
-                        onValueChange = { formulario = formulario.copy(transecto = it) },
+                        value = transecto,
+                        onValueChange = { transecto = it },
                         label = { Text("Número de Transecto") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         modifier = Modifier.fillMaxWidth()
@@ -142,17 +153,15 @@ fun ObservationForm(navController: NavController, formulario_id: Long = 0L) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         val animals = listOf("Mamífero", "Ave", "Reptil", "Anfibio", "Insecto")
-                        if (formulario.tipoAnimal == "") {
-                            formulario = formulario.copy(tipoAnimal = animals[0])
+                        if (tipoAnimal == "") {
+                            tipoAnimal = animals[0]
                         }
 
                         animals.forEach { animal ->
                             IconToggleButton(
-                                checked = formulario.tipoAnimal == animal,
+                                checked = tipoAnimal == animal,
                                 onCheckedChange = {
-                                    formulario = formulario.copy(
-                                        tipoAnimal = animal
-                                    )
+                                    tipoAnimal = animal
                                 },
                             ) {
                                 val iconResource = when (animal) {
@@ -167,153 +176,164 @@ fun ObservationForm(navController: NavController, formulario_id: Long = 0L) {
                                     painter = painterResource(id = iconResource),
                                     contentDescription = animal,
                                     modifier = Modifier.size(40.dp),
-                                    tint = if (formulario.tipoAnimal == animal) Color(0xFF4E7029) else Color(
+                                    tint = if (tipoAnimal == animal) Color(0xFF4E7029) else Color(
                                         0xFF3F3F3F
                                     )
                                 )
                             }
                         }
                     }
-                }
 
-                OutlinedTextField(
-                    value = formulario.nombreComun,
-                    onValueChange = { formulario = formulario.copy(nombreComun = it) },
-                    label = { Text("Nombre Común") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                OutlinedTextField(
-                    value = formulario.nombreCientifico,
-                    onValueChange = { formulario = formulario.copy(nombreCientifico = it) },
-                    label = { Text("Nombre Científico") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                OutlinedTextField(
-                    value = formulario.numeroIndividuos,
-                    onValueChange = { formulario = formulario.copy(numeroIndividuos = it) },
-                    label = { Text("Número de Individuos") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Text("Tipo de Observación")
-                val observacionOptions =
-                    listOf("La Vió", "Huella", "Rastro", "Cacería", "Le dijeron")
-                if (formulario.tipoObservacion == "") {
-                    formulario = formulario.copy(tipoObservacion = observacionOptions[0])
-                }
-                Column {
-                    observacionOptions.forEach { option ->
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            RadioButton(
-                                selected = formulario.tipoObservacion == option,
-                                onClick = { formulario.tipoObservacion = option },
-                                colors = RadioButtonDefaults.colors(
-                                    selectedColor = Color(0xFF4E7029),
-                                    unselectedColor = Color.Gray
-                                )
-                            )
-                            Text(option, modifier = Modifier.padding(start = 8.dp))
-                        }
-                    }
-
-
-                    // Camera Button
-                    Button(
-                        onClick = { showCamera = true }, // Toggle the camera view
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF4E7029),
-                            contentColor = Color.White
-                        ),
-                        shape = RoundedCornerShape(10)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Take Photo",
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Take Photo")
-                    }
-
-                    Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
-
-                    // Display the saved image
-                    savedImageUri.value?.let { uri ->
-                        Column {
-                            //Text("Image saved at: $uri")
-                            Image(
-                                painter = rememberAsyncImagePainter(model = uri),
-                                contentDescription = "Saved Image",
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(200.dp)
-                            )
-                        }
-                    }
 
                     OutlinedTextField(
-                        value = formulario.observaciones,
-                        onValueChange = { formulario = formulario.copy(observaciones = it) },
-                        label = { Text("Observaciones") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp),
-                        maxLines = 4
+                        value = nombreComun,
+                        onValueChange = { nombreComun = it },
+                        label = { Text("Nombre Común") },
+                        modifier = Modifier.fillMaxWidth()
                     )
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Button(
-                            onClick = { navController.navigate("home") },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF4E7029),
-                                contentColor = Color.White
-                            ),
-                            shape = RoundedCornerShape(50),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(
-                                "Atras",
-                                style = TextStyle(
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            )
-                        }
+                    OutlinedTextField(
+                        value = nombreCientifico,
+                        onValueChange = { nombreCientifico = it },
+                        label = { Text("Nombre Científico") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
 
-                        Button(
-                            onClick = {
-                                // Guardar en base de datos, vinculado al usuario
-                                runBlocking {
-                                    appContainer.usuariosRepository.insertUserWithFormularioUno(
-                                        context.accountInfo.user_id, formulario
+                    OutlinedTextField(
+                        value = numeroIndividuos,
+                        onValueChange = { numeroIndividuos = it },
+                        label = { Text("Número de Individuos") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Text("Tipo de Observación")
+                    val observacionOptions =
+                        listOf("La Vió", "Huella", "Rastro", "Cacería", "Le dijeron")
+                    if (tipoObservacion == "") {
+                        tipoObservacion = observacionOptions[0]
+                    }
+                    Column {
+                        observacionOptions.forEach { option ->
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                RadioButton(
+                                    selected = tipoObservacion == option,
+                                    onClick = { tipoObservacion = option },
+                                    colors = RadioButtonDefaults.colors(
+                                        selectedColor = Color(0xFF4E7029),
+                                        unselectedColor = Color.Gray
                                     )
-                                }
-                                navController.navigate("home")
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF4E7029),
-                                contentColor = Color.White
-                            ),
-                            shape = RoundedCornerShape(50),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(
-                                "Guardar",
-                                style = TextStyle(
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.SemiBold
                                 )
-                            )
+                                Text(option, modifier = Modifier.padding(start = 8.dp))
+                            }
                         }
                     }
+
+
+                        // Camera Button
+                        Button(
+                            onClick = { showCamera = true }, // Toggle the camera view
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF4E7029),
+                                contentColor = Color.White
+                            ),
+                            shape = RoundedCornerShape(10)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Take Photo",
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("Take Photo")
+                        }
+
+                        Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
+
+                        // Display the saved image
+                        savedImageUri.value?.let { uri ->
+                            Column {
+                                //Text("Image saved at: $uri")
+                                Image(
+                                    painter = rememberAsyncImagePainter(model = uri),
+                                    contentDescription = "Saved Image",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(200.dp)
+                                )
+                            }
+                        }
+
+                        OutlinedTextField(
+                            value = observaciones,
+                            onValueChange = { observaciones = it },
+                            label = { Text("Observaciones") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(100.dp),
+                            maxLines = 4
+                        )
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Button(
+                                onClick = { navController.navigate("home") },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFF4E7029),
+                                    contentColor = Color.White
+                                ),
+                                shape = RoundedCornerShape(50),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(
+                                    "Atras",
+                                    style = TextStyle(
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                )
+                            }
+
+                            Button(
+                                onClick = {
+                                    val formulario =
+                                        FormularioUnoEntity(
+                                            transecto = transecto,
+                                            tipoAnimal = tipoAnimal,
+                                            nombreComun = nombreComun,
+                                            nombreCientifico = nombreCientifico,
+                                            numeroIndividuos = numeroIndividuos,
+                                            tipoObservacion = tipoObservacion,
+                                            observaciones = observaciones,
+                                        ).withID(formularioId)
+                                    // Guardar en base de datos, vinculado al usuario
+                                    runBlocking {
+                                        appContainer.usuariosRepository.insertUserWithFormularioUno(
+                                            context.accountInfo.user_id, formulario
+                                        )
+                                    }
+                                    navController.navigate("home")
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFF4E7029),
+                                    contentColor = Color.White
+                                ),
+                                shape = RoundedCornerShape(50),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(
+                                    "Guardar",
+                                    style = TextStyle(
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                )
+                            }
+                        }
                 }
             }
         }

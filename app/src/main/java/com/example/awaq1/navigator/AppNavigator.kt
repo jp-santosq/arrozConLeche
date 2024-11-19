@@ -20,10 +20,14 @@ import com.example.awaq1.view.Settings
 import com.example.awaq1.view.TwoFactor
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class FormUnoID(val form_id: Long = 0)
+@Serializable data class FormUnoID(val form_id: Long = 0)
 
-@RequiresApi(Build.VERSION_CODES.P)
+@Serializable data class FormDosID(val form_id: Long = 0)
+
+@Serializable data class FormTresID(val form_id: Long = 0)
+
+@Serializable data class FormCuatroID(val form_id: Long = 0)
+
 @Composable
 fun AppNavigator(onLogout: () -> Unit, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
@@ -55,14 +59,17 @@ fun AppNavigator(onLogout: () -> Unit, modifier: Modifier = Modifier) {
             val formId: FormUnoID = backStackEntry.toRoute()
             ObservationForm(navController = navController, formId.form_id)
         }
-        composable("reporte_2") {
-            ObservationFormDos(navController = navController)
+        composable<FormDosID> { backStackEntry ->
+            val formId: FormDosID = backStackEntry.toRoute()
+            ObservationFormDos(navController = navController, formId.form_id)
         }
-        composable("reporte_3") {
-           ObservationFormTres(navController = navController)
+        composable<FormTresID> { backStackEntry ->
+            val formId: FormTresID = backStackEntry.toRoute()
+           ObservationFormTres(navController = navController, formId.form_id)
         }
-        composable("reporte_4") {
-            ObservationFormCuatro(navController = navController)
+        composable<FormCuatroID> { backStackEntry ->
+            val formId: FormCuatroID = backStackEntry.toRoute()
+            ObservationFormCuatro(navController = navController, formId.form_id)
         }
 
         composable("buscar") {

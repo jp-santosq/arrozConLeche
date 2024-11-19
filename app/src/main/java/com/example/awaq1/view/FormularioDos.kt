@@ -47,46 +47,69 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.ViewModels.CameraViewModel
 import com.example.awaq1.data.formularios.FormularioDosEntity
+import kotlinx.coroutines.flow.first
 
 
-@RequiresApi(Build.VERSION_CODES.P)
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
 fun PreviewForm2() {
     ObservationFormDos(rememberNavController())
 }
 
-@RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ObservationFormDos(navController: NavController) {
+fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
     val cameraViewModel: CameraViewModel = viewModel()
 
-    var zona: String by remember {mutableStateOf("")}
-    var tipoAnimal: String by remember {mutableStateOf("")}
-    var nombreComun: String by remember {mutableStateOf("")}
-    var nombreCientifico: String by remember {mutableStateOf("")}
-    var numeroIndividuos: String by remember {mutableStateOf("")}
-    var tipoObservacion: String by remember {mutableStateOf("")}
-    var alturaObservacion: String by remember {mutableStateOf("")}
-    var observaciones: String by remember {mutableStateOf("")}
+    var zona: String by remember { mutableStateOf("") }
+    var tipoAnimal: String by remember { mutableStateOf("") }
+    var nombreComun: String by remember { mutableStateOf("") }
+    var nombreCientifico: String by remember { mutableStateOf("") }
+    var numeroIndividuos: String by remember { mutableStateOf("") }
+    var tipoObservacion: String by remember { mutableStateOf("") }
+    var alturaObservacion: String by remember { mutableStateOf("") }
+    var observaciones: String by remember { mutableStateOf("") }
+
+    if (formularioId != 0L) {
+        val formulario: FormularioDosEntity? = runBlocking {
+            Log.d("Formulario2Loading", "Loading formulario2 with ID $formularioId")
+            appContainer.formulariosRepository.getFormularioDosStream(formularioId).first()
+        }
+
+        if (formulario != null) {
+            zona = formulario.zona
+            tipoAnimal = formulario.tipoAnimal
+            nombreComun = formulario.nombreComun
+            nombreCientifico = formulario.nombreCientifico
+            numeroIndividuos = formulario.numeroIndividuos
+            tipoObservacion = formulario.tipoObservacion
+            alturaObservacion = formulario.alturaObservacion
+            observaciones = formulario.observaciones
+        } else {
+            Log.e("Formulario2Loading", "NO se pudo obtener el formulario2 con id $formularioId")
+        }
+    }
+
+
     var showCamera by remember { mutableStateOf(false) }
     val savedImageUri = remember { mutableStateOf<Uri?>(null) }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(
-                    text ="Formulario de Observación",
-                    style = TextStyle(
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = (-0.03).em,
-                        color = Color(0xFF4E7029)
+                title = {
+                    Text(
+                        text = "Formulario de Observación",
+                        style = TextStyle(
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = (-0.03).em,
+                            color = Color(0xFF4E7029)
+                        )
                     )
-                ) },
+                },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color.White,
                     titleContentColor = Color(0xFF4E7029)
@@ -103,9 +126,11 @@ fun ObservationFormDos(navController: NavController) {
                     onGalleryClick = { /* Optional: Handle gallery selection */ }
                 )
             } else {
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.White)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.White)
+                ) {
                     Column(
                         modifier = Modifier
                             .padding(paddingValues)
@@ -115,7 +140,12 @@ fun ObservationFormDos(navController: NavController) {
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Text("Zona")
-                        val zonasOpciones = listOf("Bosque", "Arreglo Agroforestal", "Cultivos Transitorios", "Cultivos Permanentes")
+                        val zonasOpciones = listOf(
+                            "Bosque",
+                            "Arreglo Agroforestal",
+                            "Cultivos Transitorios",
+                            "Cultivos Permanentes"
+                        )
                         if (zona == "") {
                             zona = zonasOpciones[0]
                         }
@@ -161,7 +191,9 @@ fun ObservationFormDos(navController: NavController) {
                                         painter = painterResource(id = iconResource),
                                         contentDescription = animal,
                                         modifier = Modifier.size(40.dp),
-                                        tint = if (tipoAnimal == animal) Color(0xFF4E7029) else Color(0xFF3F3F3F)
+                                        tint = if (tipoAnimal == animal) Color(0xFF4E7029) else Color(
+                                            0xFF3F3F3F
+                                        )
                                     )
                                 }
                             }
@@ -190,7 +222,8 @@ fun ObservationFormDos(navController: NavController) {
                         )
 
                         Text("Tipo de Observación")
-                        val observacionOptions = listOf("La Vió", "Huella", "Rastro", "Cacería", "Le dijeron")
+                        val observacionOptions =
+                            listOf("La Vió", "Huella", "Rastro", "Cacería", "Le dijeron")
                         if (tipoObservacion == "") {
                             tipoObservacion = observacionOptions[0]
                         }
@@ -211,7 +244,11 @@ fun ObservationFormDos(navController: NavController) {
                         }
 
                         Text("Altura de Observación")
-                        val alturaOptions: List<Pair<String, String>> = listOf(Pair("Baja", "<1mt"), Pair("Media", "1-3mt"), Pair("Alta", ">3mt"))
+                        val alturaOptions: List<Pair<String, String>> = listOf(
+                            Pair("Baja", "<1mt"),
+                            Pair("Media", "1-3mt"),
+                            Pair("Alta", ">3mt")
+                        )
                         if (alturaObservacion == "") {
                             alturaObservacion = alturaOptions[0].first
                         }
@@ -226,7 +263,10 @@ fun ObservationFormDos(navController: NavController) {
                                             unselectedColor = Color.Gray
                                         )
                                     )
-                                    Text("${option.first} ${option.second}", modifier = Modifier.padding(start = 8.dp))
+                                    Text(
+                                        "${option.first} ${option.second}",
+                                        modifier = Modifier.padding(start = 8.dp)
+                                    )
                                 }
                             }
                         }
@@ -280,11 +320,13 @@ fun ObservationFormDos(navController: NavController) {
                                 shape = RoundedCornerShape(50),
                                 modifier = Modifier.weight(1f)
                             ) {
-                                Text("Atras",
+                                Text(
+                                    "Atras",
                                     style = TextStyle(
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight.SemiBold
-                                    ))
+                                    )
+                                )
                             }
 
                             Button(
@@ -299,7 +341,8 @@ fun ObservationFormDos(navController: NavController) {
                                             tipoObservacion = tipoObservacion,
                                             alturaObservacion = alturaObservacion,
                                             observaciones = observaciones,
-                                        )
+                                        ).withID(formularioId)
+
                                     runBlocking {
                                         appContainer.usuariosRepository.insertUserWithFormularioDos(
                                             context.accountInfo.user_id, formulario
@@ -315,11 +358,13 @@ fun ObservationFormDos(navController: NavController) {
                                 shape = RoundedCornerShape(50),
                                 modifier = Modifier.weight(1f)
                             ) {
-                                Text("Enviar",
+                                Text(
+                                    "Enviar",
                                     style = TextStyle(
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight.SemiBold
-                                    ))
+                                    )
+                                )
                             }
                         }
                     }

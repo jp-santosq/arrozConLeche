@@ -23,7 +23,6 @@ data class FormularioUnoEntity(
     fun withID(id: Long): FormularioUnoEntity {
         val newForm = this.copy()
         newForm.id = id
-        newForm.transecto = "huhuhu"
         return newForm
     }
 }
@@ -43,6 +42,12 @@ data class FormularioDosEntity(
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    fun withID(id: Long): FormularioDosEntity {
+        val newForm = this.copy()
+        newForm.id = id
+        return newForm
+    }
 }
 
 // Validacion de cobertura
@@ -58,6 +63,12 @@ data class FormularioTresEntity(
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    fun withID(id: Long): FormularioTresEntity {
+        val newForm = this.copy()
+        newForm.id = id
+        return newForm
+    }
 }
 
 // Parcela de vegetacion
@@ -80,5 +91,11 @@ data class FormularioCuatroEntity(
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    fun withID(id: Long): FormularioCuatroEntity {
+        val newForm = this.copy()
+        newForm.id = id
+        return newForm
+    }
 }
 

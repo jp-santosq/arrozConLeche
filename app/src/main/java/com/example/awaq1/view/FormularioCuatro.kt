@@ -35,9 +35,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.awaq1.MainActivity
 import kotlinx.coroutines.runBlocking
 import androidx.compose.material.icons.Icons
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.ui.draw.scale
@@ -45,19 +43,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.ViewModels.CameraViewModel
 import com.example.awaq1.data.formularios.FormularioCuatroEntity
+import com.example.awaq1.data.formularios.FormularioTresEntity
+import kotlinx.coroutines.flow.first
 
 
-@RequiresApi(Build.VERSION_CODES.P)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewForm4() {
     ObservationFormCuatro(rememberNavController())
 }
 
-@RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun ObservationFormCuatro(navController: NavController) {
+fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
     val cameraViewModel: CameraViewModel = viewModel()
@@ -75,6 +73,32 @@ fun ObservationFormCuatro(navController: NavController) {
     var estatura: String by remember { mutableStateOf("") }
     var altura: String by remember { mutableStateOf("") }
     var observaciones: String by remember { mutableStateOf("") }
+
+    if (formularioId != 0L) {
+        val formulario: FormularioCuatroEntity? = runBlocking {
+            Log.d("Formulario4Loading", "Loading formulario4 with ID $formularioId")
+            appContainer.formulariosRepository.getFormularioCuatroStream(formularioId).first()
+        }
+
+        if (formulario != null) {
+            codigo = formulario.codigo
+            quad_a = formulario.quad_a
+            quad_b = formulario.quad_b
+            sub_quad = formulario.sub_quad
+            habitoDeCrecimiento = formulario.habitoDeCrecimiento
+            nombreComun = formulario.nombreComun
+            nombreCientifico = formulario.nombreCientifico
+            placa = formulario.placa
+            circunferencia = formulario.circunferencia
+            distancia = formulario.distancia
+            estatura = formulario.estatura
+            altura = formulario.altura
+            observaciones = formulario.observaciones
+        } else {
+            Log.e("Formulario4Loading", "NO se pudo obtener el formulario4 con id $formularioId")
+        }
+    }
+
     var showCamera by remember { mutableStateOf(false) }
     val savedImageUri = remember { mutableStateOf<Uri?>(null) }
 
@@ -384,7 +408,8 @@ fun ObservationFormCuatro(navController: NavController) {
                                         estatura = estatura,
                                         altura = altura,
                                         observaciones = observaciones
-                                    )
+                                    ).withID(formularioId)
+
                                     runBlocking {
                                         appContainer.usuariosRepository.insertUserWithFormularioCuatro(
                                             context.accountInfo.user_id, formulario
