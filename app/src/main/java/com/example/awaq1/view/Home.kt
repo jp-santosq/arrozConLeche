@@ -50,7 +50,7 @@ fun Home(navController: NavController) {
         context.accountInfo.user_id
     )
         .collectAsState(initial = emptyList())
-    val count by appContainer.formulariosRepository.getFormularioUnoCount()
+    val count by appContainer.formulariosRepository.getAllFormulariosCount()
         .collectAsState(initial = 0)
 
     Scaffold(

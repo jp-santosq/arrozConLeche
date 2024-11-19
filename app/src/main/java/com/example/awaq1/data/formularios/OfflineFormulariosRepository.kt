@@ -54,4 +54,14 @@ class OfflineFormulariosRepository(
     override fun getFormularioCuatroCount(): Flow<Int> = flow {
         emit(formularioCuatroDAO.getFormularioCuatroCount())
     }
+
+
+
+    override fun getAllFormulariosCount(): Flow<Int> = flow {
+        val count1 = formularioUnoDAO.getFormularioUnoCount()
+        val count2 = formularioDosDAO.getFormularioDosCount()
+        val count3 = formularioTresDAO.getFormularioTresCount()
+        val count4 = formularioCuatroDAO.getFormularioCuatroCount()
+        emit(count1 + count2 + count3 + count4)
+    }
 }

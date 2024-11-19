@@ -36,9 +36,12 @@ interface FormulariosRepository {
     suspend fun deleteFormularioCuatro(item: FormularioCuatroEntity)
     suspend fun updateFormularioCuatro(item: FormularioCuatroEntity)
 
+    // General Formularios
+
     fun getFormularioUnoCount(): Flow<Int>
     fun getFormularioDosCount(): Flow<Int>
     fun getFormularioTresCount(): Flow<Int>
     fun getFormularioCuatroCount(): Flow<Int>
 
+    fun getAllFormulariosCount(): Flow<Int>
 }
