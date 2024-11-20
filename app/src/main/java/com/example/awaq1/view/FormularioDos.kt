@@ -329,8 +329,15 @@ fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
                                 )
                                 Button(onClick = {
                                     savedImageUris.value = savedImageUris.value.toMutableList().apply { remove(uri) }
-                                }) {
-                                    Text("Delete")
+                                },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = Color.Transparent // Removes background color
+                                    ),
+                                    elevation = null // Removes shadow/elevation for a completely flat button
+                                ) {
+                                    Text(text = "X",
+                                        color = Color.Red,
+                                        fontSize = 20.sp)
                                 }
                             }
                         }

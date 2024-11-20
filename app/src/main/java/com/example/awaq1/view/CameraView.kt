@@ -93,33 +93,36 @@ fun CameraWindow(
                 contentDescription = "Captured Photo",
                 modifier = Modifier.fillMaxSize()
             )
-            Row(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Button(
-                    onClick = {
-                        currentCapturedUri = null // Reset current image
-                        showPreview = false // Return to camera preview
-                    },
-                    modifier = Modifier.weight(1f)
+            Column(modifier = Modifier.align(Alignment.BottomCenter)) {
+                Row(
+                    modifier = Modifier
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("Retake")
+                    Button(
+                        onClick = {
+                            currentCapturedUri = null // Reset current image
+                            showPreview = false // Return to camera preview
+                        },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Retake")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(
+                        onClick = {
+                            savedImageUris.value.add(uri) // Add image to the list
+                            currentCapturedUri = null // Reset current image
+                            showPreview = false // Return to camera preview
+                            onClose() // Exit the CameraWindow after confirmation
+                        },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Confirm")
+                    }
+
                 }
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(
-                    onClick = {
-                        savedImageUris.value.add(uri) // Add image to the list
-                        currentCapturedUri = null // Reset current image
-                        showPreview = false // Return to camera preview
-                        onClose() // Exit the CameraWindow after confirmation
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Confirm")
-                }
+                Spacer(modifier = Modifier.height(45.dp))
             }
         }
 
