@@ -64,8 +64,8 @@ fun PrincipalView(modifier: Modifier = Modifier, auth0: Auth0) {
     val context = LocalContext.current as MainActivity
 
     Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
-        context.accountInfo = AccountInfo("example@example.com", user_id = 1L)
-        if (true) { // loggedIn o true
+        //context.accountInfo = AccountInfo("example@example.com", user_id = 1L)
+        if (loggedIn) { // loggedIn o true
             AppNavigator(
                 onLogout = {
                     Log.d("AuthLogout", "Logging out!")
