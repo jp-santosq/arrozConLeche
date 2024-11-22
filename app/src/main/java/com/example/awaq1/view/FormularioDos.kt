@@ -386,7 +386,15 @@ fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
                                 }
                             }
                         }
-
+                        OutlinedTextField(
+                            value = observaciones,
+                            onValueChange = { observaciones = it },
+                            label = { Text("Observaciones") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(100.dp),
+                            maxLines = 4
+                        )
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
