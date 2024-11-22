@@ -51,6 +51,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.ViewModels.CameraViewModel
 import com.example.awaq1.data.formularios.FormularioDosEntity
+import com.example.awaq1.data.formularios.Ubicacion
 import kotlinx.coroutines.flow.first
 
 
@@ -66,6 +67,22 @@ fun Preview() {
 fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
+
+    var location by remember { mutableStateOf<Pair<Double, Double>?>(null) }
+    val ubicacion = Ubicacion(context)
+    LaunchedEffect(Unit) {
+        context.requestLocationPermission()
+        if (ubicacion.hasLocationPermission()) {
+            location = ubicacion.obtenerCoordenadas()
+            if (location != null) {
+                Log.d("ObservationForm", "Location retrieved: Lat=${location!!.first}, Long=${location!!.second}")
+            } else {
+                Log.d("ObservationForm", "Location is null")
+            }
+        } else {
+            Log.d("ObservationForm", "Location permission required but not granted.")
+        }
+    }
 
     var transecto by remember { mutableStateOf("") }
     var tipoAnimal by remember { mutableStateOf("") }
@@ -140,6 +157,10 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
                         .verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+                    location?.let { (latitude, longitude) ->
+                        Text("Ubicacion Actual: Lati: $latitude, Long: $longitude")
+                    } ?: Text("Buscando ubicacion...")
+
                     OutlinedTextField(
                         value = transecto,
                         onValueChange = { transecto = it },

@@ -46,6 +46,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.ViewModels.CameraViewModel
 import com.example.awaq1.data.formularios.FormularioCuatroEntity
 import com.example.awaq1.data.formularios.FormularioTresEntity
+import com.example.awaq1.data.formularios.Ubicacion
 import kotlinx.coroutines.flow.first
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -60,6 +61,24 @@ fun PreviewForm4() {
 fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
+
+    var location by remember { mutableStateOf<Pair<Double, Double>?>(null) }
+    val ubicacion = Ubicacion(context)
+    LaunchedEffect(Unit) {
+        context.requestLocationPermission()
+        if (ubicacion.hasLocationPermission()) {
+            location = ubicacion.obtenerCoordenadas()
+            if (location != null) {
+                Log.d("ObservationForm", "Location retrieved: Lat=${location!!.first}, Long=${location!!.second}")
+            } else {
+                Log.d("ObservationForm", "Location is null")
+            }
+        } else {
+            Log.d("ObservationForm", "Location permission required but not granted.")
+        }
+    }
+
+
     val cameraViewModel: CameraViewModel = viewModel()
 
     var codigo: String by remember { mutableStateOf("") }
@@ -147,6 +166,10 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
                             .verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
+                        location?.let { (latitude, longitude) ->
+                            Text("Ubicacion Actual: Lati: $latitude, Long: $longitude")
+                        } ?: Text("Buscando ubicacion...")
+
                         OutlinedTextField(
                             value = codigo,
                             onValueChange = { codigo = it },

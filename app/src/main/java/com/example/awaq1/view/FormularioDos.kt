@@ -48,6 +48,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.ViewModels.CameraViewModel
 import com.example.awaq1.data.formularios.FormularioDosEntity
+import com.example.awaq1.data.formularios.Ubicacion
 import kotlinx.coroutines.flow.first
 
 
@@ -64,6 +65,23 @@ fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
     val cameraViewModel: CameraViewModel = viewModel()
+
+    var location by remember { mutableStateOf<Pair<Double, Double>?>(null) }
+    val ubicacion = Ubicacion(context)
+    LaunchedEffect(Unit) {
+        context.requestLocationPermission()
+        if (ubicacion.hasLocationPermission()) {
+            location = ubicacion.obtenerCoordenadas()
+            if (location != null) {
+                Log.d("ObservationForm", "Location retrieved: Lat=${location!!.first}, Long=${location!!.second}")
+            } else {
+                Log.d("ObservationForm", "Location is null")
+            }
+        } else {
+            Log.d("ObservationForm", "Location permission required but not granted.")
+        }
+    }
+
 
     var zona: String by remember { mutableStateOf("") }
     var tipoAnimal: String by remember { mutableStateOf("") }
@@ -141,6 +159,10 @@ fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
                             .verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
+                        location?.let { (latitude, longitude) ->
+                            Text("Ubicacion Actual: Lati: $latitude, Long: $longitude")
+                        } ?: Text("Buscando ubicacion...")
+
                         Text("Zona")
                         val zonasOpciones = listOf(
                             "Bosque",
