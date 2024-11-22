@@ -93,3 +93,24 @@ interface FormularioCuatroDAO {
     @Query("SELECT COUNT(*) FROM Formulario4")
     suspend fun getFormularioCuatroCount(): Int
 }
+
+@Dao
+interface FormularioCincoDAO {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(item: FormularioCincoEntity): Long
+
+    @Update
+    suspend fun update(item: FormularioCincoEntity)
+
+    @Delete
+    suspend fun delete(item: FormularioCincoEntity)
+
+    @Query("SELECT * from Formulario5 WHERE id = :id")
+    fun getFormularioCincoEntity(id: Long): Flow<FormularioCincoEntity?>
+
+    @Query("SELECT * from Formulario5 ORDER BY id ASC")
+    fun getAllFormularioCincoEntities(): Flow<List<FormularioCincoEntity>>
+
+    @Query("SELECT COUNT(*) FROM Formulario5")
+    suspend fun getFormularioCincoCount(): Int
+}

@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.example.awaq1.data.formularios.FormularioCincoEntity
 import com.example.awaq1.data.formularios.FormularioCuatroEntity
 import com.example.awaq1.data.formularios.FormularioDosEntity
 import com.example.awaq1.data.formularios.FormularioTresEntity
@@ -130,4 +131,26 @@ interface UsuarioFormulario4DAO {
 
     @Query("SELECT * from Formulario4 INNER JOIN UsuarioFormulario4 ON Formulario4.id = UsuarioFormulario4.formId WHERE UsuarioFormulario4.usuarioId = :usuarioId")
     fun getAllFormulariosForUserID(usuarioId: Long): Flow<List<FormularioCuatroEntity>>
+}
+
+// DAO for UsuarioFormulario5Entity
+@Dao
+interface UsuarioFormulario5DAO {
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(usuarioFormulario: UsuarioFormulario5Entity): Long
+
+    @Update
+    suspend fun update(usuarioFormulario: UsuarioFormulario5Entity)
+
+    @Delete
+    suspend fun delete(usuarioFormulario: UsuarioFormulario5Entity)
+
+    @Query("SELECT * from UsuarioFormulario5 WHERE usuarioId = :usuarioId")
+    fun getFormulariosForUsuario(usuarioId: Long): Flow<List<UsuarioFormulario5Entity>>
+
+    @Query("SELECT * from UsuarioFormulario5 WHERE formId = :formId")
+    fun getUsuariosForFormulario(formId: Long): Flow<List<UsuarioFormulario5Entity>>
+
+    @Query("SELECT * from Formulario5 INNER JOIN UsuarioFormulario5 ON Formulario5.id = UsuarioFormulario5.formId WHERE UsuarioFormulario5.usuarioId = :usuarioId")
+    fun getAllFormulariosForUserID(usuarioId: Long): Flow<List<FormularioCincoEntity>>
 }

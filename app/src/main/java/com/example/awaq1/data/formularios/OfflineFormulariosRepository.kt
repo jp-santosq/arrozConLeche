@@ -8,6 +8,7 @@ class OfflineFormulariosRepository(
     private val formularioDosDAO: FormularioDosDAO,
     private val formularioTresDAO: FormularioTresDAO,
     private val formularioCuatroDAO: FormularioCuatroDAO,
+    private val formularioCincoDAO: FormularioCincoDAO,
     private val imageDAO: ImageDAO
 ): FormulariosRepository {
     override fun getAllFormularioUnosStream(): Flow<List<FormularioUnoEntity>> = formularioUnoDAO.getAllFormularioUnoEntities()
@@ -43,6 +44,14 @@ class OfflineFormulariosRepository(
     override suspend fun deleteFormularioCuatro(item: FormularioCuatroEntity) = formularioCuatroDAO.delete(item)
     override suspend fun updateFormularioCuatro(item: FormularioCuatroEntity) = formularioCuatroDAO.update(item)
 
+    override fun getAllFormularioCincoStream(): Flow<List<FormularioCincoEntity>> = formularioCincoDAO.getAllFormularioCincoEntities()
+    override fun getFormularioCincoStream(id: Long): Flow<FormularioCincoEntity?> = formularioCincoDAO.getFormularioCincoEntity(id)
+    override suspend fun insertFormularioCinco(item: FormularioCincoEntity): Long {
+        return formularioCincoDAO.insert(item)
+    }
+    override suspend fun deleteFormularioCinco(item: FormularioCincoEntity) = formularioCincoDAO.delete(item)
+    override suspend fun updateFormularioCinco(item: FormularioCincoEntity) = formularioCincoDAO.update(item)
+
     override fun getFormularioUnoCount(): Flow<Int> = flow {
         emit(formularioUnoDAO.getFormularioUnoCount())
     }
@@ -55,13 +64,17 @@ class OfflineFormulariosRepository(
     override fun getFormularioCuatroCount(): Flow<Int> = flow {
         emit(formularioCuatroDAO.getFormularioCuatroCount())
     }
+    override fun getFormularioCincoCount(): Flow<Int> = flow {
+        emit(formularioCincoDAO.getFormularioCincoCount())
+    }
 
     override fun getAllFormulariosCount(): Flow<Int> = flow {
         val count1 = formularioUnoDAO.getFormularioUnoCount()
         val count2 = formularioDosDAO.getFormularioDosCount()
         val count3 = formularioTresDAO.getFormularioTresCount()
         val count4 = formularioCuatroDAO.getFormularioCuatroCount()
-        emit(count1 + count2 + count3 + count4)
+        val count5 = formularioCincoDAO.getFormularioCincoCount()
+        emit(count1 + count2 + count3 + count4 + count5)
     }
 
     override suspend fun insertImage(image: ImageEntity) {

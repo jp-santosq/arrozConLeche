@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.awaq1.R
+import com.example.awaq1.navigator.FormCincoID
 import com.example.awaq1.navigator.FormCuatroID
 import com.example.awaq1.navigator.FormDosID
 import com.example.awaq1.navigator.FormTresID
@@ -108,6 +109,7 @@ fun SelectFormularioScreen(navController: NavController) {
                 FormChooseButton(FormDosID(), "Fauna en Punto de Conteo", navController)
                 FormChooseButton(FormTresID(), "Validación de Cobertura", navController)
                 FormChooseButton(FormCuatroID(), "Parcela de Vegetación", navController)
+                FormChooseButton(FormCincoID(), "Fauna Busqueda Libre", navController)
             }
         }
     }

@@ -38,10 +38,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.awaq1.MainActivity
+import com.example.awaq1.data.formularios.FormularioCincoEntity
 import com.example.awaq1.data.formularios.FormularioCuatroEntity
 import com.example.awaq1.data.formularios.FormularioDosEntity
 import com.example.awaq1.data.formularios.FormularioTresEntity
 import com.example.awaq1.data.formularios.FormularioUnoEntity
+import com.example.awaq1.navigator.FormCincoID
 import com.example.awaq1.navigator.FormCuatroID
 import com.example.awaq1.navigator.FormDosID
 import com.example.awaq1.navigator.FormTresID
@@ -68,6 +70,10 @@ fun Home(navController: NavController) {
     )
         .collectAsState(initial = emptyList())
     val forms4: List<FormularioCuatroEntity> by appContainer.usuariosRepository.getAllFormularioCuatroForUserID(
+        context.accountInfo.user_id
+    )
+        .collectAsState(initial = emptyList())
+    val forms5: List<FormularioCincoEntity> by appContainer.usuariosRepository.getAllFormularioCincoForUserID(
         context.accountInfo.user_id
     )
         .collectAsState(initial = emptyList())
@@ -155,6 +161,10 @@ fun Home(navController: NavController) {
                             val formCard = FormInfo(form)
                             formCard.DisplayCard(navController)
                         }
+                        items(forms5) { form ->
+                            val formCard = FormInfo(form)
+                            formCard.DisplayCard(navController)
+                        }
                         items(1) {
                             Spacer(modifier = Modifier.height(5.dp))
                         }
@@ -232,6 +242,14 @@ data class FormInfo(
         formId = formulario.id
     )
 
+    constructor(formulario: FormularioCincoEntity) : this(
+        tipo = "Zona", formulario.zona,
+        primerTag = "Tipo", formulario.tipoAnimal,
+        segundoTag = "Nombre", formulario.nombreComun,
+        formulario = "form5",
+        formId = formulario.id
+    )
+
     fun goEditFormulario(navController: NavController) {
         Log.d("HOME_CLICK_ACTION", "Click en $this")
         when (formulario) {
@@ -239,6 +257,7 @@ data class FormInfo(
             "form2" -> navController.navigate(route = FormDosID(formId))
             "form3" -> navController.navigate(route = FormTresID(formId))
             "form4" -> navController.navigate(route = FormCuatroID(formId))
+            "form5" -> navController.navigate(route = FormCincoID(formId))
             else -> throw Exception("CARD NAVIGATION NOT IMPLEMENTED FOR $formulario")
         }
     }

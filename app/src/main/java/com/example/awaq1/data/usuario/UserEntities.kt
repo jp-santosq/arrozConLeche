@@ -9,6 +9,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.example.awaq1.data.formularios.FormularioCincoEntity
 import com.example.awaq1.data.formularios.FormularioCuatroEntity
 import com.example.awaq1.data.formularios.FormularioDosEntity
 import com.example.awaq1.data.formularios.FormularioTresEntity
@@ -78,6 +79,20 @@ data class UsuarioFormulario3Entity(
     primaryKeys = ["usuarioId", "formId"]
 )
 data class UsuarioFormulario4Entity(
+    val usuarioId: Long,
+    val formId: Long,
+)
+
+// Usuario Formulario 5 Association Entity
+@Entity(
+    tableName = "UsuarioFormulario5",
+    foreignKeys = [
+        ForeignKey(entity = UsuarioEntity::class, parentColumns = ["id"], childColumns = ["usuarioId"], onDelete = ForeignKey.CASCADE),
+        ForeignKey(entity = FormularioCincoEntity::class, parentColumns = ["id"], childColumns = ["formId"], onDelete = ForeignKey.CASCADE)
+    ],
+    primaryKeys = ["usuarioId", "formId"]
+)
+data class UsuarioFormulario5Entity(
     val usuarioId: Long,
     val formId: Long,
 )

@@ -18,6 +18,7 @@ class AppDataContainer(private val context: Context) : AppContainer {
             formularioDosDAO = FormulariosDatabase.getDatabase(context).formulario2Dao(),
             formularioTresDAO = FormulariosDatabase.getDatabase(context).formulario3Dao(),
             formularioCuatroDAO = FormulariosDatabase.getDatabase(context).formulario4Dao(),
+            formularioCincoDAO = FormulariosDatabase.getDatabase(context).formulario5Dao(),
             imageDAO = FormulariosDatabase.getDatabase(context).imageDao()
         )
     }
@@ -29,10 +30,12 @@ class AppDataContainer(private val context: Context) : AppContainer {
             usuarioFormulario2DAO = FormulariosDatabase.getDatabase(context).usuarioFormulario2DAO(),
             usuarioFormulario3DAO = FormulariosDatabase.getDatabase(context).usuarioFormulario3DAO(),
             usuarioFormulario4DAO = FormulariosDatabase.getDatabase(context).usuarioFormulario4DAO(),
+            usuarioFormulario5DAO = FormulariosDatabase.getDatabase(context).usuarioFormulario5DAO(),
             formularioUnoDAO = FormulariosDatabase.getDatabase(context).formulario1Dao(),
             formularioDosDAO = FormulariosDatabase.getDatabase(context).formulario2Dao(),
             formularioTresDAO = FormulariosDatabase.getDatabase(context).formulario3Dao(),
             formularioCuatroDAO = FormulariosDatabase.getDatabase(context).formulario4Dao(),
+            formularioCincoDAO = FormulariosDatabase.getDatabase(context).formulario5Dao(),
         )
     }
 }

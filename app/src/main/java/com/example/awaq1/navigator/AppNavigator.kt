@@ -11,6 +11,7 @@ import androidx.navigation.toRoute
 import com.example.awaq1.view.Home
 import com.example.awaq1.view.Mapa
 import com.example.awaq1.view.ObservationForm
+import com.example.awaq1.view.ObservationFormCinco
 import com.example.awaq1.view.ObservationFormDos
 import com.example.awaq1.view.ObservationFormCuatro
 import com.example.awaq1.view.ObservationFormTres
@@ -27,6 +28,8 @@ import kotlinx.serialization.Serializable
 @Serializable data class FormTresID(val form_id: Long = 0)
 
 @Serializable data class FormCuatroID(val form_id: Long = 0)
+
+@Serializable data class FormCincoID(val form_id: Long = 0)
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
@@ -72,6 +75,10 @@ fun AppNavigator(onLogout: () -> Unit, modifier: Modifier = Modifier) {
         composable<FormCuatroID> { backStackEntry ->
             val formId: FormCuatroID = backStackEntry.toRoute()
             ObservationFormCuatro(navController = navController, formId.form_id)
+        }
+        composable<FormCincoID> { backStackEntry ->
+            val formId: FormCincoID = backStackEntry.toRoute()
+            ObservationFormCinco(navController = navController, formId.form_id)
         }
         composable("buscar") {
             ObservationListScreen(navController = navController)

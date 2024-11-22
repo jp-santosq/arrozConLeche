@@ -116,3 +116,29 @@ data class FormularioCuatroEntity(
     }
 }
 
+//Fauna Busqueda Libre
+@Entity(tableName = "Formulario5")
+data class FormularioCincoEntity(
+    var zona: String,
+    var clima: String,
+    var temporada: String,
+    var tipoAnimal: String,
+    var nombreComun: String,
+    var nombreCientifico: String,
+    var numeroIndividuos: String,
+    var tipoObservacion: String,
+    var alturaObservacion: String,
+    var observaciones: String,
+    val latitude: Double? = null,
+    val longitude: Double? = null
+
+) {
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0
+
+    fun withID(id: Long): FormularioCincoEntity {
+        val newForm = this.copy()
+        newForm.id = id
+        return newForm
+    }
+}

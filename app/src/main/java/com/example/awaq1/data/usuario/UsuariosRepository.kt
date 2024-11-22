@@ -1,6 +1,8 @@
 package com.example.awaq1.data.usuario
 
 import androidx.room.Transaction
+import com.example.awaq1.data.formularios.FormularioCincoDAO
+import com.example.awaq1.data.formularios.FormularioCincoEntity
 import com.example.awaq1.data.formularios.FormularioCuatroDAO
 import com.example.awaq1.data.formularios.FormularioCuatroEntity
 import com.example.awaq1.data.formularios.FormularioDosDAO
@@ -25,7 +27,9 @@ class UsuariosRepository(
     private val formularioTresDAO: FormularioTresDAO,
     private val usuarioFormulario3DAO: UsuarioFormulario3DAO,
     private val formularioCuatroDAO: FormularioCuatroDAO,
-    private val usuarioFormulario4DAO: UsuarioFormulario4DAO
+    private val usuarioFormulario4DAO: UsuarioFormulario4DAO,
+    private val formularioCincoDAO: FormularioCincoDAO,
+    private val usuarioFormulario5DAO: UsuarioFormulario5DAO,
 ) {
 
     // User operations
@@ -114,4 +118,21 @@ class UsuariosRepository(
     fun getUsuariosForFormularioCuatro(formId: Long): Flow<List<UsuarioFormulario4Entity>> = usuarioFormulario4DAO.getUsuariosForFormulario(formId)
 
     fun getAllFormularioCuatroForUserID(usuarioId: Long): Flow<List<FormularioCuatroEntity>> = usuarioFormulario4DAO.getAllFormulariosForUserID(usuarioId)
+
+    // UsuarioFormulario5 operations
+    @Transaction
+    suspend fun insertUserWithFormularioCinco(userId: Long, formulario: FormularioCincoEntity): Long {
+        val formId = formularioCincoDAO.insert(formulario)
+        if (formId == -1L) throw Exception("Failed to insert form")
+
+        val usuarioFormulario = UsuarioFormulario5Entity(usuarioId = userId, formId = formId)
+        usuarioFormulario5DAO.insert(usuarioFormulario)
+        return formId
+    }
+
+    fun getFormulariosForUsuarioCinco(usuarioId: Long): Flow<List<UsuarioFormulario5Entity>> = usuarioFormulario5DAO.getFormulariosForUsuario(usuarioId)
+
+    fun getUsuariosForFormularioCinco(formId: Long): Flow<List<UsuarioFormulario5Entity>> = usuarioFormulario5DAO.getUsuariosForFormulario(formId)
+
+    fun getAllFormularioCincoForUserID(usuarioId: Long): Flow<List<FormularioCincoEntity>> = usuarioFormulario5DAO.getAllFormulariosForUserID(usuarioId)
 }
