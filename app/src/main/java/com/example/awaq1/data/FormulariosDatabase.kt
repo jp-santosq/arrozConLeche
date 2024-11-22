@@ -15,6 +15,8 @@ import com.example.awaq1.data.formularios.FormularioTresDAO
 import com.example.awaq1.data.formularios.FormularioTresEntity
 import com.example.awaq1.data.formularios.FormularioUnoDAO
 import com.example.awaq1.data.formularios.FormularioUnoEntity
+import com.example.awaq1.data.formularios.ImageDAO
+import com.example.awaq1.data.formularios.ImageEntity
 import com.example.awaq1.data.usuario.UsuarioDAO
 import com.example.awaq1.data.usuario.UsuarioEntity
 import com.example.awaq1.data.usuario.UsuarioFormulario1DAO
@@ -28,7 +30,7 @@ import com.example.awaq1.data.usuario.UsuarioFormulario4Entity
 
 
 @Database(
-    entities = [FormularioUnoEntity::class, FormularioDosEntity::class, FormularioTresEntity::class, FormularioCuatroEntity::class, UsuarioEntity::class, UsuarioFormulario1Entity::class, UsuarioFormulario2Entity::class, UsuarioFormulario3Entity::class, UsuarioFormulario4Entity::class],
+    entities = [FormularioUnoEntity::class, FormularioDosEntity::class, FormularioTresEntity::class, FormularioCuatroEntity::class, ImageEntity::class,UsuarioEntity::class, UsuarioFormulario1Entity::class, UsuarioFormulario2Entity::class, UsuarioFormulario3Entity::class, UsuarioFormulario4Entity::class],
     version = 5,
     exportSchema = true,
     autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)]
@@ -38,6 +40,7 @@ abstract class FormulariosDatabase : RoomDatabase() {
     abstract fun formulario2Dao(): FormularioDosDAO
     abstract fun formulario3Dao(): FormularioTresDAO
     abstract fun formulario4Dao(): FormularioCuatroDAO
+    abstract fun imageDao(): ImageDAO
     abstract fun usuarioDAO(): UsuarioDAO
     abstract fun usuarioFormulario1DAO(): UsuarioFormulario1DAO
     abstract fun usuarioFormulario2DAO(): UsuarioFormulario2DAO

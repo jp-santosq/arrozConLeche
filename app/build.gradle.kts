@@ -65,6 +65,7 @@ dependencies {
 
     implementation(libs.androidx.room.runtime)
     implementation(libs.play.services.location)
+    implementation(libs.androidx.foundation.android)
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
 

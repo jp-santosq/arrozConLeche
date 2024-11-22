@@ -44,6 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.ViewModels.CameraViewModel
 import com.example.awaq1.data.formularios.FormularioTresEntity
+import com.example.awaq1.data.formularios.ImageEntity
 import com.example.awaq1.data.formularios.Ubicacion
 import kotlinx.coroutines.flow.first
 
@@ -95,6 +96,20 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
             } else {
                 null
             }
+            // Load saved images
+            val storedImages = runBlocking {
+                appContainer.formulariosRepository.getImagesByFormulario(formularioId, "Formulario3")
+                    .first() // Fetch the list of ImageEntity for this form
+            }
+            // Convert image URIs from String to Uri and store them in savedImageUris
+            savedImageUris.value = storedImages.mapNotNull { imageEntity ->
+                try {
+                    Uri.parse(imageEntity.imageUri) // Convert String to Uri
+                } catch (e: Exception) {
+                    Log.e("ObservationForm", "Failed to parse URI: ${imageEntity.imageUri}", e)
+                    null
+                }
+            }.toMutableList()
         } else {
             Log.e("Formulario3Loading", "NO se pudo obtener el formulario3 con id $formularioId")
         }
@@ -383,9 +398,27 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
                                     ).withID(formularioId)
 
                                     runBlocking {
-                                        appContainer.usuariosRepository.insertUserWithFormularioTres(
+                                        // Insert regresa su id
+                                        val formId = appContainer.usuariosRepository.insertUserWithFormularioTres(
                                             context.accountInfo.user_id, formulario
                                         )
+                                        Log.d("ImageDAO", "formId: $formId")
+
+                                        // Borrar todas las fotos en ese reporte
+                                        appContainer.formulariosRepository.deleteImagesByFormulario(
+                                            formularioId = formId,
+                                            formularioType = "Formulario3"
+                                        )
+
+                                        // Agregar todas las imagenes al reporte
+                                        savedImageUris.value.forEach { uri ->
+                                            val image = ImageEntity(
+                                                formularioId = formId,
+                                                formularioType = "Formulario3",
+                                                imageUri = uri.toString()
+                                            )
+                                            appContainer.formulariosRepository.insertImage(image)
+                                        }
                                     }
                                     navController.navigate("home")
                                 },

@@ -17,7 +17,8 @@ class AppDataContainer(private val context: Context) : AppContainer {
             formularioUnoDAO = FormulariosDatabase.getDatabase(context).formulario1Dao(),
             formularioDosDAO = FormulariosDatabase.getDatabase(context).formulario2Dao(),
             formularioTresDAO = FormulariosDatabase.getDatabase(context).formulario3Dao(),
-            formularioCuatroDAO = FormulariosDatabase.getDatabase(context).formulario4Dao()
+            formularioCuatroDAO = FormulariosDatabase.getDatabase(context).formulario4Dao(),
+            imageDAO = FormulariosDatabase.getDatabase(context).imageDao()
         )
     }
 

@@ -48,6 +48,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.ViewModels.CameraViewModel
 import com.example.awaq1.data.formularios.FormularioDosEntity
+import com.example.awaq1.data.formularios.ImageEntity
 import com.example.awaq1.data.formularios.Ubicacion
 import kotlinx.coroutines.flow.first
 
@@ -64,8 +65,9 @@ fun PreviewForm2() {
 fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
     val context = LocalContext.current as MainActivity
     val appContainer = context.container
+    var showCamera by remember { mutableStateOf(false) }
     val cameraViewModel: CameraViewModel = viewModel()
-
+    val savedImageUris = remember { mutableStateOf(mutableListOf<Uri>()) }
     var location by remember { mutableStateOf<Pair<Double, Double>?>(null) }
     val ubicacion = Ubicacion(context)
 
@@ -98,6 +100,22 @@ fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
             } else {
                 null
             }
+
+            // Load saved images
+            val storedImages = runBlocking {
+                appContainer.formulariosRepository.getImagesByFormulario(formularioId, "Formulario2")
+                    .first() // Fetch the list of ImageEntity for this form
+            }
+
+            // Convert image URIs from String to Uri and store them in savedImageUris
+            savedImageUris.value = storedImages.mapNotNull { imageEntity ->
+                try {
+                    Uri.parse(imageEntity.imageUri) // Convert String to Uri
+                } catch (e: Exception) {
+                    Log.e("ObservationForm", "Failed to parse URI: ${imageEntity.imageUri}", e)
+                    null
+                }
+            }.toMutableList()
         } else {
             Log.e("Formulario2Loading", "NO se pudo obtener el formulario2 con id $formularioId")
         }
@@ -118,8 +136,8 @@ fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
         }
     }
 
-    var showCamera by remember { mutableStateOf(false) }
-    val savedImageUris = remember { mutableStateOf(mutableListOf<Uri>()) }
+
+
 
     Scaffold(
         topBar = {
@@ -410,9 +428,27 @@ fun ObservationFormDos(navController: NavController, formularioId: Long = 0) {
                                         ).withID(formularioId)
 
                                     runBlocking {
-                                        appContainer.usuariosRepository.insertUserWithFormularioDos(
+                                        // Insert regresa su id
+                                        val formId = appContainer.usuariosRepository.insertUserWithFormularioDos(
                                             context.accountInfo.user_id, formulario
                                         )
+                                        Log.d("ImageDAO", "formId: $formId")
+
+                                        // Borrar todas las fotos en ese reporte
+                                        appContainer.formulariosRepository.deleteImagesByFormulario(
+                                            formularioId = formId,
+                                            formularioType = "Formulario2"
+                                        )
+
+                                        // Agregar todas las imagenes al reporte
+                                        savedImageUris.value.forEach { uri ->
+                                            val image = ImageEntity(
+                                                formularioId = formId,
+                                                formularioType = "Formulario2",
+                                                imageUri = uri.toString()
+                                            )
+                                            appContainer.formulariosRepository.insertImage(image)
+                                        }
                                     }
 
                                     navController.navigate("home")

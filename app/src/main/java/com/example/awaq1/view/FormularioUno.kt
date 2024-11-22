@@ -48,10 +48,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.material.icons.filled.Add
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.toRoute
 import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.ViewModels.CameraViewModel
 import com.example.awaq1.data.formularios.FormularioDosEntity
+import com.example.awaq1.data.formularios.ImageEntity
 import com.example.awaq1.data.formularios.Ubicacion
+import com.example.awaq1.navigator.FormUnoID
 import kotlinx.coroutines.flow.first
 
 
@@ -78,6 +81,10 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
     var numeroIndividuos by remember { mutableStateOf("") }
     var tipoObservacion by remember { mutableStateOf("") }
     var observaciones by remember { mutableStateOf("") }
+    val cameraViewModel: CameraViewModel = viewModel()
+
+    var showCamera by remember { mutableStateOf(false) }
+    val savedImageUris = remember { mutableStateOf(mutableListOf<Uri>()) }
 
     if (formularioId != 0L) {
         val formulario: FormularioUnoEntity? = runBlocking {
@@ -98,10 +105,27 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
             } else {
                 null
             }
+
+            // Load saved images
+            val storedImages = runBlocking {
+                appContainer.formulariosRepository.getImagesByFormulario(formularioId, "Formulario1")
+                    .first() // Fetch the list of ImageEntity for this form
+            }
+
+            // Convert image URIs from String to Uri and store them in savedImageUris
+            savedImageUris.value = storedImages.mapNotNull { imageEntity ->
+                try {
+                    Uri.parse(imageEntity.imageUri) // Convert String to Uri
+                } catch (e: Exception) {
+                    Log.e("ObservationForm", "Failed to parse URI: ${imageEntity.imageUri}", e)
+                    null
+                }
+            }.toMutableList()
         } else {
-            Log.e("Formulario2Loading", "NO se pudo obtener el formulario2 con id $formularioId")
+            Log.e("Formulario1Loading", "NO se pudo obtener el formulario1 con id $formularioId")
         }
     }
+
     if(location == null){
         LaunchedEffect(Unit) {
             context.requestLocationPermission()
@@ -120,10 +144,7 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
     // Para Room, 0 significa que no hay un id designado. Genera una nueva entrada con id auto-generado.
     // Un valor de un id existente, reemplaza.
 
-    val cameraViewModel: CameraViewModel = viewModel()
 
-    var showCamera by remember { mutableStateOf(false) }
-    val savedImageUris = remember { mutableStateOf(mutableListOf<Uri>()) }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -374,9 +395,27 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
                                     ).withID(formularioId)
                                 // Guardar en base de datos, vinculado al usuario
                                 runBlocking {
-                                    appContainer.usuariosRepository.insertUserWithFormularioUno(
+                                    // Insert regresa su id
+                                    val formId = appContainer.usuariosRepository.insertUserWithFormularioUno(
                                         context.accountInfo.user_id, formulario
                                     )
+                                    Log.d("ImageDAO", "formId: $formId")
+
+                                    // Borrar todas las fotos en ese reporte
+                                    appContainer.formulariosRepository.deleteImagesByFormulario(
+                                        formularioId = formId,
+                                        formularioType = "Formulario1"
+                                    )
+
+                                    // Agregar todas las imagenes al reporte
+                                    savedImageUris.value.forEach { uri ->
+                                        val image = ImageEntity(
+                                            formularioId = formId,
+                                            formularioType = "Formulario1",
+                                            imageUri = uri.toString()
+                                        )
+                                        appContainer.formulariosRepository.insertImage(image)
+                                    }
                                 }
                                 navController.navigate("home")
                             },

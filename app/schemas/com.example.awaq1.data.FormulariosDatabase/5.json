@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "a2a6b47d68de0531a557eefe8387c4aa",
+    "identityHash": "7990c0038bc1043cb8e09b10bfb9a3f4",
     "entities": [
       {
         "tableName": "Formulario1",
@@ -343,6 +343,44 @@
         "foreignKeys": []
       },
       {
+        "tableName": "ImageEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `formularioId` INTEGER NOT NULL, `formularioType` TEXT NOT NULL, `imageUri` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "formularioId",
+            "columnName": "formularioId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "formularioType",
+            "columnName": "formularioType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUri",
+            "columnName": "imageUri",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
         "tableName": "Usuarios",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `lastAccess` TEXT NOT NULL, `lastLogin` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
@@ -584,7 +622,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a2a6b47d68de0531a557eefe8387c4aa')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7990c0038bc1043cb8e09b10bfb9a3f4')"
     ]
   }
 }
