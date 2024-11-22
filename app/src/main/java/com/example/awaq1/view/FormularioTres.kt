@@ -63,19 +63,6 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
 
     var location by remember { mutableStateOf<Pair<Double, Double>?>(null) }
     val ubicacion = Ubicacion(context)
-    LaunchedEffect(Unit) {
-        context.requestLocationPermission()
-        if (ubicacion.hasLocationPermission()) {
-            location = ubicacion.obtenerCoordenadas()
-            if (location != null) {
-                Log.d("ObservationForm", "Location retrieved: Lat=${location!!.first}, Long=${location!!.second}")
-            } else {
-                Log.d("ObservationForm", "Location is null")
-            }
-        } else {
-            Log.d("ObservationForm", "Location permission required but not granted.")
-        }
-    }
 
     val cameraViewModel: CameraViewModel = viewModel()
 
@@ -103,11 +90,31 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
             tipoCultivo = formulario.tipoCultivo
             disturbio = formulario.disturbio
             observaciones = formulario.observaciones
+            location = if (formulario.latitude != null && formulario.longitude != null) {
+                Pair(formulario.latitude, formulario.longitude)
+            } else {
+                null
+            }
         } else {
             Log.e("Formulario3Loading", "NO se pudo obtener el formulario3 con id $formularioId")
         }
     }
 
+    if(location == null){
+        LaunchedEffect(Unit) {
+            context.requestLocationPermission()
+            if (ubicacion.hasLocationPermission()) {
+                location = ubicacion.obtenerCoordenadas()
+                if (location != null) {
+                    Log.d("ObservationForm", "Location retrieved: Lat=${location!!.first}, Long=${location!!.second}")
+                } else {
+                    Log.d("ObservationForm", "Location is null")
+                }
+            } else {
+                Log.d("ObservationForm", "Location permission required but not granted.")
+            }
+        }
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -371,6 +378,8 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
                                         tipoCultivo = tipoCultivo,
                                         disturbio = disturbio,
                                         observaciones = observaciones,
+                                        latitude = location?.first,
+                                        longitude = location?.second
                                     ).withID(formularioId)
 
                                     runBlocking {

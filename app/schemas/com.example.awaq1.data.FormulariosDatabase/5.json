@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "036e5325ed9b7f20e73dc32d72394e34",
+    "identityHash": "a2a6b47d68de0531a557eefe8387c4aa",
     "entities": [
       {
         "tableName": "Formulario1",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`transecto` TEXT NOT NULL, `tipoAnimal` TEXT NOT NULL, `nombreComun` TEXT NOT NULL, `nombreCientifico` TEXT NOT NULL, `numeroIndividuos` TEXT NOT NULL, `tipoObservacion` TEXT NOT NULL, `observaciones` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`transecto` TEXT NOT NULL, `tipoAnimal` TEXT NOT NULL, `nombreComun` TEXT NOT NULL, `nombreCientifico` TEXT NOT NULL, `numeroIndividuos` TEXT NOT NULL, `tipoObservacion` TEXT NOT NULL, `observaciones` TEXT NOT NULL, `latitude` REAL, `longitude` REAL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "transecto",
@@ -51,6 +51,18 @@
             "notNull": true
           },
           {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
@@ -68,7 +80,7 @@
       },
       {
         "tableName": "Formulario2",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`zona` TEXT NOT NULL, `tipoAnimal` TEXT NOT NULL, `nombreComun` TEXT NOT NULL, `nombreCientifico` TEXT NOT NULL, `numeroIndividuos` TEXT NOT NULL, `tipoObservacion` TEXT NOT NULL, `alturaObservacion` TEXT NOT NULL, `observaciones` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`zona` TEXT NOT NULL, `tipoAnimal` TEXT NOT NULL, `nombreComun` TEXT NOT NULL, `nombreCientifico` TEXT NOT NULL, `numeroIndividuos` TEXT NOT NULL, `tipoObservacion` TEXT NOT NULL, `alturaObservacion` TEXT NOT NULL, `observaciones` TEXT NOT NULL, `latitude` REAL, `longitude` REAL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "zona",
@@ -119,6 +131,18 @@
             "notNull": true
           },
           {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
@@ -136,7 +160,7 @@
       },
       {
         "tableName": "Formulario3",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`codigo` TEXT NOT NULL, `seguimiento` INTEGER NOT NULL, `cambio` INTEGER NOT NULL, `cobertura` TEXT NOT NULL, `tipoCultivo` TEXT NOT NULL, `disturbio` TEXT NOT NULL, `observaciones` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`codigo` TEXT NOT NULL, `seguimiento` INTEGER NOT NULL, `cambio` INTEGER NOT NULL, `cobertura` TEXT NOT NULL, `tipoCultivo` TEXT NOT NULL, `disturbio` TEXT NOT NULL, `observaciones` TEXT NOT NULL, `latitude` REAL, `longitude` REAL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "codigo",
@@ -181,6 +205,18 @@
             "notNull": true
           },
           {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
@@ -198,7 +234,7 @@
       },
       {
         "tableName": "Formulario4",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`codigo` TEXT NOT NULL, `quad_a` TEXT NOT NULL, `quad_b` TEXT NOT NULL, `sub_quad` TEXT NOT NULL, `habitoDeCrecimiento` TEXT NOT NULL, `nombreComun` TEXT NOT NULL, `nombreCientifico` TEXT NOT NULL, `placa` TEXT NOT NULL, `circunferencia` TEXT NOT NULL, `distancia` TEXT NOT NULL, `estatura` TEXT NOT NULL, `altura` TEXT NOT NULL, `observaciones` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`codigo` TEXT NOT NULL, `quad_a` TEXT NOT NULL, `quad_b` TEXT NOT NULL, `sub_quad` TEXT NOT NULL, `habitoDeCrecimiento` TEXT NOT NULL, `nombreComun` TEXT NOT NULL, `nombreCientifico` TEXT NOT NULL, `placa` TEXT NOT NULL, `circunferencia` TEXT NOT NULL, `distancia` TEXT NOT NULL, `estatura` TEXT NOT NULL, `altura` TEXT NOT NULL, `observaciones` TEXT NOT NULL, `latitude` REAL, `longitude` REAL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "codigo",
@@ -277,6 +313,18 @@
             "columnName": "observaciones",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": false
           },
           {
             "fieldPath": "id",
@@ -536,7 +584,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '036e5325ed9b7f20e73dc32d72394e34')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a2a6b47d68de0531a557eefe8387c4aa')"
     ]
   }
 }

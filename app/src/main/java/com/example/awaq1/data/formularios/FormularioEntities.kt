@@ -13,6 +13,8 @@ data class FormularioUnoEntity(
     var numeroIndividuos: String,
     var tipoObservacion: String,
     var observaciones: String,
+    val latitude: Double? = null,
+    val longitude: Double? = null
 ) {
     // Excluye id de las funciones autogeneradas (equals, copy, hashCode...)
     // https://kotlinlang.org/docs/data-classes.html#properties-declared-in-the-class-body
@@ -39,6 +41,9 @@ data class FormularioDosEntity(
     var tipoObservacion: String,
     var alturaObservacion: String,
     var observaciones: String,
+    val latitude: Double? = null,
+    val longitude: Double? = null
+
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
@@ -59,7 +64,9 @@ data class FormularioTresEntity(
     val cobertura: String,
     val tipoCultivo: String,
     val disturbio: String,
-    val observaciones: String
+    val observaciones: String,
+    val latitude: Double? = null,
+    val longitude: Double? = null
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
@@ -87,7 +94,9 @@ data class FormularioCuatroEntity(
     // Que es esto?? Dice "Estatura Biomonitor en mt" en Figma
     val estatura: String,
     val altura: String,
-    val observaciones: String
+    val observaciones: String,
+    val latitude: Double? = null,
+    val longitude: Double? = null
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

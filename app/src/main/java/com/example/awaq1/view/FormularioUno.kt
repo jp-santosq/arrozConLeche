@@ -70,19 +70,6 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
 
     var location by remember { mutableStateOf<Pair<Double, Double>?>(null) }
     val ubicacion = Ubicacion(context)
-    LaunchedEffect(Unit) {
-        context.requestLocationPermission()
-        if (ubicacion.hasLocationPermission()) {
-            location = ubicacion.obtenerCoordenadas()
-            if (location != null) {
-                Log.d("ObservationForm", "Location retrieved: Lat=${location!!.first}, Long=${location!!.second}")
-            } else {
-                Log.d("ObservationForm", "Location is null")
-            }
-        } else {
-            Log.d("ObservationForm", "Location permission required but not granted.")
-        }
-    }
 
     var transecto by remember { mutableStateOf("") }
     var tipoAnimal by remember { mutableStateOf("") }
@@ -106,11 +93,30 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
             numeroIndividuos = formulario.numeroIndividuos
             tipoObservacion = formulario.tipoObservacion
             observaciones = formulario.observaciones
+            location = if (formulario.latitude != null && formulario.longitude != null) {
+                Pair(formulario.latitude, formulario.longitude)
+            } else {
+                null
+            }
         } else {
             Log.e("Formulario2Loading", "NO se pudo obtener el formulario2 con id $formularioId")
         }
     }
-
+    if(location == null){
+        LaunchedEffect(Unit) {
+            context.requestLocationPermission()
+            if (ubicacion.hasLocationPermission()) {
+                location = ubicacion.obtenerCoordenadas()
+                if (location != null) {
+                    Log.d("ObservationForm", "Location retrieved: Lat=${location!!.first}, Long=${location!!.second}")
+                } else {
+                    Log.d("ObservationForm", "Location is null")
+                }
+            } else {
+                Log.d("ObservationForm", "Location permission required but not granted.")
+            }
+        }
+    }
     // Para Room, 0 significa que no hay un id designado. Genera una nueva entrada con id auto-generado.
     // Un valor de un id existente, reemplaza.
 
@@ -363,6 +369,8 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
                                         numeroIndividuos = numeroIndividuos,
                                         tipoObservacion = tipoObservacion,
                                         observaciones = observaciones,
+                                        latitude = location?.first,
+                                        longitude = location?.second
                                     ).withID(formularioId)
                                 // Guardar en base de datos, vinculado al usuario
                                 runBlocking {

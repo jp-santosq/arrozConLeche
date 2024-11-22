@@ -64,19 +64,6 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
 
     var location by remember { mutableStateOf<Pair<Double, Double>?>(null) }
     val ubicacion = Ubicacion(context)
-    LaunchedEffect(Unit) {
-        context.requestLocationPermission()
-        if (ubicacion.hasLocationPermission()) {
-            location = ubicacion.obtenerCoordenadas()
-            if (location != null) {
-                Log.d("ObservationForm", "Location retrieved: Lat=${location!!.first}, Long=${location!!.second}")
-            } else {
-                Log.d("ObservationForm", "Location is null")
-            }
-        } else {
-            Log.d("ObservationForm", "Location permission required but not granted.")
-        }
-    }
 
 
     val cameraViewModel: CameraViewModel = viewModel()
@@ -115,11 +102,30 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
             estatura = formulario.estatura
             altura = formulario.altura
             observaciones = formulario.observaciones
+            location = if (formulario.latitude != null && formulario.longitude != null) {
+                Pair(formulario.latitude, formulario.longitude)
+            } else {
+                null
+            }
         } else {
             Log.e("Formulario4Loading", "NO se pudo obtener el formulario4 con id $formularioId")
         }
     }
-
+    if(location == null){
+        LaunchedEffect(Unit) {
+            context.requestLocationPermission()
+            if (ubicacion.hasLocationPermission()) {
+                location = ubicacion.obtenerCoordenadas()
+                if (location != null) {
+                    Log.d("ObservationForm", "Location retrieved: Lat=${location!!.first}, Long=${location!!.second}")
+                } else {
+                    Log.d("ObservationForm", "Location is null")
+                }
+            } else {
+                Log.d("ObservationForm", "Location permission required but not granted.")
+            }
+        }
+    }
     var showCamera by remember { mutableStateOf(false) }
     val savedImageUris = remember { mutableStateOf(mutableListOf<Uri>()) }
 
@@ -444,7 +450,9 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
                                         distancia = distancia,
                                         estatura = estatura,
                                         altura = altura,
-                                        observaciones = observaciones
+                                        observaciones = observaciones,
+                                        latitude = location?.first,
+                                        longitude = location?.second
                                     ).withID(formularioId)
 
                                     runBlocking {
