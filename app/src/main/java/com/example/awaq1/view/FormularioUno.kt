@@ -75,6 +75,8 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
     val ubicacion = Ubicacion(context)
 
     var transecto by remember { mutableStateOf("") }
+    var clima by remember { mutableStateOf("") }
+    var temporada by remember { mutableStateOf("Verano/Seca") }
     var tipoAnimal by remember { mutableStateOf("") }
     var nombreComun by remember { mutableStateOf("") }
     var nombreCientifico by remember { mutableStateOf("") }
@@ -94,6 +96,8 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
 
         if (formulario != null) {
             transecto = formulario.transecto
+            clima = formulario.clima
+            temporada = formulario.temporada
             tipoAnimal = formulario.tipoAnimal
             nombreComun = formulario.nombreComun
             nombreCientifico = formulario.nombreCientifico
@@ -195,6 +199,63 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         modifier = Modifier.fillMaxWidth()
                     )
+                    Text("Estado del Tiempo:")
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val weatherOptions = listOf("Soleado", "Parcialmente Nublado", "Lluvioso")
+                        val weatherIcons = listOf(
+                            R.drawable.sunny, // Add sunny icon in your drawable resources
+                            R.drawable.cloudy, // Add partly cloudy icon in your drawable resources
+                            R.drawable.rainy // Add rainy icon in your drawable resources
+                        )
+
+                        weatherOptions.forEachIndexed { index, option ->
+                            IconToggleButton(
+                                checked = clima == option,
+                                onCheckedChange = { clima = option },
+                                modifier = Modifier.size(100.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .border(
+                                            width = 2.dp,
+                                            color = if (clima == option) Color(0xFF4E7029) else Color.Transparent,
+                                            shape = RoundedCornerShape(8.dp)
+                                        )
+                                        .padding(8.dp)
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = weatherIcons[index]),
+                                        contentDescription = option,
+                                        modifier = Modifier.requiredSize(64.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    Text("Época")
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val seasonOptions = listOf("Verano/Seca", "Invierno/Lluviosa")
+                        seasonOptions.forEach { option ->
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                RadioButton(
+                                    selected = temporada == option,
+                                    onClick = { temporada = option },
+                                    colors = RadioButtonDefaults.colors(
+                                        selectedColor = Color(0xFF4E7029),
+                                        unselectedColor = Color.Gray
+                                    )
+                                )
+                                Text(option, modifier = Modifier.padding(start = 8.dp))
+                            }
+                        }
+                    }
 
                     Text("Tipo de Animal")
                     Row(
@@ -384,6 +445,8 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
                                 val formulario =
                                     FormularioUnoEntity(
                                         transecto = transecto,
+                                        clima = clima,
+                                        temporada = temporada,
                                         tipoAnimal = tipoAnimal,
                                         nombreComun = nombreComun,
                                         nombreCientifico = nombreCientifico,

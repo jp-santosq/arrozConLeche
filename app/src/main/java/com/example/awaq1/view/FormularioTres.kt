@@ -39,9 +39,13 @@ import androidx.compose.material.icons.Icons
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.IconToggleButton
+import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import com.example.awaq1.R
 import com.example.awaq1.ViewModels.CameraViewModel
 import com.example.awaq1.data.formularios.FormularioTresEntity
 import com.example.awaq1.data.formularios.ImageEntity
@@ -68,6 +72,8 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
     val cameraViewModel: CameraViewModel = viewModel()
 
     var codigo by remember { mutableStateOf("") }
+    var clima by remember { mutableStateOf("") }
+    var temporada by remember { mutableStateOf("Verano/Seca") }
     var seguimiento by remember { mutableStateOf(true) }
     var cambio by remember { mutableStateOf(true) }
     var cobertura: String by remember { mutableStateOf("") }
@@ -85,6 +91,8 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
 
         if (formulario != null) {
             codigo = formulario.codigo
+            clima = formulario.clima
+            temporada = formulario.temporada
             seguimiento = formulario.seguimiento
             cambio = formulario.cambio
             cobertura = formulario.cobertura
@@ -184,7 +192,63 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             modifier = Modifier.fillMaxWidth()
                         )
+                        Text("Estado del Tiempo:")
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val weatherOptions = listOf("Soleado", "Parcialmente Nublado", "Lluvioso")
+                            val weatherIcons = listOf(
+                                R.drawable.sunny, // Add sunny icon in your drawable resources
+                                R.drawable.cloudy, // Add partly cloudy icon in your drawable resources
+                                R.drawable.rainy // Add rainy icon in your drawable resources
+                            )
 
+                            weatherOptions.forEachIndexed { index, option ->
+                                IconToggleButton(
+                                    checked = clima == option,
+                                    onCheckedChange = { clima = option },
+                                    modifier = Modifier.size(100.dp)
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                            .border(
+                                                width = 2.dp,
+                                                color = if (clima == option) Color(0xFF4E7029) else Color.Transparent,
+                                                shape = RoundedCornerShape(8.dp)
+                                            )
+                                            .padding(8.dp)
+                                    ) {
+                                        Image(
+                                            painter = painterResource(id = weatherIcons[index]),
+                                            contentDescription = option,
+                                            modifier = Modifier.requiredSize(64.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        Text("Época")
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val seasonOptions = listOf("Verano/Seca", "Invierno/Lluviosa")
+                            seasonOptions.forEach { option ->
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    RadioButton(
+                                        selected = temporada == option,
+                                        onClick = { temporada = option },
+                                        colors = RadioButtonDefaults.colors(
+                                            selectedColor = Color(0xFF4E7029),
+                                            unselectedColor = Color.Gray
+                                        )
+                                    )
+                                    Text(option, modifier = Modifier.padding(start = 8.dp))
+                                }
+                            }
+                        }
                         // SI o NO
                         Text("Seguimiento")
                         Column {
@@ -387,6 +451,8 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
                                 onClick = {
                                     val formulario = FormularioTresEntity(
                                         codigo = codigo,
+                                        clima = clima,
+                                        temporada = temporada,
                                         seguimiento = seguimiento,
                                         cambio = cambio,
                                         cobertura = cobertura,

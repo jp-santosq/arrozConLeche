@@ -7,6 +7,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Formulario1")
 data class FormularioUnoEntity(
     var transecto: String,
+    var clima: String,
+    var temporada: String,
     var tipoAnimal: String,
     var nombreComun: String,
     var nombreCientifico: String,
@@ -34,6 +36,8 @@ data class FormularioUnoEntity(
 @Entity(tableName = "Formulario2")
 data class FormularioDosEntity(
     var zona: String,
+    var clima: String,
+    var temporada: String,
     var tipoAnimal: String,
     var nombreComun: String,
     var nombreCientifico: String,
@@ -59,6 +63,8 @@ data class FormularioDosEntity(
 @Entity(tableName = "Formulario3")
 data class FormularioTresEntity(
     val codigo: String,
+    var clima: String,
+    var temporada: String,
     val seguimiento: Boolean,
     val cambio: Boolean,
     val cobertura: String,
@@ -82,6 +88,8 @@ data class FormularioTresEntity(
 @Entity(tableName = "Formulario4")
 data class FormularioCuatroEntity(
     val codigo: String,
+    var clima: String,
+    var temporada: String,
     val quad_a: String,
     val quad_b: String,
     val sub_quad: String,
