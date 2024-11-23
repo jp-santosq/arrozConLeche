@@ -12,6 +12,8 @@ import androidx.room.Update
 import com.example.awaq1.data.formularios.FormularioCincoEntity
 import com.example.awaq1.data.formularios.FormularioCuatroEntity
 import com.example.awaq1.data.formularios.FormularioDosEntity
+import com.example.awaq1.data.formularios.FormularioSeisEntity
+import com.example.awaq1.data.formularios.FormularioSieteEntity
 import com.example.awaq1.data.formularios.FormularioTresEntity
 import com.example.awaq1.data.formularios.FormularioUnoEntity
 import kotlinx.coroutines.flow.Flow
@@ -93,6 +95,34 @@ data class UsuarioFormulario4Entity(
     primaryKeys = ["usuarioId", "formId"]
 )
 data class UsuarioFormulario5Entity(
+    val usuarioId: Long,
+    val formId: Long,
+)
+
+// Usuario Formulario 6 Association Entity
+@Entity(
+    tableName = "UsuarioFormulario6",
+    foreignKeys = [
+        ForeignKey(entity = UsuarioEntity::class, parentColumns = ["id"], childColumns = ["usuarioId"], onDelete = ForeignKey.CASCADE),
+        ForeignKey(entity = FormularioSeisEntity::class, parentColumns = ["id"], childColumns = ["formId"], onDelete = ForeignKey.CASCADE)
+    ],
+    primaryKeys = ["usuarioId", "formId"]
+)
+data class UsuarioFormulario6Entity(
+    val usuarioId: Long,
+    val formId: Long,
+)
+
+// Usuario Formulario 7 Association Entity
+@Entity(
+    tableName = "UsuarioFormulario7",
+    foreignKeys = [
+        ForeignKey(entity = UsuarioEntity::class, parentColumns = ["id"], childColumns = ["usuarioId"], onDelete = ForeignKey.CASCADE),
+        ForeignKey(entity = FormularioSieteEntity::class, parentColumns = ["id"], childColumns = ["formId"], onDelete = ForeignKey.CASCADE)
+    ],
+    primaryKeys = ["usuarioId", "formId"]
+)
+data class UsuarioFormulario7Entity(
     val usuarioId: Long,
     val formId: Long,
 )

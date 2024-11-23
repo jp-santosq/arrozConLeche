@@ -9,6 +9,8 @@ class OfflineFormulariosRepository(
     private val formularioTresDAO: FormularioTresDAO,
     private val formularioCuatroDAO: FormularioCuatroDAO,
     private val formularioCincoDAO: FormularioCincoDAO,
+    private val formularioSeisDAO: FormularioSeisDAO,
+    private val formularioSieteDAO: FormularioSieteDAO,
     private val imageDAO: ImageDAO
 ): FormulariosRepository {
     override fun getAllFormularioUnosStream(): Flow<List<FormularioUnoEntity>> = formularioUnoDAO.getAllFormularioUnoEntities()
@@ -52,6 +54,22 @@ class OfflineFormulariosRepository(
     override suspend fun deleteFormularioCinco(item: FormularioCincoEntity) = formularioCincoDAO.delete(item)
     override suspend fun updateFormularioCinco(item: FormularioCincoEntity) = formularioCincoDAO.update(item)
 
+    override fun getAllFormularioSeisStream(): Flow<List<FormularioSeisEntity>> = formularioSeisDAO.getAllFormularioSeisEntities()
+    override fun getFormularioSeisStream(id: Long): Flow<FormularioSeisEntity?> = formularioSeisDAO.getFormularioSeisEntity(id)
+    override suspend fun insertFormularioSeis(item: FormularioSeisEntity): Long {
+        return formularioSeisDAO.insert(item)
+    }
+    override suspend fun deleteFormularioSeis(item: FormularioSeisEntity) = formularioSeisDAO.delete(item)
+    override suspend fun updateFormularioSeis(item: FormularioSeisEntity) = formularioSeisDAO.update(item)
+
+    override fun getAllFormularioSieteStream(): Flow<List<FormularioSieteEntity>> = formularioSieteDAO.getAllFormularioSieteEntities()
+    override fun getFormularioSieteStream(id: Long): Flow<FormularioSieteEntity?> = formularioSieteDAO.getFormularioSieteEntity(id)
+    override suspend fun insertFormularioSiete(item: FormularioSieteEntity): Long {
+        return formularioSieteDAO.insert(item)
+    }
+    override suspend fun deleteFormularioSiete(item: FormularioSieteEntity) = formularioSieteDAO.delete(item)
+    override suspend fun updateFormularioSiete(item: FormularioSieteEntity) = formularioSieteDAO.update(item)
+
     override fun getFormularioUnoCount(): Flow<Int> = flow {
         emit(formularioUnoDAO.getFormularioUnoCount())
     }
@@ -67,6 +85,12 @@ class OfflineFormulariosRepository(
     override fun getFormularioCincoCount(): Flow<Int> = flow {
         emit(formularioCincoDAO.getFormularioCincoCount())
     }
+    override fun getFormularioSeisCount(): Flow<Int> = flow {
+        emit(formularioSeisDAO.getFormularioSeisCount())
+    }
+    override fun getFormularioSieteCount(): Flow<Int> = flow {
+        emit(formularioSieteDAO.getFormularioSieteCount())
+    }
 
     override fun getAllFormulariosCount(): Flow<Int> = flow {
         val count1 = formularioUnoDAO.getFormularioUnoCount()
@@ -74,7 +98,9 @@ class OfflineFormulariosRepository(
         val count3 = formularioTresDAO.getFormularioTresCount()
         val count4 = formularioCuatroDAO.getFormularioCuatroCount()
         val count5 = formularioCincoDAO.getFormularioCincoCount()
-        emit(count1 + count2 + count3 + count4 + count5)
+        val count6 = formularioSeisDAO.getFormularioSeisCount()
+        val count7 = formularioSieteDAO.getFormularioSieteCount()
+        emit(count1 + count2 + count3 + count4 + count5 + count6 + count7)
     }
 
     override suspend fun insertImage(image: ImageEntity) {

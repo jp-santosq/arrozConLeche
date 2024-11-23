@@ -142,3 +142,58 @@ data class FormularioCincoEntity(
         return newForm
     }
 }
+
+//Camaras Trampa
+@Entity(tableName = "Formulario6")
+data class FormularioSeisEntity(
+    val codigo: String,
+    var clima: String,
+    var temporada: String,
+    val zona: String,
+    val nombreCamara: String,
+    val placaCamara: String,
+    val placaGuaya: String,
+    val anchoCamino: String,
+    val fechaInstalacion: String,
+    val distanciaObjetivo: String,
+    val alturaLente: String,
+    val checklist: String,
+    var observaciones: String,
+    val latitude: Double? = null,
+    val longitude: Double? = null
+
+) {
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0
+
+    fun withID(id: Long): FormularioSeisEntity {
+        val newForm = this.copy()
+        newForm.id = id
+        return newForm
+    }
+}
+
+//Variables Climaticas
+@Entity(tableName = "Formulario7")
+data class FormularioSieteEntity(
+    var clima: String,
+    var temporada: String,
+    val zona: String,
+    val pluviosidad: String,
+    val temperaturaMaxima: String,
+    val humedadMaxima: String,
+    val temperaturaMinima: String,
+    val nivelQuebrada: String,
+    val latitude: Double? = null,
+    val longitude: Double? = null
+
+) {
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0
+
+    fun withID(id: Long): FormularioSieteEntity {
+        val newForm = this.copy()
+        newForm.id = id
+        return newForm
+    }
+}

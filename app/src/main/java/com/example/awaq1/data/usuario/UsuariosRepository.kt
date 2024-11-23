@@ -7,6 +7,10 @@ import com.example.awaq1.data.formularios.FormularioCuatroDAO
 import com.example.awaq1.data.formularios.FormularioCuatroEntity
 import com.example.awaq1.data.formularios.FormularioDosDAO
 import com.example.awaq1.data.formularios.FormularioDosEntity
+import com.example.awaq1.data.formularios.FormularioSeisDAO
+import com.example.awaq1.data.formularios.FormularioSeisEntity
+import com.example.awaq1.data.formularios.FormularioSieteDAO
+import com.example.awaq1.data.formularios.FormularioSieteEntity
 import com.example.awaq1.data.formularios.FormularioTresDAO
 import com.example.awaq1.data.formularios.FormularioTresEntity
 import com.example.awaq1.data.formularios.FormularioUnoDAO
@@ -30,6 +34,10 @@ class UsuariosRepository(
     private val usuarioFormulario4DAO: UsuarioFormulario4DAO,
     private val formularioCincoDAO: FormularioCincoDAO,
     private val usuarioFormulario5DAO: UsuarioFormulario5DAO,
+    private val formularioSeisDAO: FormularioSeisDAO,
+    private val usuarioFormulario6DAO: UsuarioFormulario6DAO,
+    private val formularioSieteDAO: FormularioSieteDAO,
+    private val usuarioFormulario7DAO: UsuarioFormulario7DAO,
 ) {
 
     // User operations
@@ -135,4 +143,38 @@ class UsuariosRepository(
     fun getUsuariosForFormularioCinco(formId: Long): Flow<List<UsuarioFormulario5Entity>> = usuarioFormulario5DAO.getUsuariosForFormulario(formId)
 
     fun getAllFormularioCincoForUserID(usuarioId: Long): Flow<List<FormularioCincoEntity>> = usuarioFormulario5DAO.getAllFormulariosForUserID(usuarioId)
+
+    // UsuarioFormulario6 operations
+    @Transaction
+    suspend fun insertUserWithFormularioSeis(userId: Long, formulario: FormularioSeisEntity): Long {
+        val formId = formularioSeisDAO.insert(formulario)
+        if (formId == -1L) throw Exception("Failed to insert form")
+
+        val usuarioFormulario = UsuarioFormulario6Entity(usuarioId = userId, formId = formId)
+        usuarioFormulario6DAO.insert(usuarioFormulario)
+        return formId
+    }
+
+    fun getFormulariosForUsuarioSeis(usuarioId: Long): Flow<List<UsuarioFormulario6Entity>> = usuarioFormulario6DAO.getFormulariosForUsuario(usuarioId)
+
+    fun getUsuariosForFormularioSeis(formId: Long): Flow<List<UsuarioFormulario6Entity>> = usuarioFormulario6DAO.getUsuariosForFormulario(formId)
+
+    fun getAllFormularioSeisForUserID(usuarioId: Long): Flow<List<FormularioSeisEntity>> = usuarioFormulario6DAO.getAllFormulariosForUserID(usuarioId)
+
+    // UsuarioFormulario7 operations
+    @Transaction
+    suspend fun insertUserWithFormularioSiete(userId: Long, formulario: FormularioSieteEntity): Long {
+        val formId = formularioSieteDAO.insert(formulario)
+        if (formId == -1L) throw Exception("Failed to insert form")
+
+        val usuarioFormulario = UsuarioFormulario7Entity(usuarioId = userId, formId = formId)
+        usuarioFormulario7DAO.insert(usuarioFormulario)
+        return formId
+    }
+
+    fun getFormulariosForUsuarioSiete(usuarioId: Long): Flow<List<UsuarioFormulario7Entity>> = usuarioFormulario7DAO.getFormulariosForUsuario(usuarioId)
+
+    fun getUsuariosForFormularioSiete(formId: Long): Flow<List<UsuarioFormulario7Entity>> = usuarioFormulario7DAO.getUsuariosForFormulario(formId)
+
+    fun getAllFormularioSieteForUserID(usuarioId: Long): Flow<List<FormularioSieteEntity>> = usuarioFormulario7DAO.getAllFormulariosForUserID(usuarioId)
 }

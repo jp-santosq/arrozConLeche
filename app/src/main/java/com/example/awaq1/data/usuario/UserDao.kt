@@ -9,6 +9,8 @@ import androidx.room.Update
 import com.example.awaq1.data.formularios.FormularioCincoEntity
 import com.example.awaq1.data.formularios.FormularioCuatroEntity
 import com.example.awaq1.data.formularios.FormularioDosEntity
+import com.example.awaq1.data.formularios.FormularioSeisEntity
+import com.example.awaq1.data.formularios.FormularioSieteEntity
 import com.example.awaq1.data.formularios.FormularioTresEntity
 import com.example.awaq1.data.formularios.FormularioUnoEntity
 import kotlinx.coroutines.flow.Flow
@@ -153,4 +155,48 @@ interface UsuarioFormulario5DAO {
 
     @Query("SELECT * from Formulario5 INNER JOIN UsuarioFormulario5 ON Formulario5.id = UsuarioFormulario5.formId WHERE UsuarioFormulario5.usuarioId = :usuarioId")
     fun getAllFormulariosForUserID(usuarioId: Long): Flow<List<FormularioCincoEntity>>
+}
+
+// DAO for UsuarioFormulario6Entity
+@Dao
+interface UsuarioFormulario6DAO {
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(usuarioFormulario: UsuarioFormulario6Entity): Long
+
+    @Update
+    suspend fun update(usuarioFormulario: UsuarioFormulario6Entity)
+
+    @Delete
+    suspend fun delete(usuarioFormulario: UsuarioFormulario6Entity)
+
+    @Query("SELECT * from UsuarioFormulario6 WHERE usuarioId = :usuarioId")
+    fun getFormulariosForUsuario(usuarioId: Long): Flow<List<UsuarioFormulario6Entity>>
+
+    @Query("SELECT * from UsuarioFormulario6 WHERE formId = :formId")
+    fun getUsuariosForFormulario(formId: Long): Flow<List<UsuarioFormulario6Entity>>
+
+    @Query("SELECT * from Formulario6 INNER JOIN UsuarioFormulario6 ON Formulario6.id = UsuarioFormulario6.formId WHERE UsuarioFormulario6.usuarioId = :usuarioId")
+    fun getAllFormulariosForUserID(usuarioId: Long): Flow<List<FormularioSeisEntity>>
+}
+
+// DAO for UsuarioFormulario7Entity
+@Dao
+interface UsuarioFormulario7DAO {
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(usuarioFormulario: UsuarioFormulario7Entity): Long
+
+    @Update
+    suspend fun update(usuarioFormulario: UsuarioFormulario7Entity)
+
+    @Delete
+    suspend fun delete(usuarioFormulario: UsuarioFormulario7Entity)
+
+    @Query("SELECT * from UsuarioFormulario7 WHERE usuarioId = :usuarioId")
+    fun getFormulariosForUsuario(usuarioId: Long): Flow<List<UsuarioFormulario7Entity>>
+
+    @Query("SELECT * from UsuarioFormulario7 WHERE formId = :formId")
+    fun getUsuariosForFormulario(formId: Long): Flow<List<UsuarioFormulario7Entity>>
+
+    @Query("SELECT * from Formulario7 INNER JOIN UsuarioFormulario7 ON Formulario7.id = UsuarioFormulario7.formId WHERE UsuarioFormulario7.usuarioId = :usuarioId")
+    fun getAllFormulariosForUserID(usuarioId: Long): Flow<List<FormularioSieteEntity>>
 }

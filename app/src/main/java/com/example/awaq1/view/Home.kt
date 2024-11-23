@@ -8,21 +8,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,14 +36,17 @@ import com.example.awaq1.MainActivity
 import com.example.awaq1.data.formularios.FormularioCincoEntity
 import com.example.awaq1.data.formularios.FormularioCuatroEntity
 import com.example.awaq1.data.formularios.FormularioDosEntity
+import com.example.awaq1.data.formularios.FormularioSeisEntity
+import com.example.awaq1.data.formularios.FormularioSieteEntity
 import com.example.awaq1.data.formularios.FormularioTresEntity
 import com.example.awaq1.data.formularios.FormularioUnoEntity
 import com.example.awaq1.navigator.FormCincoID
 import com.example.awaq1.navigator.FormCuatroID
 import com.example.awaq1.navigator.FormDosID
+import com.example.awaq1.navigator.FormSeisID
+import com.example.awaq1.navigator.FormSieteID
 import com.example.awaq1.navigator.FormTresID
 import com.example.awaq1.navigator.FormUnoID
-
 @Composable
 fun Home(navController: NavController) {
     val context = LocalContext.current as MainActivity
@@ -74,6 +72,14 @@ fun Home(navController: NavController) {
     )
         .collectAsState(initial = emptyList())
     val forms5: List<FormularioCincoEntity> by appContainer.usuariosRepository.getAllFormularioCincoForUserID(
+        context.accountInfo.user_id
+    )
+        .collectAsState(initial = emptyList())
+    val forms6: List<FormularioSeisEntity> by appContainer.usuariosRepository.getAllFormularioSeisForUserID(
+        context.accountInfo.user_id
+    )
+        .collectAsState(initial = emptyList())
+    val forms7: List<FormularioSieteEntity> by appContainer.usuariosRepository.getAllFormularioSieteForUserID(
         context.accountInfo.user_id
     )
         .collectAsState(initial = emptyList())
@@ -141,6 +147,7 @@ fun Home(navController: NavController) {
                         columns = GridCells.Fixed(1),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
+                        reverseLayout = true,
                         modifier = Modifier
                             .padding(horizontal = 0.dp, vertical = 8.dp)
                             .fillMaxWidth()
@@ -162,6 +169,14 @@ fun Home(navController: NavController) {
                             formCard.DisplayCard(navController)
                         }
                         items(forms5) { form ->
+                            val formCard = FormInfo(form)
+                            formCard.DisplayCard(navController)
+                        }
+                        items(forms6) { form ->
+                            val formCard = FormInfo(form)
+                            formCard.DisplayCard(navController)
+                        }
+                        items(forms7) { form ->
                             val formCard = FormInfo(form)
                             formCard.DisplayCard(navController)
                         }
@@ -249,6 +264,20 @@ data class FormInfo(
         formulario = "form5",
         formId = formulario.id
     )
+    constructor(formulario: FormularioSeisEntity) : this(
+        tipo = "Codigo", formulario.codigo,
+        primerTag = "Zona", formulario.zona,
+        segundoTag = "PlacaCamara", formulario.placaCamara,
+        formulario = "form6",
+        formId = formulario.id
+    )
+    constructor(formulario: FormularioSieteEntity) : this(
+        tipo = "Zona", formulario.zona,
+        primerTag = "Pluviosidad", formulario.pluviosidad,
+        segundoTag = "TempMax", formulario.temperaturaMaxima,
+        formulario = "form7",
+        formId = formulario.id
+    )
 
     fun goEditFormulario(navController: NavController) {
         Log.d("HOME_CLICK_ACTION", "Click en $this")
@@ -258,6 +287,8 @@ data class FormInfo(
             "form3" -> navController.navigate(route = FormTresID(formId))
             "form4" -> navController.navigate(route = FormCuatroID(formId))
             "form5" -> navController.navigate(route = FormCincoID(formId))
+            "form6" -> navController.navigate(route = FormSeisID(formId))
+            "form7" -> navController.navigate(route = FormSieteID(formId))
             else -> throw Exception("CARD NAVIGATION NOT IMPLEMENTED FOR $formulario")
         }
     }

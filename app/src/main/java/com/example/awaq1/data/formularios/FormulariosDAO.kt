@@ -114,3 +114,45 @@ interface FormularioCincoDAO {
     @Query("SELECT COUNT(*) FROM Formulario5")
     suspend fun getFormularioCincoCount(): Int
 }
+
+@Dao
+interface FormularioSeisDAO {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(item: FormularioSeisEntity): Long
+
+    @Update
+    suspend fun update(item: FormularioSeisEntity)
+
+    @Delete
+    suspend fun delete(item: FormularioSeisEntity)
+
+    @Query("SELECT * from Formulario6 WHERE id = :id")
+    fun getFormularioSeisEntity(id: Long): Flow<FormularioSeisEntity?>
+
+    @Query("SELECT * from Formulario6 ORDER BY id ASC")
+    fun getAllFormularioSeisEntities(): Flow<List<FormularioSeisEntity>>
+
+    @Query("SELECT COUNT(*) FROM Formulario6")
+    suspend fun getFormularioSeisCount(): Int
+}
+
+@Dao
+interface FormularioSieteDAO {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(item: FormularioSieteEntity): Long
+
+    @Update
+    suspend fun update(item: FormularioSieteEntity)
+
+    @Delete
+    suspend fun delete(item: FormularioSieteEntity)
+
+    @Query("SELECT * from Formulario7 WHERE id = :id")
+    fun getFormularioSieteEntity(id: Long): Flow<FormularioSieteEntity?>
+
+    @Query("SELECT * from Formulario7 ORDER BY id ASC")
+    fun getAllFormularioSieteEntities(): Flow<List<FormularioSieteEntity>>
+
+    @Query("SELECT COUNT(*) FROM Formulario7")
+    suspend fun getFormularioSieteCount(): Int
+}

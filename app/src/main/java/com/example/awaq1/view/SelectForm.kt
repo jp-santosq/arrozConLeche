@@ -56,6 +56,8 @@ import com.example.awaq1.R
 import com.example.awaq1.navigator.FormCincoID
 import com.example.awaq1.navigator.FormCuatroID
 import com.example.awaq1.navigator.FormDosID
+import com.example.awaq1.navigator.FormSeisID
+import com.example.awaq1.navigator.FormSieteID
 import com.example.awaq1.navigator.FormTresID
 import com.example.awaq1.navigator.FormUnoID
 
@@ -110,6 +112,8 @@ fun SelectFormularioScreen(navController: NavController) {
                 FormChooseButton(FormTresID(), "Validación de Cobertura", navController)
                 FormChooseButton(FormCuatroID(), "Parcela de Vegetación", navController)
                 FormChooseButton(FormCincoID(), "Fauna Busqueda Libre", navController)
+                FormChooseButton(FormSeisID(), "Camaras Trampa", navController)
+                FormChooseButton(FormSieteID(), "Variables Climaticas", navController)
             }
         }
     }
