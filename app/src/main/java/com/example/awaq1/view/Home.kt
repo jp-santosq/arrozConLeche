@@ -224,7 +224,8 @@ data class FormInfo(
 
     val formulario: String, // Indicador de tipo de formulario, para luego acceder
     val formId: Long,
-    val fechaCreacion: String
+    val fechaCreacion: String,
+    val edicion: String
 ) {
     constructor(formulario: FormularioUnoEntity) : this(
         tipo = "Transecto", formulario.transecto,
@@ -232,7 +233,8 @@ data class FormInfo(
         segundoTag = "Nombre", formulario.nombreComun,
         formulario = "form1",
         formId = formulario.id,
-        fechaCreacion = formulario.fecha
+        fechaCreacion = formulario.fecha,
+        edicion=formulario.editado
     )
 
     constructor(formulario: FormularioDosEntity) : this(
@@ -241,7 +243,8 @@ data class FormInfo(
         segundoTag = "Nombre", formulario.nombreComun,
         formulario = "form2",
         formId = formulario.id,
-        fechaCreacion = formulario.fecha
+        fechaCreacion = formulario.fecha,
+        edicion=formulario.editado
     )
 
     constructor(formulario: FormularioTresEntity) : this(
@@ -250,7 +253,8 @@ data class FormInfo(
         segundoTag = "Cambio", siONo(formulario.cambio),
         formulario = "form3",
         formId = formulario.id,
-        fechaCreacion = formulario.fecha
+        fechaCreacion = formulario.fecha,
+        edicion=formulario.editado
     )
 
     constructor(formulario: FormularioCuatroEntity) : this(
@@ -259,7 +263,8 @@ data class FormInfo(
         segundoTag = "Cuad. B", formulario.quad_b,
         formulario = "form4",
         formId = formulario.id,
-        fechaCreacion = formulario.fecha
+        fechaCreacion = formulario.fecha,
+        edicion=formulario.editado
     )
 
     constructor(formulario: FormularioCincoEntity) : this(
@@ -268,7 +273,8 @@ data class FormInfo(
         segundoTag = "Nombre", formulario.nombreComun,
         formulario = "form5",
         formId = formulario.id,
-        fechaCreacion = formulario.fecha
+        fechaCreacion = formulario.fecha,
+        edicion=formulario.editado
     )
     constructor(formulario: FormularioSeisEntity) : this(
         tipo = "Codigo", formulario.codigo,
@@ -276,7 +282,8 @@ data class FormInfo(
         segundoTag = "PlacaCamara", formulario.placaCamara,
         formulario = "form6",
         formId = formulario.id,
-        fechaCreacion = formulario.fecha
+        fechaCreacion = formulario.fecha,
+        edicion=formulario.editado
     )
     constructor(formulario: FormularioSieteEntity) : this(
         tipo = "Zona", formulario.zona,
@@ -284,7 +291,8 @@ data class FormInfo(
         segundoTag = "TempMax", formulario.temperaturaMaxima,
         formulario = "form7",
         formId = formulario.id,
-        fechaCreacion = formulario.fecha
+        fechaCreacion = formulario.fecha,
+        edicion=formulario.editado
     )
 
     fun goEditFormulario(navController: NavController) {

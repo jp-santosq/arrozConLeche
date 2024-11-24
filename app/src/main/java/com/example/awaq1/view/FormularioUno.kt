@@ -56,6 +56,9 @@ import com.example.awaq1.data.formularios.ImageEntity
 import com.example.awaq1.data.formularios.Ubicacion
 import com.example.awaq1.navigator.FormUnoID
 import kotlinx.coroutines.flow.first
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 @Preview(showBackground = true, showSystemUi = false)
@@ -83,8 +86,9 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
     var numeroIndividuos by remember { mutableStateOf("") }
     var tipoObservacion by remember { mutableStateOf("") }
     var observaciones by remember { mutableStateOf("") }
+    var fecha by remember { mutableStateOf("") }
+    var editado by remember { mutableStateOf("") }
     val cameraViewModel: CameraViewModel = viewModel()
-
     var showCamera by remember { mutableStateOf(false) }
     val savedImageUris = remember { mutableStateOf(mutableListOf<Uri>()) }
 
@@ -104,6 +108,8 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
             numeroIndividuos = formulario.numeroIndividuos
             tipoObservacion = formulario.tipoObservacion
             observaciones = formulario.observaciones
+            fecha = formulario.fecha
+            editado = formulario.editado
             location = if (formulario.latitude != null && formulario.longitude != null) {
                 Pair(formulario.latitude, formulario.longitude)
             } else {
@@ -129,6 +135,7 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
             Log.e("Formulario1Loading", "NO se pudo obtener el formulario1 con id $formularioId")
         }
     }
+
 
     if(location == null){
         LaunchedEffect(Unit) {
@@ -442,6 +449,10 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
 
                         Button(
                             onClick = {
+                                if (fecha.isNullOrEmpty()) {
+                                    fecha = getCurrentDate()
+                                }
+                                editado = getCurrentDate()
                                 val formulario =
                                     FormularioUnoEntity(
                                         transecto = transecto,
@@ -454,7 +465,9 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
                                         tipoObservacion = tipoObservacion,
                                         observaciones = observaciones,
                                         latitude = location?.first,
-                                        longitude = location?.second
+                                        longitude = location?.second,
+                                        fecha = fecha,
+                                        editado = editado
                                     ).withID(formularioId)
                                 // Guardar en base de datos, vinculado al usuario
                                 runBlocking {
@@ -502,4 +515,12 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
             }
         }
     )
+}
+
+fun getCurrentDate(existingDate: String? = null): String {
+    return existingDate ?: run {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date = Date()
+        dateFormat.format(date)
+    }
 }
