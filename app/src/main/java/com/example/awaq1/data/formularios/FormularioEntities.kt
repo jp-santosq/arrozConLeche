@@ -5,10 +5,12 @@ import androidx.room.PrimaryKey
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun getCurrentDate(): String {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    val date = Date()
-    return dateFormat.format(date)
+fun getCurrentDate(existingDate: String? = null): String {
+    return existingDate ?: run {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date = Date()
+        dateFormat.format(date)
+    }
 }
 
 
@@ -26,7 +28,8 @@ data class FormularioUnoEntity(
     var observaciones: String,
     val latitude: Double? = null,
     val longitude: Double? = null,
-    val fecha: String = getCurrentDate()
+    val fecha: String = getCurrentDate(),
+    val editado: String = getCurrentDate(null)
 ) {
     // Excluye id de las funciones autogeneradas (equals, copy, hashCode...)
     // https://kotlinlang.org/docs/data-classes.html#properties-declared-in-the-class-body
@@ -35,7 +38,7 @@ data class FormularioUnoEntity(
     var id: Long = 0
 
     fun withID(id: Long): FormularioUnoEntity {
-        val newForm = this.copy()
+        val newForm = this.copy(fecha = getCurrentDate(this.fecha), editado = getCurrentDate())
         newForm.id = id
         return newForm
     }
@@ -57,14 +60,15 @@ data class FormularioDosEntity(
     var observaciones: String,
     val latitude: Double? = null,
     val longitude: Double? = null,
-    val fecha: String = getCurrentDate()
+    val fecha: String = getCurrentDate(),
+    val editado: String = getCurrentDate(null)
 
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
     fun withID(id: Long): FormularioDosEntity {
-        val newForm = this.copy()
+        val newForm = this.copy(fecha = getCurrentDate(this.fecha), editado = getCurrentDate())
         newForm.id = id
         return newForm
     }
@@ -84,13 +88,14 @@ data class FormularioTresEntity(
     val observaciones: String,
     val latitude: Double? = null,
     val longitude: Double? = null,
-    val fecha: String = getCurrentDate()
+    val fecha: String = getCurrentDate(),
+    val editado: String = getCurrentDate(null)
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
     fun withID(id: Long): FormularioTresEntity {
-        val newForm = this.copy()
+        val newForm = this.copy(fecha = getCurrentDate(this.fecha), editado = getCurrentDate())
         newForm.id = id
         return newForm
     }
@@ -117,13 +122,14 @@ data class FormularioCuatroEntity(
     val observaciones: String,
     val latitude: Double? = null,
     val longitude: Double? = null,
-    val fecha: String = getCurrentDate()
+    val fecha: String = getCurrentDate(),
+    val editado: String = getCurrentDate(null)
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
     fun withID(id: Long): FormularioCuatroEntity {
-        val newForm = this.copy()
+        val newForm = this.copy(fecha = getCurrentDate(this.fecha), editado = getCurrentDate())
         newForm.id = id
         return newForm
     }
@@ -144,7 +150,8 @@ data class FormularioCincoEntity(
     var observaciones: String,
     val latitude: Double? = null,
     val longitude: Double? = null,
-    val fecha: String = getCurrentDate()
+    val fecha: String = getCurrentDate(),
+    val editado: String = getCurrentDate(null)
 
 
 ) {
@@ -152,7 +159,7 @@ data class FormularioCincoEntity(
     var id: Long = 0
 
     fun withID(id: Long): FormularioCincoEntity {
-        val newForm = this.copy()
+        val newForm = this.copy(fecha = getCurrentDate(this.fecha), editado = getCurrentDate())
         newForm.id = id
         return newForm
     }
@@ -176,14 +183,15 @@ data class FormularioSeisEntity(
     var observaciones: String,
     val latitude: Double? = null,
     val longitude: Double? = null,
-    val fecha: String = getCurrentDate()
+    val fecha: String = getCurrentDate(),
+    val editado: String = getCurrentDate(null)
 
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
     fun withID(id: Long): FormularioSeisEntity {
-        val newForm = this.copy()
+        val newForm = this.copy(fecha = getCurrentDate(this.fecha), editado = getCurrentDate())
         newForm.id = id
         return newForm
     }
@@ -202,14 +210,15 @@ data class FormularioSieteEntity(
     val nivelQuebrada: String,
     val latitude: Double? = null,
     val longitude: Double? = null,
-    val fecha: String = getCurrentDate()
+    val fecha: String = getCurrentDate(),
+    val editado: String = getCurrentDate(null)
 
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
     fun withID(id: Long): FormularioSieteEntity {
-        val newForm = this.copy()
+        val newForm = this.copy(fecha = getCurrentDate(this.fecha), editado = getCurrentDate())
         newForm.id = id
         return newForm
     }
