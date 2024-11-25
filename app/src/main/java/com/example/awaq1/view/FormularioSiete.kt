@@ -81,6 +81,8 @@ fun ObservationFormSiete(navController: NavController, formularioId: Long = 0) {
     var humedadMaxima by remember { mutableStateOf("") }
     var temperaturaMinima by remember { mutableStateOf("") }
     var nivelQuebrada by remember { mutableStateOf("") }
+    var fecha by remember { mutableStateOf("") }
+    var editado by remember { mutableStateOf("") }
 
 
     if (formularioId != 0L) {
@@ -98,6 +100,8 @@ fun ObservationFormSiete(navController: NavController, formularioId: Long = 0) {
             humedadMaxima = formulario.humedadMaxima
             temperaturaMinima = formulario.temperaturaMinima
             nivelQuebrada = formulario.nivelQuebrada
+            fecha = formulario.fecha
+            editado = formulario.editado
             location = if (formulario.latitude != null && formulario.longitude != null) {
                 Pair(formulario.latitude, formulario.longitude)
             } else {
@@ -381,6 +385,10 @@ fun ObservationFormSiete(navController: NavController, formularioId: Long = 0) {
 
                             Button(
                                 onClick = {
+                                    if (fecha.isNullOrEmpty()) {
+                                        fecha = getCurrentDate()
+                                    }
+                                    editado = getCurrentDate()
                                     val formulario =
                                         FormularioSieteEntity(
                                             clima = clima,
@@ -392,7 +400,9 @@ fun ObservationFormSiete(navController: NavController, formularioId: Long = 0) {
                                             temperaturaMinima = temperaturaMinima,
                                             nivelQuebrada = nivelQuebrada,
                                             latitude = location?.first,
-                                            longitude = location?.second
+                                            longitude = location?.second,
+                                            fecha = fecha,
+                                            editado = editado
                                         ).withID(formularioId)
 
                                     runBlocking {

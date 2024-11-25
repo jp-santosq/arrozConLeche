@@ -82,6 +82,8 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
     var observaciones: String by remember { mutableStateOf("") }
     var showCamera by remember { mutableStateOf(false) }
     val savedImageUris = remember { mutableStateOf(mutableListOf<Uri>()) }
+    var fecha by remember { mutableStateOf("") }
+    var editado by remember { mutableStateOf("") }
 
     if (formularioId != 0L) {
         val formulario: FormularioTresEntity? = runBlocking {
@@ -99,6 +101,8 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
             tipoCultivo = formulario.tipoCultivo
             disturbio = formulario.disturbio
             observaciones = formulario.observaciones
+            fecha = formulario.fecha
+            editado = formulario.editado
             location = if (formulario.latitude != null && formulario.longitude != null) {
                 Pair(formulario.latitude, formulario.longitude)
             } else {
@@ -449,6 +453,10 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
 
                             Button(
                                 onClick = {
+                                    if (fecha.isNullOrEmpty()) {
+                                        fecha = getCurrentDate()
+                                    }
+                                    editado = getCurrentDate()
                                     val formulario = FormularioTresEntity(
                                         codigo = codigo,
                                         clima = clima,
@@ -460,7 +468,9 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
                                         disturbio = disturbio,
                                         observaciones = observaciones,
                                         latitude = location?.first,
-                                        longitude = location?.second
+                                        longitude = location?.second,
+                                        fecha = fecha,
+                                        editado = editado
                                     ).withID(formularioId)
 
                                     runBlocking {

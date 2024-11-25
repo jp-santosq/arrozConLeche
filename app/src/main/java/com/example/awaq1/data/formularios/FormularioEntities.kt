@@ -2,6 +2,10 @@ package com.example.awaq1.data.formularios
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.text.SimpleDateFormat
+import java.util.*
+
+
 
 // Fauna en Transectos
 @Entity(tableName = "Formulario1")
@@ -16,7 +20,9 @@ data class FormularioUnoEntity(
     var tipoObservacion: String,
     var observaciones: String,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val fecha: String,
+    val editado: String,
 ) {
     // Excluye id de las funciones autogeneradas (equals, copy, hashCode...)
     // https://kotlinlang.org/docs/data-classes.html#properties-declared-in-the-class-body
@@ -46,7 +52,9 @@ data class FormularioDosEntity(
     var alturaObservacion: String,
     var observaciones: String,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val fecha: String,
+    val editado: String,
 
 ) {
     @PrimaryKey(autoGenerate = true)
@@ -72,7 +80,9 @@ data class FormularioTresEntity(
     val disturbio: String,
     val observaciones: String,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val fecha: String,
+    val editado: String,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
@@ -104,7 +114,9 @@ data class FormularioCuatroEntity(
     val altura: String,
     val observaciones: String,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val fecha: String,
+    val editado: String,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
@@ -130,7 +142,10 @@ data class FormularioCincoEntity(
     var alturaObservacion: String,
     var observaciones: String,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val fecha: String,
+    val editado: String,
+
 
 ) {
     @PrimaryKey(autoGenerate = true)
@@ -160,7 +175,9 @@ data class FormularioSeisEntity(
     val checklist: String,
     var observaciones: String,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val fecha: String,
+    val editado: String,
 
 ) {
     @PrimaryKey(autoGenerate = true)
@@ -185,7 +202,9 @@ data class FormularioSieteEntity(
     val temperaturaMinima: String,
     val nivelQuebrada: String,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val fecha: String,
+    val editado: String,
 
 ) {
     @PrimaryKey(autoGenerate = true)

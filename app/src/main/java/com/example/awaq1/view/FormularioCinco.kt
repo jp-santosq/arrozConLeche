@@ -81,6 +81,8 @@ fun ObservationFormCinco(navController: NavController, formularioId: Long = 0) {
     var tipoObservacion: String by remember { mutableStateOf("") }
     var alturaObservacion: String by remember { mutableStateOf("") }
     var observaciones: String by remember { mutableStateOf("") }
+    var fecha by remember { mutableStateOf("") }
+    var editado by remember { mutableStateOf("") }
 
     if (formularioId != 0L) {
         val formulario: FormularioCincoEntity? = runBlocking {
@@ -99,6 +101,8 @@ fun ObservationFormCinco(navController: NavController, formularioId: Long = 0) {
             tipoObservacion = formulario.tipoObservacion
             alturaObservacion = formulario.alturaObservacion
             observaciones = formulario.observaciones
+            fecha = formulario.fecha
+            editado = formulario.editado
             location = if (formulario.latitude != null && formulario.longitude != null) {
                 Pair(formulario.latitude, formulario.longitude)
             } else {
@@ -481,6 +485,10 @@ fun ObservationFormCinco(navController: NavController, formularioId: Long = 0) {
 
                             Button(
                                 onClick = {
+                                    if (fecha.isNullOrEmpty()) {
+                                        fecha = getCurrentDate()
+                                    }
+                                    editado = getCurrentDate()
                                     val formulario =
                                         FormularioCincoEntity(
                                             zona = zona,
@@ -494,7 +502,9 @@ fun ObservationFormCinco(navController: NavController, formularioId: Long = 0) {
                                             alturaObservacion = alturaObservacion,
                                             observaciones = observaciones,
                                             latitude = location?.first,
-                                            longitude = location?.second
+                                            longitude = location?.second,
+                                            fecha = fecha,
+                                            editado = editado
                                         ).withID(formularioId)
 
                                     runBlocking {

@@ -89,6 +89,8 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
     var estatura: String by remember { mutableStateOf("") }
     var altura: String by remember { mutableStateOf("") }
     var observaciones: String by remember { mutableStateOf("") }
+    var fecha by remember { mutableStateOf("") }
+    var editado by remember { mutableStateOf("") }
 
     if (formularioId != 0L) {
         val formulario: FormularioCuatroEntity? = runBlocking {
@@ -112,6 +114,8 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
             estatura = formulario.estatura
             altura = formulario.altura
             observaciones = formulario.observaciones
+            fecha = formulario.fecha
+            editado = formulario.editado
             location = if (formulario.latitude != null && formulario.longitude != null) {
                 Pair(formulario.latitude, formulario.longitude)
             } else {
@@ -516,6 +520,10 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
 
                             Button(
                                 onClick = {
+                                    if (fecha.isNullOrEmpty()) {
+                                        fecha = getCurrentDate()
+                                    }
+                                    editado = getCurrentDate()
                                     val formulario = FormularioCuatroEntity(
                                         codigo = codigo,
                                         clima = clima,
@@ -533,7 +541,9 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
                                         altura = altura,
                                         observaciones = observaciones,
                                         latitude = location?.first,
-                                        longitude = location?.second
+                                        longitude = location?.second,
+                                        fecha = fecha,
+                                        editado = editado
                                     ).withID(formularioId)
 
                                     runBlocking {
