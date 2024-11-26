@@ -368,7 +368,7 @@ fun ObservationFormSiete(navController: NavController, formularioId: Long = 0) {
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             Button(
-                                onClick = { navController.navigate("home") },
+                                onClick = { navController.navigate("elegir_reporte") },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = Color(0xFF4E7029),
                                     contentColor = Color.White
