@@ -55,6 +55,11 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+
+            excludes +="META-INF/LICENSE.md"
+
+            excludes += "META-INF/NOTICE.md"
+            excludes += "META-INF/LICENSE-notice.md"
         }
     }
 }
@@ -66,6 +71,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.play.services.location)
     implementation(libs.androidx.foundation.android)
+    androidTestImplementation(libs.junit.jupiter)
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
 
@@ -84,7 +90,7 @@ dependencies {
 
     implementation(libs.jetbrains.kotlinx.serialization.json)
 
-    testImplementation(libs.junit)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
