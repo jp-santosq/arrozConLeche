@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.awaq1.R
+import com.example.awaq1.view.BottomNavigationBar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -139,21 +140,4 @@ fun SettingsSection(title: String, items: List<String>) {
     }
 }
 
-@Composable
-fun BottomNavigationBar(navController: NavController) {
-    NavigationBar {
-        NavigationBarItem(
-            icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
-            label = { Text("Inicio") },
-            selected = false,
-            onClick = {navController.navigate("settings")}
-        )
-        NavigationBarItem(
-            icon = { Icon(Icons.Default.Settings, contentDescription = "Ajustes") },
-            label = { Text("Ajustes") },
-            selected = true,
-            onClick = {}
-        )
-    }
-}
 

@@ -21,8 +21,12 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +44,7 @@ import com.example.awaq1.data.formularios.FormularioSeisEntity
 import com.example.awaq1.data.formularios.FormularioSieteEntity
 import com.example.awaq1.data.formularios.FormularioTresEntity
 import com.example.awaq1.data.formularios.FormularioUnoEntity
+import com.example.awaq1.data.formularios.Ubicacion
 import com.example.awaq1.navigator.FormCincoID
 import com.example.awaq1.navigator.FormCuatroID
 import com.example.awaq1.navigator.FormDosID
@@ -50,7 +55,23 @@ import com.example.awaq1.navigator.FormUnoID
 @Composable
 fun Home(navController: NavController) {
     val context = LocalContext.current as MainActivity
-
+    var location by remember { mutableStateOf<Pair<Double, Double>?>(null) }
+    val ubicacion = Ubicacion(context)
+    if(location == null){
+        LaunchedEffect(Unit) {
+            context.requestLocationPermission()
+            if (ubicacion.hasLocationPermission()) {
+                location = ubicacion.obtenerCoordenadas()
+                if (location != null) {
+                    Log.d("LogIn", "Location retrieved: Lat=${location!!.first}, Long=${location!!.second}")
+                } else {
+                    Log.d("LogIn", "Location is null")
+                }
+            } else {
+                Log.d("ObservationForm", "Location permission required but not granted.")
+            }
+        }
+    }
     //Username para saludo
     val nombre = context.accountInfo.username.substringBefore("@")
 
