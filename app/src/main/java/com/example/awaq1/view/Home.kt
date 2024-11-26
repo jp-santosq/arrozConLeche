@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -52,6 +53,8 @@ import com.example.awaq1.navigator.FormSeisID
 import com.example.awaq1.navigator.FormSieteID
 import com.example.awaq1.navigator.FormTresID
 import com.example.awaq1.navigator.FormUnoID
+import androidx.compose.ui.text.style.TextOverflow
+
 @Composable
 fun Home(navController: NavController) {
     val context = LocalContext.current as MainActivity
@@ -129,12 +132,27 @@ fun Home(navController: NavController) {
                         .background(Color(0xFFCDE4B4)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "Hola, $nombre!",
-                        fontSize = 50.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF4E7029)
-                    )
+                    Row(modifier = Modifier.fillMaxWidth().padding(20.dp)) {
+                        var fontSize by remember { mutableStateOf(50.sp) }
+
+                        Text(
+                            text = "Hola, $nombre!",
+                            fontSize = fontSize,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF4E7029),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .onGloballyPositioned { coordinates ->
+                                    val containerWidth = coordinates.size.width
+                                    val textWidth = coordinates.size.width
+                                    if (textWidth > containerWidth) {
+                                        fontSize = (fontSize.value - 1).sp
+                                    }
+                                }
+                        )
+                    }
                 }
 
                 // Dashboard Section
@@ -159,8 +177,6 @@ fun Home(navController: NavController) {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         StatsColumn(label = "Total", count = count, color = Color.Black)
-                        StatsColumn(label = "Enviados", count = 3, color = Color(0xFF4CAF50))
-                        StatsColumn(label = "Guardados", count = 2, color = Color.Red)
                     }
 
                     // Forms Grid
