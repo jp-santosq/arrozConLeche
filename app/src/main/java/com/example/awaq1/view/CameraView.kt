@@ -15,24 +15,29 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.MainActivity
 import com.example.awaq1.ViewModels.CameraViewModel
+import okhttp3.internal.wait
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
@@ -104,6 +109,11 @@ fun CameraWindow(
                             currentCapturedUri = null // Reset current image
                             showPreview = false // Return to camera preview
                         },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF4E7029),
+                            contentColor = Color.White
+                        ),
+                        shape = RoundedCornerShape(50),
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("Retake")
@@ -116,6 +126,11 @@ fun CameraWindow(
                             showPreview = false // Return to camera preview
                             onClose() // Exit the CameraWindow after confirmation
                         },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF4E7029),
+                            contentColor = Color.White
+                        ),
+                        shape = RoundedCornerShape(50),
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("Confirm")
@@ -127,43 +142,60 @@ fun CameraWindow(
         }
 
         if (!showPreview) {
-            Column(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Button(
-                    onClick = {
-                        cameraViewModel.takePhoto(
-                            context = context,
-                            onImageSaved = { uri ->
-                                currentCapturedUri = uri
-                                flashVisible = true
-                                Handler(Looper.getMainLooper()).postDelayed({
-                                    flashVisible = false
-                                }, 200)
-                            },
-                            onError = { exception ->
-                                Log.e("CameraWindow", "Error taking photo: ${exception.message}")
-                            }
-                        )
+            Column(modifier = Modifier.align(Alignment.BottomCenter)) {
+                Row(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    TextButton(
+                        onClick = { galleryLauncher.launch("image/*") } // Launch gallery picker
+                    ) {
+                        Text("Galeria", color = Color.White, fontSize = 25.sp)
                     }
-                ) {
-                    Text("Tomar Foto")
+
+                    //Spacer(modifier = Modifier.width(8.dp))
+
+                    Button(
+                        onClick = {
+                            cameraViewModel.takePhoto(
+                                context = context,
+                                onImageSaved = { uri ->
+                                    currentCapturedUri = uri
+                                    flashVisible = true
+                                    Handler(Looper.getMainLooper()).postDelayed({
+                                        flashVisible = false
+                                    }, 200)
+                                },
+                                onError = { exception ->
+                                    Log.e(
+                                        "CameraWindow",
+                                        "Error taking photo: ${exception.message}"
+                                    )
+                                }
+                            )
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.White
+                        ),
+                        shape = CircleShape,
+                        modifier = Modifier.size(64.dp)
+                    ) {
+                        //Text("Tomar Foto")
+                    }
+
+                    //Spacer(modifier = Modifier.width(8.dp))
+
+                    TextButton(
+                        onClick = { onClose() }, // Launch gallery picker
+
+                    ) {
+                        Text("Cancelar", color = Color.White, fontSize = 25.sp)
+                    }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(
-                    onClick = { galleryLauncher.launch("image/*") } // Launch gallery picker
-                ) {
-                    Text("Importar de galeria")
-                }
-                Button(
-                    onClick = { onClose() } // Launch gallery picker
-                ) {
-                    Text("Cancelar")
-                }
-                Spacer(modifier = Modifier.height(45.dp))
+                Spacer(modifier = Modifier.height(65.dp))
             }
         }
     }

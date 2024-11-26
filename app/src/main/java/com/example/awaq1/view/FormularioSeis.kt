@@ -239,7 +239,7 @@ fun ObservationFormSeis(navController: NavController, formularioId: Long = 0) {
                                 IconToggleButton(
                                     checked = clima == option,
                                     onCheckedChange = { clima = option },
-                                    modifier = Modifier.size(100.dp)
+                                    modifier = Modifier.size(150.dp)
                                 ) {
                                     Box(
                                         modifier = Modifier
@@ -254,7 +254,7 @@ fun ObservationFormSeis(navController: NavController, formularioId: Long = 0) {
                                         Image(
                                             painter = painterResource(id = weatherIcons[index]),
                                             contentDescription = option,
-                                            modifier = Modifier.requiredSize(64.dp)
+                                            modifier = Modifier.requiredSize(95.dp)
                                         )
                                     }
                                 }

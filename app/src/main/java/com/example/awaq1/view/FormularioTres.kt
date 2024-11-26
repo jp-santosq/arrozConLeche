@@ -212,7 +212,7 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
                                 IconToggleButton(
                                     checked = clima == option,
                                     onCheckedChange = { clima = option },
-                                    modifier = Modifier.size(100.dp)
+                                    modifier = Modifier.size(150.dp)
                                 ) {
                                     Box(
                                         modifier = Modifier
@@ -227,7 +227,7 @@ fun ObservationFormTres(navController: NavController, formularioId: Long = 0L) {
                                         Image(
                                             painter = painterResource(id = weatherIcons[index]),
                                             contentDescription = option,
-                                            modifier = Modifier.requiredSize(64.dp)
+                                            modifier = Modifier.requiredSize(95.dp)
                                         )
                                     }
                                 }

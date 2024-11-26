@@ -53,6 +53,7 @@ fun LogIn(
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.matchParentSize())
         Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
+            Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = stringResource(R.string.bienvenido),
                 fontSize = 37.sp,

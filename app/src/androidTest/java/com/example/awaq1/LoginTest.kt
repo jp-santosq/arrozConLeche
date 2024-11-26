@@ -33,13 +33,13 @@ class BottomNavigationBarTest {
         composeTestRule.runOnIdle { }
 
         // Verify that the displayed screen is Home
-        composeTestRule.onNodeWithText("Hola, Samantha").assertIsDisplayed() // For Home screen    }
+        composeTestRule.onNodeWithText("Hola,").assertIsDisplayed() // For Home screen    }
     }
 
     @Test
     fun testReporteButtonNavigatesToReporte() {
         // Simulate navigating to the Reporte screen
-        composeTestRule.onNodeWithContentDescription("Reporte").performClick()
+        composeTestRule.onNodeWithContentDescription("Fauna").performClick()
 
         // Wait for the UI to settle
         composeTestRule.runOnIdle { }

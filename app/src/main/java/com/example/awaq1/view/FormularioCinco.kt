@@ -235,7 +235,7 @@ fun ObservationFormCinco(navController: NavController, formularioId: Long = 0) {
                                 IconToggleButton(
                                     checked = clima == option,
                                     onCheckedChange = { clima = option },
-                                    modifier = Modifier.size(100.dp)
+                                    modifier = Modifier.size(150.dp)
                                 ) {
                                     Box(
                                         modifier = Modifier
@@ -250,7 +250,7 @@ fun ObservationFormCinco(navController: NavController, formularioId: Long = 0) {
                                         Image(
                                             painter = painterResource(id = weatherIcons[index]),
                                             contentDescription = option,
-                                            modifier = Modifier.requiredSize(64.dp)
+                                            modifier = Modifier.requiredSize(95.dp)
                                         )
                                     }
                                 }
@@ -289,7 +289,7 @@ fun ObservationFormCinco(navController: NavController, formularioId: Long = 0) {
                                 IconToggleButton(
                                     checked = tipoAnimal == animal,
                                     onCheckedChange = { tipoAnimal = animal },
-                                    modifier = Modifier.size(100.dp)
+                                    modifier = Modifier.size(155.dp)
                                 ) {
                                     val imageResource = when (animal) {
                                         "Mamífero" -> R.drawable.ic_mamifero
@@ -318,7 +318,7 @@ fun ObservationFormCinco(navController: NavController, formularioId: Long = 0) {
                                             Image(
                                                 painter = painterResource(id = imageResource),
                                                 contentDescription = animal,
-                                                modifier = Modifier.requiredSize(100.dp) // Larger size for the image
+                                                modifier = Modifier.requiredSize(75.dp) // Larger size for the image
                                             )
                                             // Label below the image
                                             Text(

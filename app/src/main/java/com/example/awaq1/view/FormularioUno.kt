@@ -186,329 +186,343 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
                     onGalleryClick = { /* Optional: Handle gallery selection */ }
                 )
             }  else {
-
-                Column(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .padding(16.dp)
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                Box(
+                   modifier = Modifier.background(color = Color.White)
                 ) {
-                    location?.let { (latitude, longitude) ->
-                        Text("Ubicacion Actual: Lati: $latitude, Long: $longitude")
-                    } ?: Text("Buscando ubicacion...")
-
-                    OutlinedTextField(
-                        value = transecto,
-                        onValueChange = { transecto = it },
-                        label = { Text("Número de Transecto") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Text("Estado del Tiempo:")
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    Column(
+                        modifier = Modifier
+                            .padding(paddingValues)
+                            .padding(16.dp)
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                            .background(color = Color.White),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        val weatherOptions = listOf("Soleado", "Parcialmente Nublado", "Lluvioso")
-                        val weatherIcons = listOf(
-                            R.drawable.sunny, // Add sunny icon in your drawable resources
-                            R.drawable.cloudy, // Add partly cloudy icon in your drawable resources
-                            R.drawable.rainy // Add rainy icon in your drawable resources
+                        location?.let { (latitude, longitude) ->
+                            Text("Ubicacion Actual: Lati: $latitude, Long: $longitude")
+                        } ?: Text("Buscando ubicacion...")
+
+                        OutlinedTextField(
+                            value = transecto,
+                            onValueChange = { transecto = it },
+                            label = { Text("Número de Transecto") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            modifier = Modifier.fillMaxWidth()
                         )
+                        Text("Estado del Tiempo:")
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val weatherOptions =
+                                listOf("Soleado", "Parcialmente Nublado", "Lluvioso")
+                            val weatherIcons = listOf(
+                                R.drawable.sunny, // Add sunny icon in your drawable resources
+                                R.drawable.cloudy, // Add partly cloudy icon in your drawable resources
+                                R.drawable.rainy // Add rainy icon in your drawable resources
+                            )
 
-                        weatherOptions.forEachIndexed { index, option ->
-                            IconToggleButton(
-                                checked = clima == option,
-                                onCheckedChange = { clima = option },
-                                modifier = Modifier.size(100.dp)
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .padding(8.dp)
-                                        .border(
-                                            width = 2.dp,
-                                            color = if (clima == option) Color(0xFF4E7029) else Color.Transparent,
-                                            shape = RoundedCornerShape(8.dp)
-                                        )
-                                        .padding(8.dp)
+                            weatherOptions.forEachIndexed { index, option ->
+                                IconToggleButton(
+                                    checked = clima == option,
+                                    onCheckedChange = { clima = option },
+                                    modifier = Modifier.size(150.dp)
                                 ) {
-                                    Image(
-                                        painter = painterResource(id = weatherIcons[index]),
-                                        contentDescription = option,
-                                        modifier = Modifier.requiredSize(64.dp)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                    Text("Época")
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        val seasonOptions = listOf("Verano/Seca", "Invierno/Lluviosa")
-                        seasonOptions.forEach { option ->
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                RadioButton(
-                                    selected = temporada == option,
-                                    onClick = { temporada = option },
-                                    colors = RadioButtonDefaults.colors(
-                                        selectedColor = Color(0xFF4E7029),
-                                        unselectedColor = Color.Gray
-                                    )
-                                )
-                                Text(option, modifier = Modifier.padding(start = 8.dp))
-                            }
-                        }
-                    }
-
-                    Text("Tipo de Animal")
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        val animals = listOf("Mamífero", "Ave", "Reptil", "Anfibio", "Insecto")
-                        if (tipoAnimal == "") {
-                            tipoAnimal = animals[0]
-                        }
-
-                        animals.forEach { animal ->
-                            IconToggleButton(
-                                checked = tipoAnimal == animal,
-                                onCheckedChange = { tipoAnimal = animal },
-                                modifier = Modifier.size(100.dp)
-                            ) {
-                                val imageResource = when (animal) {
-                                    "Mamífero" -> R.drawable.ic_mamifero
-                                    "Ave" -> R.drawable.ic_ave
-                                    "Reptil" -> R.drawable.ic_reptil
-                                    "Anfibio" -> R.drawable.ic_anfibio
-                                    "Insecto" -> R.drawable.ic_insecto
-                                    else -> android.R.drawable.ic_menu_gallery
-                                }
-
-                                // Outer Box for border and padding
-                                Box(
-                                    modifier = Modifier
-                                        .padding(8.dp) // Space between items
-                                        .border(
-                                            width = 2.dp,
-                                            color = if (tipoAnimal == animal) Color(0xFF4E7029) else Color.Transparent, // Green border if selected
-                                            shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp) // Rounded corners
-                                        )
-                                        .padding(8.dp) // Padding inside the border
-                                ) {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally // Center image and label
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                            .border(
+                                                width = 2.dp,
+                                                color = if (clima == option) Color(0xFF4E7029) else Color.Transparent,
+                                                shape = RoundedCornerShape(8.dp)
+                                            )
+                                            .padding(8.dp)
                                     ) {
-                                        // Image with increased size
                                         Image(
-                                            painter = painterResource(id = imageResource),
-                                            contentDescription = animal,
-                                            modifier = Modifier.requiredSize(100.dp) // Larger size for the image
-                                        )
-                                        // Label below the image
-                                        Text(
-                                            text = animal,
-                                            fontSize = 20.sp,
-                                            color = if (tipoAnimal == animal) Color(0xFF4E7029) else Color(0xFF3F3F3F), // Green if selected
-                                            modifier = Modifier.padding(top = 4.dp) // Space between image and label
+                                            painter = painterResource(id = weatherIcons[index]),
+                                            contentDescription = option,
+                                            modifier = Modifier.requiredSize(95.dp)
                                         )
                                     }
                                 }
                             }
                         }
-                    }
-
-
-                    OutlinedTextField(
-                        value = nombreComun,
-                        onValueChange = { nombreComun = it },
-                        label = { Text("Nombre Común") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    OutlinedTextField(
-                        value = nombreCientifico,
-                        onValueChange = { nombreCientifico = it },
-                        label = { Text("Nombre Científico") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    OutlinedTextField(
-                        value = numeroIndividuos,
-                        onValueChange = { numeroIndividuos = it },
-                        label = { Text("Número de Individuos") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Text("Tipo de Observación")
-                    val observacionOptions =
-                        listOf("La Vió", "Huella", "Rastro", "Cacería", "Le dijeron")
-                    if (tipoObservacion == "") {
-                        tipoObservacion = observacionOptions[0]
-                    }
-                    Column {
-                        observacionOptions.forEach { option ->
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                RadioButton(
-                                    selected = tipoObservacion == option,
-                                    onClick = { tipoObservacion = option },
-                                    colors = RadioButtonDefaults.colors(
-                                        selectedColor = Color(0xFF4E7029),
-                                        unselectedColor = Color.Gray
+                        Text("Época")
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val seasonOptions = listOf("Verano/Seca", "Invierno/Lluviosa")
+                            seasonOptions.forEach { option ->
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    RadioButton(
+                                        selected = temporada == option,
+                                        onClick = { temporada = option },
+                                        colors = RadioButtonDefaults.colors(
+                                            selectedColor = Color(0xFF4E7029),
+                                            unselectedColor = Color.Gray
+                                        )
                                     )
-                                )
-                                Text(option, modifier = Modifier.padding(start = 8.dp))
+                                    Text(option, modifier = Modifier.padding(start = 8.dp))
+                                }
                             }
                         }
-                    }
 
-
-                    // Camera Button
-                    Button(
-                        onClick = { showCamera = true },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF4E7029),
-                            contentColor = Color.White
-                        ),
-                        shape = RoundedCornerShape(10)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Take Photo",
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Take Photo")
-                    }
-
-                   // Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
-
-                    // Display the saved image
-                    savedImageUris.value.forEach { uri ->
+                        Text("Tipo de Animal")
                         Row(
-                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val animals = listOf("Mamífero", "Ave", "Reptil", "Anfibio", "Insecto")
+                            if (tipoAnimal == "") {
+                                tipoAnimal = animals[0]
+                            }
+
+                            animals.forEach { animal ->
+                                IconToggleButton(
+                                    checked = tipoAnimal == animal,
+                                    onCheckedChange = { tipoAnimal = animal },
+                                    modifier = Modifier.size(155.dp)
+                                ) {
+                                    val imageResource = when (animal) {
+                                        "Mamífero" -> R.drawable.ic_mamifero
+                                        "Ave" -> R.drawable.ic_ave
+                                        "Reptil" -> R.drawable.ic_reptil
+                                        "Anfibio" -> R.drawable.ic_anfibio
+                                        "Insecto" -> R.drawable.ic_insecto
+                                        else -> android.R.drawable.ic_menu_gallery
+                                    }
+
+                                    // Outer Box for border and padding
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(8.dp) // Space between items
+                                            .border(
+                                                width = 2.dp,
+                                                color = if (tipoAnimal == animal) Color(0xFF4E7029) else Color.Transparent, // Green border if selected
+                                                shape = androidx.compose.foundation.shape.RoundedCornerShape(
+                                                    8.dp
+                                                ) // Rounded corners
+                                            )
+                                            .padding(8.dp) // Padding inside the border
+                                    ) {
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally // Center image and label
+                                        ) {
+                                            // Image with increased size
+                                            Image(
+                                                painter = painterResource(id = imageResource),
+                                                contentDescription = animal,
+                                                modifier = Modifier.requiredSize(75.dp) // Larger size for the image
+                                            )
+                                            // Label below the image
+                                            Text(
+                                                text = animal,
+                                                fontSize = 20.sp,
+                                                color = if (tipoAnimal == animal) Color(0xFF4E7029) else Color(
+                                                    0xFF3F3F3F
+                                                ), // Green if selected
+                                                modifier = Modifier.padding(top = 4.dp) // Space between image and label
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+                        OutlinedTextField(
+                            value = nombreComun,
+                            onValueChange = { nombreComun = it },
+                            label = { Text("Nombre Común") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        OutlinedTextField(
+                            value = nombreCientifico,
+                            onValueChange = { nombreCientifico = it },
+                            label = { Text("Nombre Científico") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        OutlinedTextField(
+                            value = numeroIndividuos,
+                            onValueChange = { numeroIndividuos = it },
+                            label = { Text("Número de Individuos") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Text("Tipo de Observación")
+                        val observacionOptions =
+                            listOf("La Vió", "Huella", "Rastro", "Cacería", "Le dijeron")
+                        if (tipoObservacion == "") {
+                            tipoObservacion = observacionOptions[0]
+                        }
+                        Column {
+                            observacionOptions.forEach { option ->
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    RadioButton(
+                                        selected = tipoObservacion == option,
+                                        onClick = { tipoObservacion = option },
+                                        colors = RadioButtonDefaults.colors(
+                                            selectedColor = Color(0xFF4E7029),
+                                            unselectedColor = Color.Gray
+                                        )
+                                    )
+                                    Text(option, modifier = Modifier.padding(start = 8.dp))
+                                }
+                            }
+                        }
+
+
+                        // Camera Button
+                        Button(
+                            onClick = { showCamera = true },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF4E7029),
+                                contentColor = Color.White
+                            ),
+                            shape = RoundedCornerShape(10)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Take Photo",
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("Take Photo")
+                        }
+
+                        // Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
+
+                        // Display the saved image
+                        savedImageUris.value.forEach { uri ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Image(
+                                    painter = rememberAsyncImagePainter(model = uri),
+                                    contentDescription = "Saved Image",
+                                    modifier = Modifier.size(100.dp)
+                                )
+                                Button(
+                                    onClick = {
+                                        savedImageUris.value = savedImageUris.value.toMutableList()
+                                            .apply { remove(uri) }
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = Color.Transparent // Removes background color
+                                    ),
+                                    elevation = null // Removes shadow/elevation for a completely flat button
+                                ) {
+                                    Text(
+                                        text = "X",
+                                        color = Color.Red,
+                                        fontSize = 20.sp
+                                    )
+                                }
+                            }
+                        }
+                        OutlinedTextField(
+                            value = observaciones,
+                            onValueChange = { observaciones = it },
+                            label = { Text("Observaciones") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(100.dp),
+                            maxLines = 4
+                        )
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Image(
-                                painter = rememberAsyncImagePainter(model = uri),
-                                contentDescription = "Saved Image",
-                                modifier = Modifier.size(100.dp)
-                            )
-                            Button(onClick = {
-                                savedImageUris.value = savedImageUris.value.toMutableList().apply { remove(uri) }
-                            },
+                            Button(
+                                onClick = { navController.navigate("home") },
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color.Transparent // Removes background color
+                                    containerColor = Color(0xFF4E7029),
+                                    contentColor = Color.White
                                 ),
-                                elevation = null // Removes shadow/elevation for a completely flat button
+                                shape = RoundedCornerShape(50),
+                                modifier = Modifier.weight(1f)
                             ) {
-                                Text(text = "X",
-                                    color = Color.Red,
-                                    fontSize = 20.sp)
+                                Text(
+                                    "Atras",
+                                    style = TextStyle(
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                )
                             }
-                        }
-                    }
-                    OutlinedTextField(
-                        value = observaciones,
-                        onValueChange = { observaciones = it },
-                        label = { Text("Observaciones") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp),
-                        maxLines = 4
-                    )
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Button(
-                            onClick = { navController.navigate("home") },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF4E7029),
-                                contentColor = Color.White
-                            ),
-                            shape = RoundedCornerShape(50),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(
-                                "Atras",
-                                style = TextStyle(
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            )
-                        }
-
-                        Button(
-                            onClick = {
-                                if (fecha.isNullOrEmpty()) {
-                                    fecha = getCurrentDate()
-                                }
-                                editado = getCurrentDate()
-                                val formulario =
-                                    FormularioUnoEntity(
-                                        transecto = transecto,
-                                        clima = clima,
-                                        temporada = temporada,
-                                        tipoAnimal = tipoAnimal,
-                                        nombreComun = nombreComun,
-                                        nombreCientifico = nombreCientifico,
-                                        numeroIndividuos = numeroIndividuos,
-                                        tipoObservacion = tipoObservacion,
-                                        observaciones = observaciones,
-                                        latitude = location?.first,
-                                        longitude = location?.second,
-                                        fecha = fecha,
-                                        editado = editado
-                                    ).withID(formularioId)
-                                // Guardar en base de datos, vinculado al usuario
-                                runBlocking {
-                                    // Insert regresa su id
-                                    val formId = appContainer.usuariosRepository.insertUserWithFormularioUno(
-                                        context.accountInfo.user_id, formulario
-                                    )
-                                    Log.d("ImageDAO", "formId: $formId")
-
-                                    // Borrar todas las fotos en ese reporte
-                                    appContainer.formulariosRepository.deleteImagesByFormulario(
-                                        formularioId = formId,
-                                        formularioType = "Formulario1"
-                                    )
-
-                                    // Agregar todas las imagenes al reporte
-                                    savedImageUris.value.forEach { uri ->
-                                        val image = ImageEntity(
-                                            formularioId = formId,
-                                            formularioType = "Formulario1",
-                                            imageUri = uri.toString()
-                                        )
-                                        appContainer.formulariosRepository.insertImage(image)
+                            Button(
+                                onClick = {
+                                    if (fecha.isNullOrEmpty()) {
+                                        fecha = getCurrentDate()
                                     }
-                                }
-                                navController.navigate("home")
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF4E7029),
-                                contentColor = Color.White
-                            ),
-                            shape = RoundedCornerShape(50),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(
-                                "Guardar",
-                                style = TextStyle(
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.SemiBold
+                                    editado = getCurrentDate()
+                                    val formulario =
+                                        FormularioUnoEntity(
+                                            transecto = transecto,
+                                            clima = clima,
+                                            temporada = temporada,
+                                            tipoAnimal = tipoAnimal,
+                                            nombreComun = nombreComun,
+                                            nombreCientifico = nombreCientifico,
+                                            numeroIndividuos = numeroIndividuos,
+                                            tipoObservacion = tipoObservacion,
+                                            observaciones = observaciones,
+                                            latitude = location?.first,
+                                            longitude = location?.second,
+                                            fecha = fecha,
+                                            editado = editado
+                                        ).withID(formularioId)
+                                    // Guardar en base de datos, vinculado al usuario
+                                    runBlocking {
+                                        // Insert regresa su id
+                                        val formId =
+                                            appContainer.usuariosRepository.insertUserWithFormularioUno(
+                                                context.accountInfo.user_id, formulario
+                                            )
+                                        Log.d("ImageDAO", "formId: $formId")
+
+                                        // Borrar todas las fotos en ese reporte
+                                        appContainer.formulariosRepository.deleteImagesByFormulario(
+                                            formularioId = formId,
+                                            formularioType = "Formulario1"
+                                        )
+
+                                        // Agregar todas las imagenes al reporte
+                                        savedImageUris.value.forEach { uri ->
+                                            val image = ImageEntity(
+                                                formularioId = formId,
+                                                formularioType = "Formulario1",
+                                                imageUri = uri.toString()
+                                            )
+                                            appContainer.formulariosRepository.insertImage(image)
+                                        }
+                                    }
+                                    navController.navigate("home")
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFF4E7029),
+                                    contentColor = Color.White
+                                ),
+                                shape = RoundedCornerShape(50),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(
+                                    "Guardar",
+                                    style = TextStyle(
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
                 }

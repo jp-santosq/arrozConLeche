@@ -40,10 +40,13 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.awaq1.R
@@ -226,7 +229,7 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
                                 IconToggleButton(
                                     checked = clima == option,
                                     onCheckedChange = { clima = option },
-                                    modifier = Modifier.size(100.dp)
+                                    modifier = Modifier.size(150.dp)
                                 ) {
                                     Box(
                                         modifier = Modifier
@@ -241,7 +244,7 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
                                         Image(
                                             painter = painterResource(id = weatherIcons[index]),
                                             contentDescription = option,
-                                            modifier = Modifier.requiredSize(64.dp)
+                                            modifier = Modifier.requiredSize(95.dp)
                                         )
                                     }
                                 }
@@ -276,14 +279,17 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
                         if (quad_b == "") {
                             quad_b = quadBOpciones[0]
                         }
-                        Row(modifier = Modifier) {
+
+                        Row(modifier = Modifier.fillMaxSize()) {
                             Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
+                                horizontalAlignment = Alignment.CenterHorizontally, // Center items horizontally
+                                verticalArrangement = Arrangement.Center, // Center items vertically
                                 modifier = Modifier
-                                    .fillMaxWidth()
+                                    .fillMaxHeight()
                                     .weight(1f)
                             ) {
                                 quadAOpciones.forEach { opcion_QA ->
+                                    /*
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier.scale(2f)
@@ -304,6 +310,16 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
                                             )
                                         )
                                     }
+                                     */
+                                    Spacer(modifier = Modifier.size(50.dp))
+                                    SquareRadioButton(
+                                        text = opcion_QA,
+                                        isSelected = quad_a == opcion_QA, // Check if this button is selected
+                                        onClick = {
+                                            quad_a = opcion_QA // Update the selected option for group A
+                                        },
+                                        size = 100.dp
+                                    )
                                 }
                             }
                             Column(
@@ -313,6 +329,7 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
                                     .weight(1f)
                             ) {
                                 quadBOpciones.forEach { opcion_QB ->
+                                    /*
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier.scale(2f)
@@ -333,18 +350,28 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
                                             )
                                         )
                                     }
+                                     */
+                                    SquareRadioButton(
+                                        text = opcion_QB,
+                                        isSelected = quad_b == opcion_QB, // Check if this button is selected
+                                        onClick = {
+                                            quad_b = opcion_QB // Update the selected option for group B
+                                        }
+                                    )
                                 }
                             }
                         }
 
                         Text("Sub-Cuadrante")
                         val subQuadOpciones = listOf("1", "2", "3", "4")
+
                         if (sub_quad == "") {
                             sub_quad = subQuadOpciones[0]
                         }
 
                         FlowRow(modifier = Modifier.fillMaxWidth()) {
                             subQuadOpciones.forEach { opcion_sub ->
+                                /*
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier
@@ -365,6 +392,15 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
                                         )
                                     )
                                 }
+                                */
+
+                                SquareRadioButton(
+                                    text = opcion_sub,
+                                    isSelected = sub_quad == opcion_sub, // Check if this button is selected
+                                    onClick = {
+                                        sub_quad = opcion_sub // Update the selected option for group A
+                                    }
+                                )
                             }
                         }
 
@@ -592,4 +628,37 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
             }
         }
     )
+}
+
+@Composable
+fun SquareRadioButton(
+    text: String,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    size: Dp = 60.dp // Default size is 60.dp
+) {
+    Box(
+        modifier = Modifier
+            .padding(8.dp)
+            .size(size) // Use the customizable size
+            .border(
+                width = 2.dp,
+                color = if (isSelected) Color(0xFF4E7029) else Color.Gray,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .background(
+                color = if (isSelected) Color(0xFFC5E1A5) else Color.Transparent,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .clickable(onClick = onClick), // Handle selection
+        contentAlignment = Alignment.Center // Center the text
+    ) {
+        Text(
+            text = text,
+            style = TextStyle(
+                fontSize = (size.value / 3).sp, // Adjust font size relative to the box size
+                color = if (isSelected) Color.Black else Color.Gray
+            )
+        )
+    }
 }
