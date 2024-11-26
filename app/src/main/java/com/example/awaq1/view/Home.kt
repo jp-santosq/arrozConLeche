@@ -173,6 +173,9 @@ fun Home(navController: NavController) {
                             .padding(horizontal = 0.dp, vertical = 8.dp)
                             .fillMaxWidth()
                     ) {
+                        items(count = 1) {
+                            Spacer(modifier = Modifier.height(10.dp))
+                        }
                         items(forms1) { form ->
                             val formCard = FormInfo(form)
                             formCard.DisplayCard(navController)
@@ -201,9 +204,7 @@ fun Home(navController: NavController) {
                             val formCard = FormInfo(form)
                             formCard.DisplayCard(navController)
                         }
-                        items(1) {
-                            Spacer(modifier = Modifier.height(5.dp))
-                        }
+
                     }
                 }
             }

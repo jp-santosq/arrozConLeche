@@ -86,10 +86,9 @@ fun SelectFormularioScreen(navController: NavController) {
             IconButton(
                 onClick = { navController.navigate("home") },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = Color(0xFF4E7029),
-                    contentColor = Color.White
+                    contentColor = Color(0xFF4E7029)
                 ),
-                modifier = Modifier.padding(20.dp).size(50.dp)
+                modifier = Modifier.padding(30.dp).size(60.dp)
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,

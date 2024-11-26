@@ -68,7 +68,7 @@ fun Preview() {
 }
 
 @RequiresApi(Build.VERSION_CODES.P)
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
     val context = LocalContext.current as MainActivity
@@ -210,9 +210,11 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
                             modifier = Modifier.fillMaxWidth()
                         )
                         Text("Estado del Tiempo:")
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        FlowRow (
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            maxItemsInEachRow = 3
+                            //verticalAlignment = Alignment.CenterVertically
                         ) {
                             val weatherOptions =
                                 listOf("Soleado", "Parcialmente Nublado", "Lluvioso")
@@ -269,9 +271,11 @@ fun ObservationForm(navController: NavController, formularioId: Long = 0L) {
                         }
 
                         Text("Tipo de Animal")
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        FlowRow (
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            maxItemsInEachRow = 3
+                            //verticalAlignment = Alignment.CenterVertically
                         ) {
                             val animals = listOf("Mamífero", "Ave", "Reptil", "Anfibio", "Insecto")
                             if (tipoAnimal == "") {

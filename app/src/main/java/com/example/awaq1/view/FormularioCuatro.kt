@@ -214,9 +214,11 @@ fun ObservationFormCuatro(navController: NavController, formularioId: Long = 0) 
                             modifier = Modifier.fillMaxWidth()
                         )
                         Text("Estado del Tiempo:")
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        FlowRow (
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            maxItemsInEachRow = 3
+                            //verticalAlignment = Alignment.CenterVertically
                         ) {
                             val weatherOptions = listOf("Soleado", "Parcialmente Nublado", "Lluvioso")
                             val weatherIcons = listOf(

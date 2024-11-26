@@ -116,7 +116,7 @@ fun CameraWindow(
                         shape = RoundedCornerShape(50),
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Retake")
+                        Text("Retomar")
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(
@@ -133,7 +133,7 @@ fun CameraWindow(
                         shape = RoundedCornerShape(50),
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Confirm")
+                        Text("Guardar")
                     }
 
                 }

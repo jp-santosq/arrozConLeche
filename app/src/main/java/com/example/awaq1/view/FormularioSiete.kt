@@ -62,7 +62,7 @@ fun PreviewForm7() {
 }
 
 @RequiresApi(Build.VERSION_CODES.P)
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ObservationFormSiete(navController: NavController, formularioId: Long = 0) {
     val context = LocalContext.current as MainActivity
@@ -191,9 +191,11 @@ fun ObservationFormSiete(navController: NavController, formularioId: Long = 0) {
                         } ?: Text("Buscando ubicacion...")
                         
                         Text("Estado del Tiempo:")
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        FlowRow (
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            maxItemsInEachRow = 3
+                            //verticalAlignment = Alignment.CenterVertically
                         ) {
                             val weatherOptions = listOf("Soleado", "Parcialmente Nublado", "Lluvioso")
                             val weatherIcons = listOf(

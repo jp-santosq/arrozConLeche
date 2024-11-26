@@ -62,7 +62,7 @@ fun PreviewForm6() {
 }
 
 @RequiresApi(Build.VERSION_CODES.P)
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ObservationFormSeis(navController: NavController, formularioId: Long = 0) {
     val context = LocalContext.current as MainActivity
@@ -224,9 +224,11 @@ fun ObservationFormSeis(navController: NavController, formularioId: Long = 0) {
                         )
 
                         Text("Estado del Tiempo:")
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        FlowRow (
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            maxItemsInEachRow = 3
+                            //verticalAlignment = Alignment.CenterVertically
                         ) {
                             val weatherOptions = listOf("Soleado", "Parcialmente Nublado", "Lluvioso")
                             val weatherIcons = listOf(
@@ -261,9 +263,11 @@ fun ObservationFormSeis(navController: NavController, formularioId: Long = 0) {
                             }
                         }
                         Text("Época")
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        FlowRow (
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            maxItemsInEachRow = 3
+                            //verticalAlignment = Alignment.CenterVertically
                         ) {
                             val seasonOptions = listOf("Verano/Seca", "Invierno/Lluviosa")
                             seasonOptions.forEach { option ->
