@@ -66,6 +66,9 @@ fun Settings(navController: NavController, onLogout: () -> Unit) {
                     .padding(16.dp)
             ) {
                 SectionTitle("GENERAL")
+                MenuItem("Sobre Desarrolladores") {
+                    navController.navigate("about_us")
+                }
                 MenuItem("Editar Perfil") {
                     navController.navigate("perfil")
                 }

@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.awaq1.view.AboutUs
 import com.example.awaq1.view.Home
 import com.example.awaq1.view.Mapa
 import com.example.awaq1.view.ObservationForm
@@ -64,7 +65,9 @@ fun AppNavigator(onLogout: () -> Unit, modifier: Modifier = Modifier) {
         composable("elegir_reporte") {
             SelectFormularioScreen(navController = navController)
         }
-
+        composable("about_us") {
+            AboutUs(navController = navController)
+        }
         composable <FormUnoID> { backStackEntry ->
             val formId: FormUnoID = backStackEntry.toRoute()
             ObservationForm(navController = navController, formId.form_id)
