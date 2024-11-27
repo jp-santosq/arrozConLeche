@@ -10,8 +10,17 @@ import org.junit.Test
 // Requerimientos
 
 // Para ejecutar la prueba se debe de desabilitar el Login de la aplicación
-// Se desactiva al cambiar la linea 39 del archivo PrincipalView.kt
-// Se cambia de if (loggedIn) { a if (0 == 0) {
+// Se desactiva al cambiar la linea 68 del archivo PrincipalView.kt
+// Se cambia de if (loggedIn) { a if (true) {
+// Se desactiva al cambiar la linea 67 del archivo PrincipalView.kt
+// Se debe de quitar las lineas de comentado para que se ejecute el codigo
+
+// ¡Importante!
+// Se debe de iniciar la app y aceptar los permisos antes de correr la prueba.
+// No se puede cerrar o terminar la app antes de empezar la prueba o los anuncios
+// de permiso bloquearan la prueba y no funcionara.
+
+// Nota, se puede interactuar con la alerta durante la prueba para cancelar la alerta
 
 // Descripcion
 
@@ -29,29 +38,35 @@ class BottomNavigationBarTest {
         // Simulate navigating to the Home screen
         composeTestRule.onNodeWithContentDescription("Home").performClick()
 
+        Thread.sleep(1000)
+
         // Wait for the UI to settle
         composeTestRule.runOnIdle { }
 
         // Verify that the displayed screen is Home
-        composeTestRule.onNodeWithText("Hola,").assertIsDisplayed() // For Home screen    }
+        composeTestRule.onNodeWithText("Hola, example!").assertIsDisplayed() // For Home screen    }
     }
 
     @Test
     fun testReporteButtonNavigatesToReporte() {
         // Simulate navigating to the Reporte screen
-        composeTestRule.onNodeWithContentDescription("Fauna").performClick()
+        composeTestRule.onNodeWithContentDescription("Reporte").performClick()
+
+        Thread.sleep(1000)
 
         // Wait for the UI to settle
         composeTestRule.runOnIdle { }
 
         // Verify that the displayed screen is Reporte
-        composeTestRule.onNodeWithText("Formulario de Observación").assertIsDisplayed() // For Reporte screen
+        composeTestRule.onNodeWithText("Fauna en Transectos").assertIsDisplayed() // For Reporte screen
     }
 
     @Test
     fun testSettingsButtonNavigatesToSettings() {
         // Simulate navigating to the Settings screen
         composeTestRule.onNodeWithContentDescription("Settings").performClick()
+
+        Thread.sleep(1000)
 
         // Wait for the UI to settle
         composeTestRule.runOnIdle { }

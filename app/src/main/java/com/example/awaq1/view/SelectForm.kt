@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -127,6 +128,8 @@ fun FormChooseButton(route: Any, text: String, navController: NavController) {
             contentColor = Color.White
         ),
         shape = RoundedCornerShape(30),
+        modifier = Modifier
+            .width(300.dp) // Fixed width and height
     ) {
         Text(
             text,
