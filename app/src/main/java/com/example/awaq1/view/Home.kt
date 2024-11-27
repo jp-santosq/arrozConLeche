@@ -132,7 +132,7 @@ fun Home(navController: NavController) {
                         .background(Color(0xFFCDE4B4)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Row(modifier = Modifier.fillMaxWidth().padding(20.dp)) {
+                    Row(modifier = Modifier.fillMaxWidth().padding(20.dp), horizontalArrangement = Arrangement.Center) {
                         var fontSize by remember { mutableStateOf(50.sp) }
 
                         Text(
@@ -142,15 +142,8 @@ fun Home(navController: NavController) {
                             color = Color(0xFF4E7029),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .onGloballyPositioned { coordinates ->
-                                    val containerWidth = coordinates.size.width
-                                    val textWidth = coordinates.size.width
-                                    if (textWidth > containerWidth) {
-                                        fontSize = (fontSize.value - 1).sp
-                                    }
-                                }
+
+
                         )
                     }
                 }
