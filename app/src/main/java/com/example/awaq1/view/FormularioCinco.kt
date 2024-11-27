@@ -424,7 +424,7 @@ fun ObservationFormCinco(navController: NavController, formularioId: Long = 0) {
                                 modifier = Modifier.size(24.dp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Take Photo")
+                            Text("Tomar Foto")
                         }
 
                         // Log.d("ObservationForm", "savedImageUri: ${savedImageUri.value}")
