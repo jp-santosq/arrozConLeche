@@ -16,8 +16,13 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.materialIcon
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -256,7 +261,8 @@ data class FormInfo(
     val formulario: String, // Indicador de tipo de formulario, para luego acceder
     val formId: Long,
     val fechaCreacion: String,
-    val edicion: String
+    val fechaEdicion: String,
+    val completo: Boolean
 ) {
     constructor(formulario: FormularioUnoEntity) : this(
         tipo = "Transecto", formulario.transecto,
@@ -265,7 +271,8 @@ data class FormInfo(
         formulario = "form1",
         formId = formulario.id,
         fechaCreacion = formulario.fecha,
-        edicion=formulario.editado
+        fechaEdicion = formulario.editado,
+        completo = formulario.esCompleto()
     )
 
     constructor(formulario: FormularioDosEntity) : this(
@@ -275,7 +282,8 @@ data class FormInfo(
         formulario = "form2",
         formId = formulario.id,
         fechaCreacion = formulario.fecha,
-        edicion=formulario.editado
+        fechaEdicion = formulario.editado,
+        completo = formulario.esCompleto()
     )
 
     constructor(formulario: FormularioTresEntity) : this(
@@ -285,7 +293,8 @@ data class FormInfo(
         formulario = "form3",
         formId = formulario.id,
         fechaCreacion = formulario.fecha,
-        edicion=formulario.editado
+        fechaEdicion = formulario.editado,
+        completo = formulario.esCompleto()
     )
 
     constructor(formulario: FormularioCuatroEntity) : this(
@@ -295,7 +304,8 @@ data class FormInfo(
         formulario = "form4",
         formId = formulario.id,
         fechaCreacion = formulario.fecha,
-        edicion=formulario.editado
+        fechaEdicion = formulario.editado,
+        completo = formulario.esCompleto()
     )
 
     constructor(formulario: FormularioCincoEntity) : this(
@@ -305,8 +315,10 @@ data class FormInfo(
         formulario = "form5",
         formId = formulario.id,
         fechaCreacion = formulario.fecha,
-        edicion=formulario.editado
+        fechaEdicion = formulario.editado,
+        completo = formulario.esCompleto()
     )
+
     constructor(formulario: FormularioSeisEntity) : this(
         tipo = "Codigo", formulario.codigo,
         primerTag = "Zona", formulario.zona,
@@ -314,8 +326,10 @@ data class FormInfo(
         formulario = "form6",
         formId = formulario.id,
         fechaCreacion = formulario.fecha,
-        edicion=formulario.editado
+        fechaEdicion = formulario.editado,
+        completo = formulario.esCompleto()
     )
+
     constructor(formulario: FormularioSieteEntity) : this(
         tipo = "Zona", formulario.zona,
         primerTag = "Pluviosidad", formulario.pluviosidad,
@@ -323,7 +337,8 @@ data class FormInfo(
         formulario = "form7",
         formId = formulario.id,
         fechaCreacion = formulario.fecha,
-        edicion=formulario.editado
+        fechaEdicion = formulario.editado,
+        completo = formulario.esCompleto()
     )
 
     fun goEditFormulario(navController: NavController) {
@@ -355,17 +370,35 @@ data class FormInfo(
             ),
         ) {
             Row(
-                modifier = Modifier.padding(20.dp).fillMaxWidth().padding(end = 40.dp),
+                modifier = Modifier
+                    .padding(20.dp)
+                    .fillMaxWidth()
+                    .padding(end = 40.dp),
                 Arrangement.SpaceBetween
 
             ) {
-                Text(
-                    text = "$tipo: $valorIdentificador",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
+                Column {
+                    Text(
+                        text = "$tipo: $valorIdentificador",
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
 
+                    if (completo) {
+                        Icon(
+                            imageVector = Icons.Rounded.CheckCircle,
+                            contentDescription = null,
+                            tint = Color.Green
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Rounded.Warning,
+                            contentDescription = null,
+                            tint = Color(237, 145, 33)
+                        )
+                    }
+                }
                 Column {
                     Text(
                         text = "$primerTag: $primerContenido",

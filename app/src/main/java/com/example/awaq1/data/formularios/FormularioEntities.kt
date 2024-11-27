@@ -35,6 +35,17 @@ data class FormularioUnoEntity(
         newForm.id = id
         return newForm
     }
+
+    fun esCompleto(): Boolean {
+        return !(transecto.isBlank() ||
+                clima.isBlank() ||
+                temporada.isBlank() ||
+                tipoAnimal.isBlank() ||
+                nombreCientifico.isBlank() ||
+                nombreComun.isBlank() ||
+                numeroIndividuos.isBlank() ||
+                tipoObservacion.isBlank())
+    }
 }
 
 
@@ -65,6 +76,18 @@ data class FormularioDosEntity(
         newForm.id = id
         return newForm
     }
+
+    fun esCompleto(): Boolean {
+        return !(zona.isBlank() ||
+	    clima.isBlank() ||
+	    temporada.isBlank() ||
+	    tipoAnimal.isBlank() ||
+	    nombreComun.isBlank() ||
+	    nombreCientifico.isBlank() ||
+	    numeroIndividuos.isBlank() ||
+	    tipoObservacion.isBlank() ||
+	    alturaObservacion.isBlank())
+    }
 }
 
 // Validacion de cobertura
@@ -91,6 +114,15 @@ data class FormularioTresEntity(
         val newForm = this.copy()
         newForm.id = id
         return newForm
+    }
+
+    fun esCompleto(): Boolean {
+        return !(codigo.isBlank() ||
+	    clima.isBlank() ||
+	    temporada.isBlank() ||
+	    cobertura.isBlank() ||
+	    tipoCultivo.isBlank() ||
+	    disturbio.isBlank())
     }
 }
 
@@ -126,6 +158,23 @@ data class FormularioCuatroEntity(
         newForm.id = id
         return newForm
     }
+
+    fun esCompleto(): Boolean {
+        return !(codigo.isBlank() ||
+	    clima.isBlank() ||
+	    temporada.isBlank() ||
+	    quad_a.isBlank() ||
+	    quad_b.isBlank() ||
+	    sub_quad.isBlank() ||
+	    habitoDeCrecimiento.isBlank() ||
+	    nombreComun.isBlank() ||
+	    nombreCientifico.isBlank() ||
+	    placa.isBlank() ||
+	    circunferencia.isBlank() ||
+	    distancia.isBlank() ||
+	    estatura.isBlank() ||
+	    altura.isBlank())
+    }
 }
 
 //Fauna Busqueda Libre
@@ -145,8 +194,6 @@ data class FormularioCincoEntity(
     val longitude: Double? = null,
     val fecha: String,
     val editado: String,
-
-
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
@@ -155,6 +202,18 @@ data class FormularioCincoEntity(
         val newForm = this.copy()
         newForm.id = id
         return newForm
+    }
+    fun esCompleto(): Boolean {
+        return !(zona.isBlank() ||
+                clima.isBlank() ||
+                temporada.isBlank() ||
+                tipoAnimal.isBlank() ||
+                nombreCientifico.isBlank() ||
+                nombreComun.isBlank() ||
+                numeroIndividuos.isBlank() ||
+                tipoObservacion.isBlank() ||
+		alturaObservacion.isBlank()
+	)
     }
 }
 
@@ -188,6 +247,23 @@ data class FormularioSeisEntity(
         newForm.id = id
         return newForm
     }
+
+    fun esCompleto(): Boolean {
+        return !(
+	    codigo.isBlank() ||           
+	    clima.isBlank() ||            
+	    temporada.isBlank() ||        
+	    zona.isBlank() ||             
+	    nombreCamara.isBlank() ||     
+	    placaCamara.isBlank() ||      
+	    placaGuaya.isBlank() ||       
+	    anchoCamino.isBlank() ||      
+	    fechaInstalacion.isBlank() || 
+	    distanciaObjetivo.isBlank() ||
+	    alturaLente.isBlank() ||      
+	    checklist.isBlank()
+	)
+    }
 }
 
 //Variables Climaticas
@@ -214,5 +290,18 @@ data class FormularioSieteEntity(
         val newForm = this.copy()
         newForm.id = id
         return newForm
+    }
+
+    fun esCompleto(): Boolean {
+        return !(
+	    clima.isBlank() ||            
+	    temporada.isBlank() ||        
+	    zona.isBlank() ||             
+	    pluviosidad.isBlank() ||      
+	    temperaturaMaxima.isBlank() ||
+	    humedadMaxima.isBlank() ||    
+	    temperaturaMinima.isBlank() ||
+	    nivelQuebrada.isBlank()    
+	)
     }
 }
