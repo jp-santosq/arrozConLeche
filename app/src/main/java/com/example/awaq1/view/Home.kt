@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -385,18 +386,23 @@ data class FormInfo(
                         color = Color.Black
                     )
 
-                    if (completo) {
-                        Icon(
-                            imageVector = Icons.Rounded.CheckCircle,
-                            contentDescription = null,
-                            tint = Color.Green
-                        )
-                    } else {
-                        Icon(
-                            imageVector = Icons.Rounded.Warning,
-                            contentDescription = null,
-                            tint = Color(237, 145, 33)
-                        )
+                    Row {
+                        if (completo) {
+                            Icon(
+                                imageVector = Icons.Rounded.CheckCircle,
+                                contentDescription = null,
+                                tint = Color.Green
+                            )
+                        } else {
+                            Icon(
+                                imageVector = Icons.Rounded.Warning,
+                                contentDescription = null,
+                                tint = Color(237, 145, 33)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.size(10.dp, 10.dp))
+                        Text("Creado: $fechaCreacion")
                     }
                 }
                 Column {
